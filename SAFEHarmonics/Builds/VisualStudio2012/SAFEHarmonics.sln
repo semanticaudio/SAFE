@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2012
+Project("{40684242-669E-E355-9835-E5EBC45FC411}") = "SAFEHarmonics", "SAFEHarmonics.vcxproj", "{64ABF459-7F4D-2289-F440-95190D31B4BD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64ABF459-7F4D-2289-F440-95190D31B4BD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{64ABF459-7F4D-2289-F440-95190D31B4BD}.Debug|Win32.Build.0 = Debug|Win32
+		{64ABF459-7F4D-2289-F440-95190D31B4BD}.Release|Win32.ActiveCfg = Release|Win32
+		{64ABF459-7F4D-2289-F440-95190D31B4BD}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

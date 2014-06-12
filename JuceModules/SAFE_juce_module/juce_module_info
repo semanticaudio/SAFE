@@ -1,0 +1,23 @@
+{
+  "id":             "SAFE_juce_module",
+  "name":           "Stuff for the Semantic Audio Feature Extraction Project",
+  "version":        "3.0.4",
+  "description":    "Should make the creation of plugins super quick and easy.",
+  "website":        "",
+  "license":        "",
+
+  "dependencies":   [ { "id": "juce_core",   "version": "matching" },
+                      { "id": "juce_audio_processors",   "version": "matching" },
+                      { "id": "juce_cryptography",   "version": "matching" } ],
+
+  "include":        "SAFE_juce_module.h",
+
+  "compile":        [ { "file": "SAFE_juce_module.cpp", "target": "! xcode" },
+                      { "file": "SAFE_juce_module.mm",  "target": "xcode" } ],
+
+  "browse":         [ "PluginUtils/*",
+                      "Filters/*",
+                      "LookAndFeel/*",
+                      "UIComponents/*",
+                      "Effects/*", ],
+}

@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2012
+Project("{B26F0EFC-4DC4-F104-DF58-A245A413B7A1}") = "SAFECompressor", "SAFECompressor.vcxproj", "{73B900B9-2FBB-6C2C-32DF-42DA7F8B6486}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{73B900B9-2FBB-6C2C-32DF-42DA7F8B6486}.Debug|Win32.ActiveCfg = Debug|Win32
+		{73B900B9-2FBB-6C2C-32DF-42DA7F8B6486}.Debug|Win32.Build.0 = Debug|Win32
+		{73B900B9-2FBB-6C2C-32DF-42DA7F8B6486}.Release|Win32.ActiveCfg = Release|Win32
+		{73B900B9-2FBB-6C2C-32DF-42DA7F8B6486}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
