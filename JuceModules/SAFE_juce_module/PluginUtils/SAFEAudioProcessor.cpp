@@ -31,8 +31,6 @@ void SAFEAudioProcessor::AnalysisThread::run()
         warning = processor->saveSemanticData (descriptors, metaData);
     }
 
-    processor->stopTimer();
-
     if (warning != NoWarning)
     {
         processor->sendWarningToEditor (warning);
@@ -580,13 +578,15 @@ WarningID SAFEAudioProcessor::startAnalysisThread()
 {
     if (analysisThread->isThreadRunning())
     {
+        resetRecording();
+        sendWarningToEditor (AnalysisThreadBusy);
         return AnalysisThreadBusy;
     }
     else
     {
         analysisThread->setParameters (descriptorsToSave, metaDataToSave, sendToServer);
         analysisThread->startThread();
-        readyToSave = true;
+        resetRecording();
     }
 
     return NoWarning;
@@ -762,7 +762,6 @@ void SAFEAudioProcessor::recordProcessedSamples (AudioSampleBuffer& buffer)
 
             if (processedTap >= numSamplesToRecord)
             {
-                recording = false;
                 startAnalysisThread();
                 break;
             }
