@@ -3,6 +3,14 @@ SAFE
 
 Semantic Audio Feature Extraction Plug-ins 
 
+## Dependencies
+
+To build VSTs you will need the SDK, avaliable here.
+http://www.steinberg.net/en/company/developer.html
+
+To build AUs you will need the SDK, avaliable here.
+https://developer.apple.com/library/mac/samplecode/CoreAudioUtilityClasses/Introduction/Intro.html
+
 ## Acknowledgments 
 
 This project would be nothing if it weren't for JUCE.
