@@ -24,15 +24,15 @@
   </MAINGROUP>
   <EXPORTFORMATS>
     <VS2012 targetFolder="Builds/VisualStudio2012" vstFolder="c:\vstsdk2.4"
-            externalLibraries="LibXtract_d_32.lib" extraDefs="IMAGE_DIRECTORY=&quot;C:/Users/id115387/Documents/ResearchWork/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel&quot;"
+            externalLibraries="LibXtract.lib" extraDefs="IMAGE_DIRECTORY=&quot;C:/Users/id115387/Documents/ResearchWork/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel&quot;"
             vst3Folder="c:\VST3 SDK" toolset="" extraLinkerFlags="" extraCompilerFlags="">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="SAFEEqualiser" libraryPath="C:\LibXtract\vc2012\LibXtract_static_llib\lib"
-                       headerPath="C:\LibXtract\"/>
+                       isDebug="1" optimisation="1" targetName="SAFEEqualiser" libraryPath="$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/lib/Debug"
+                       headerPath="$(SolutionDir)../../../LibXtract"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="3" targetName="SAFEEqualiser" headerPath="C:\LibXtract\"
-                       libraryPath="C:\LibXtract\vc2012\LibXtract_static_llib\lib\Release"/>
+                       isDebug="0" optimisation="3" targetName="SAFEEqualiser" headerPath="$(SolutionDir)../../../LibXtract"
+                       libraryPath="$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/lib/Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="SAFE_juce_module" path="../JuceModules"/>

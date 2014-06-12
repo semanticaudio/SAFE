@@ -24,15 +24,15 @@
   </MAINGROUP>
   <EXPORTFORMATS>
     <VS2012 targetFolder="Builds/VisualStudio2012" vstFolder="c:\vstsdk2.4"
-            externalLibraries="LibXtract_d_32.lib" extraDefs="" extraCompilerFlags=""
+            externalLibraries="LibXtract.lib" extraDefs="" extraCompilerFlags=""
             extraLinkerFlags="">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="SAFEReverb" headerPath="C:\LibXtract\"
-                       libraryPath="C:\LibXtract\vc2012\LibXtract_static_llib\lib"/>
+                       isDebug="1" optimisation="1" targetName="SAFEReverb" headerPath="$(SolutionDir)../../../LibXtract"
+                       libraryPath="$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/lib/Debug"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="3" targetName="SAFEReverb" headerPath="C:\LibXtract\"
-                       libraryPath="C:\LibXtract\vc2012\LibXtract_static_llib\lib\Release"/>
+                       isDebug="0" optimisation="3" targetName="SAFEReverb" headerPath="$(SolutionDir)../../../LibXtract"
+                       libraryPath="$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/lib/Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_opengl" path="../JuceModules"/>

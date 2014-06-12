@@ -23,16 +23,16 @@
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
-    <VS2012 targetFolder="Builds/VisualStudio2012" externalLibraries="LibXtract_d_32.lib"
+    <VS2012 targetFolder="Builds/VisualStudio2012" externalLibraries="LibXtract.lib"
             vstFolder="c:\vstsdk2.4" extraDefs="IMAGE_DIRECTORY=&quot;C:/Users/id115387/Documents/ResearchWork/SAFE/Utils/SAFE_juce_module/LookAndFeel&quot;"
             extraCompilerFlags="">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="SAFEDistortion" libraryPath="C:\LibXtract\vc2012\LibXtract_static_llib\lib"
-                       headerPath="C:\LibXtract\"/>
+                       isDebug="1" optimisation="1" targetName="SAFEDistortion" libraryPath="$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/lib/Debug"
+                       headerPath="$(SolutionDir)../../../LibXtract"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="3" targetName="SAFEDistortion" headerPath="C:\LibXtract\"
-                       libraryPath="C:\LibXtract\vc2012\LibXtract_static_llib\lib\Release"/>
+                       isDebug="0" optimisation="3" targetName="SAFEDistortion" headerPath="$(SolutionDir)../../../LibXtract"
+                       libraryPath="$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/lib/Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="SAFE_juce_module" path="../JuceModules"/>
