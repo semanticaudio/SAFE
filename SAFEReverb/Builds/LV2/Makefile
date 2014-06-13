@@ -18,12 +18,12 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=native
   endif
 
-  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D IMAGE_DIRECTORY=\"/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\" -D "JucePlugin_Build_LV2" -D JucePlugin_LV2URI=\"\" -D JucePlugin_LV2Category=\"Reverb\" -D "JucePlugin_WantsLV2TimePos=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2  -I ../../JuceLibraryCode -I ../../../JuceModules
+  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D IMAGE_DIRECTORY=\"/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\" -D "JucePlugin_Build_LV2" -D JucePlugin_LV2URI=\"https://github.com/semanticaudio/SAFE/tree/master/SAFECompressor\" -D JucePlugin_LV2Category=\"Reverb\" -D "JucePlugin_WantsLV2TimePos=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2  -I ../../JuceLibraryCode -I ../../../JuceModules
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -fPIC -O0
   CXXFLAGS += $(CFLAGS)
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -shared -L/usr/X11R6/lib/ -lGL -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -lcurl /usr/local/lib/libxtract.a
   LDDEPS :=
-  RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D IMAGE_DIRECTORY=\"/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\" -D "JucePlugin_Build_LV2" -D JucePlugin_LV2URI=\"\" -D JucePlugin_LV2Category=\"Reverb\" -D "JucePlugin_WantsLV2TimePos=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2  -I ../../JuceLibraryCode -I ../../../JuceModules
+  RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D IMAGE_DIRECTORY=\"/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\" -D "JucePlugin_Build_LV2" -D JucePlugin_LV2URI=\"https://github.com/semanticaudio/SAFE/tree/master/SAFECompressor\" -D JucePlugin_LV2Category=\"Reverb\" -D "JucePlugin_WantsLV2TimePos=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2  -I ../../JuceLibraryCode -I ../../../JuceModules
   TARGET := SAFEReverb.so
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
   CLEANCMD = rm -rf $(OUTDIR)/$(TARGET) $(OBJDIR)
@@ -39,12 +39,12 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=native
   endif
 
-  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D IMAGE_DIRECTORY=\"/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\" -D "JucePlugin_Build_LV2" -D JucePlugin_LV2URI=\"\" -D JucePlugin_LV2Category=\"Reverb\" -D "JucePlugin_WantsLV2TimePos=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2  -I ../../JuceLibraryCode -I ../../../JuceModules
+  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D IMAGE_DIRECTORY=\"/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\" -D "JucePlugin_Build_LV2" -D JucePlugin_LV2URI=\"https://github.com/semanticaudio/SAFE/tree/master/SAFECompressor\" -D JucePlugin_LV2Category=\"Reverb\" -D "JucePlugin_WantsLV2TimePos=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2  -I ../../JuceLibraryCode -I ../../../JuceModules
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -fPIC -O3
   CXXFLAGS += $(CFLAGS)
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -shared -fvisibility=hidden -L/usr/X11R6/lib/ -lGL -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -lcurl /usr/local/lib/libxtract.a
   LDDEPS :=
-  RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D IMAGE_DIRECTORY=\"/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\" -D "JucePlugin_Build_LV2" -D JucePlugin_LV2URI=\"\" -D JucePlugin_LV2Category=\"Reverb\" -D "JucePlugin_WantsLV2TimePos=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2  -I ../../JuceLibraryCode -I ../../../JuceModules
+  RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D IMAGE_DIRECTORY=\"/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\" -D "JucePlugin_Build_LV2" -D JucePlugin_LV2URI=\"https://github.com/semanticaudio/SAFE/tree/master/SAFECompressor\" -D JucePlugin_LV2Category=\"Reverb\" -D "JucePlugin_WantsLV2TimePos=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2  -I ../../JuceLibraryCode -I ../../../JuceModules
   TARGET := SAFEReverb.so
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
   CLEANCMD = rm -rf $(OUTDIR)/$(TARGET) $(OBJDIR)
@@ -60,12 +60,12 @@ ifeq ($(CONFIG),Release64)
     TARGET_ARCH := -m64
   endif
 
-  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D IMAGE_DIRECTORY=\"/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\" -D "JucePlugin_Build_LV2" -D JucePlugin_LV2URI=\"\" -D JucePlugin_LV2Category=\"Reverb\" -D "JucePlugin_WantsLV2TimePos=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2  -I ../../JuceLibraryCode -I ../../../JuceModules
+  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D IMAGE_DIRECTORY=\"/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\" -D "JucePlugin_Build_LV2" -D JucePlugin_LV2URI=\"https://github.com/semanticaudio/SAFE/tree/master/SAFECompressor\" -D JucePlugin_LV2Category=\"Reverb\" -D "JucePlugin_WantsLV2TimePos=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2  -I ../../JuceLibraryCode -I ../../../JuceModules
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -fPIC -O3
   CXXFLAGS += $(CFLAGS)
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -shared -fvisibility=hidden -L/usr/X11R6/lib/ -lGL -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -lcurl /usr/local/lib/libxtract.a
   LDDEPS :=
-  RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D IMAGE_DIRECTORY=\"/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\" -D "JucePlugin_Build_LV2" -D JucePlugin_LV2URI=\"\" -D JucePlugin_LV2Category=\"Reverb\" -D "JucePlugin_WantsLV2TimePos=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2  -I ../../JuceLibraryCode -I ../../../JuceModules
+  RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D IMAGE_DIRECTORY=\"/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\" -D "JucePlugin_Build_LV2" -D JucePlugin_LV2URI=\"https://github.com/semanticaudio/SAFE/tree/master/SAFECompressor\" -D JucePlugin_LV2Category=\"Reverb\" -D "JucePlugin_WantsLV2TimePos=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2  -I ../../JuceLibraryCode -I ../../../JuceModules
   TARGET := SAFEReverb.so
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
   CLEANCMD = rm -rf $(OUTDIR)/$(TARGET) $(OBJDIR)
