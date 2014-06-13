@@ -1,25 +1,30 @@
 SAFEEqualiser/Builds/MacOSX/build/*
 SAFEEqualiser/Builds/Linux/build/*
+SAFEEqualiser/Builds/LV2/build/*
 SAFEEqualiser/Builds/VisualStudio2012/Debug/*
 SAFEEqualiser/Builds/VisualStudio2012/Release/*
 
 SAFEDistortion/Builds/MacOSX/build/*
 SAFEDistortion/Builds/Linux/build/*
+SAFEDistortion/Builds/LV2/build/*
 SAFEDistortion/Builds/VisualStudio2012/Debug/*
 SAFEDistortion/Builds/VisualStudio2012/Release/*
 
 SAFECompressor/Builds/MacOSX/build/*
 SAFECompressor/Builds/Linux/build/*
+SAFECompressor/Builds/LV2/build/*
 SAFECompressor/Builds/VisualStudio2012/Debug/*
 SAFECompressor/Builds/VisualStudio2012/Release/*
 
 SAFEReverb/Builds/MacOSX/build/*
 SAFEReverb/Builds/Linux/build/*
+SAFEReverb/Builds/LV2/build/*
 SAFEReverb/Builds/VisualStudio2012/Debug/*
 SAFEReverb/Builds/VisualStudio2012/Release/*
 
 SAFEHarmonics/Builds/MacOSX/build/*
 SAFEHarmonics/Builds/Linux/build/*
+SAFEHarmonics/Builds/LV2/build/*
 SAFEHarmonics/Builds/VisualStudio2012/Debug/*
 SAFEHarmonics/Builds/VisualStudio2012/Release/*
 
@@ -35,3 +40,5 @@ SAFEHarmonics/Builds/VisualStudio2012/Release/*
 *.pdf
 
 *.swp
+
+lv2_ttl_generator
