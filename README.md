@@ -21,3 +21,6 @@ https://github.com/martineastwood/mverb
 
 All the audio feature extraction is done using LibXtract.
 https://github.com/jamiebullock/LibXtract
+
+The JUCE LV2 wrapper is part of DISTRHO.
+https://github.com/DISTRHO/DISTRHO
