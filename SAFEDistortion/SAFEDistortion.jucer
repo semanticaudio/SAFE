@@ -74,7 +74,7 @@
         <MODULEPATH id="juce_cryptography" path="../JuceModules"/>
       </MODULEPATHS>
     </XCODE_MAC>
-    <LINUX_MAKE targetFolder="Builds/Linux" extraDefs="IMAGE_DIRECTORY=\&quot;/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\&quot;"
+    <LINUX_MAKE targetFolder="Builds/Linux" extraDefs="IMAGE_DIRECTORY=\&quot;/home/sean/Documents/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel\&quot;&#10;&#10;JucePlugin_Build_LV2&#10;JucePlugin_LV2URI=\&quot;\&quot;&#10;JucePlugin_LV2Category=\&quot;Distortion\&quot;&#10;JucePlugin_WantsLV2TimePos=1"
                 extraLinkerFlags="/usr/local/lib/libxtract.a" vstFolder="~/SDKs/vstsdk2.4"
                 externalLibraries="curl">
       <CONFIGURATIONS>
