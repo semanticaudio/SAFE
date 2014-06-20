@@ -114,9 +114,9 @@ public:
     //==========================================================================
     //      Process Block
     //==========================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock);
+    void prepareToPlay (double sampleRate, int samplesPerBlock) final;
     virtual void pluginPreparation (double sampleRate, int samplesPerBlock) = 0;
-    void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages);
+    void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages) final;
     virtual void pluginProcessing (AudioSampleBuffer& buffer, MidiBuffer& midiMessages) = 0;
 
     //==========================================================================

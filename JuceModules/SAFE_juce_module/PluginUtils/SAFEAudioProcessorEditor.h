@@ -11,7 +11,7 @@ public:
     //      Constructor and Destructor
     //==========================================================================
     SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFilter);
-    ~SAFEAudioProcessorEditor();
+    virtual ~SAFEAudioProcessorEditor();
 
     //==========================================================================
     //      User Interaction Listeners
