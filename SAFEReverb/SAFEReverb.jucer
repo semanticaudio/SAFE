@@ -33,6 +33,9 @@
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
                        isDebug="0" optimisation="3" targetName="SAFEReverb" headerPath="$(SolutionDir)../../../LibXtract"
                        libraryPath="$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/lib/Release"/>
+        <CONFIGURATION name="Release64" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
+                       isDebug="0" optimisation="3" targetName="SAFEReverb" headerPath="$(SolutionDir)../../../LibXtract"
+                       libraryPath="$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/x64/Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_opengl" path="../JuceModules"/>

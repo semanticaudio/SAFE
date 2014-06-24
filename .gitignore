@@ -3,30 +3,40 @@ SAFEEqualiser/Builds/Linux/build/*
 SAFEEqualiser/Builds/LV2/build/*
 SAFEEqualiser/Builds/VisualStudio2012/Debug/*
 SAFEEqualiser/Builds/VisualStudio2012/Release/*
+SAFEEqualiser/Builds/VisualStudio2012/Release64/*
+SAFEEqualiser/Builds/VisualStudio2012/x64/*
 
 SAFEDistortion/Builds/MacOSX/build/*
 SAFEDistortion/Builds/Linux/build/*
 SAFEDistortion/Builds/LV2/build/*
 SAFEDistortion/Builds/VisualStudio2012/Debug/*
 SAFEDistortion/Builds/VisualStudio2012/Release/*
+SAFEDistortion/Builds/VisualStudio2012/Release64/*
+SAFEDistortion/Builds/VisualStudio2012/x64/*
 
 SAFECompressor/Builds/MacOSX/build/*
 SAFECompressor/Builds/Linux/build/*
 SAFECompressor/Builds/LV2/build/*
 SAFECompressor/Builds/VisualStudio2012/Debug/*
 SAFECompressor/Builds/VisualStudio2012/Release/*
+SAFECompressor/Builds/VisualStudio2012/Release64/*
+SAFECompressor/Builds/VisualStudio2012/x64/*
 
 SAFEReverb/Builds/MacOSX/build/*
 SAFEReverb/Builds/Linux/build/*
 SAFEReverb/Builds/LV2/build/*
 SAFEReverb/Builds/VisualStudio2012/Debug/*
 SAFEReverb/Builds/VisualStudio2012/Release/*
+SAFEReverb/Builds/VisualStudio2012/Release64/*
+SAFEReverb/Builds/VisualStudio2012/x64/*
 
 SAFEHarmonics/Builds/MacOSX/build/*
 SAFEHarmonics/Builds/Linux/build/*
 SAFEHarmonics/Builds/LV2/build/*
 SAFEHarmonics/Builds/VisualStudio2012/Debug/*
 SAFEHarmonics/Builds/VisualStudio2012/Release/*
+SAFEHarmonics/Builds/VisualStudio2012/Release64/*
+SAFEHarmonics/Builds/VisualStudio2012/x64/*
 
 *.opensdf
 *.sdf
