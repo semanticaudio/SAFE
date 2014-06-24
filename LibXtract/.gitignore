@@ -71,3 +71,5 @@ doc/html
 doc/doxygen-build.stamp
 doc/documentation.doxygen
 
+
+vc2012/LibXtract_static_llib/LibXtract/x64/*
