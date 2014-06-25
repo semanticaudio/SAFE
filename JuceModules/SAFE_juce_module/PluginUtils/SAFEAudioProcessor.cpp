@@ -663,60 +663,75 @@ void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& /*
     recordUnprocessedSamples (buffer);
 
     // call the plugin dsp
-    int numChannels = buffer.getNumChannels();
-    int numSamples = buffer.getNumSamples();
+    bool parametersInterpolating = false;
 
-    if (numSamples < remainingControlBlockSamples)
+    for (int i = 0; i < parameters.size(); ++i)
     {
-        AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, numSamples);
+        parametersInterpolating |= parameters [i]->isInterpolating();
+    }
 
-        pluginProcessing (controlBlock);
+    if (parametersInterpolating)
+    {
+        int numChannels = buffer.getNumChannels();
+        int numSamples = buffer.getNumSamples();
 
-        remainingControlBlockSamples -= numSamples;
+        if (numSamples < remainingControlBlockSamples)
+        {
+            AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, numSamples);
+
+            pluginProcessing (controlBlock);
+
+            remainingControlBlockSamples -= numSamples;
+        }
+        else
+        {
+            if (remainingControlBlockSamples)
+            {
+                AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, remainingControlBlockSamples);
+
+                pluginProcessing (controlBlock);
+            }
+        
+            int numControlBlocks = (int) ((numSamples - remainingControlBlockSamples) / controlBlockSize);
+            int sampleNumber = remainingControlBlockSamples;
+
+            for (int block = 0; block < numControlBlocks; ++block)
+            {
+                for (int i = 0; i < parameters.size(); ++i)
+                {
+                    parameters [i]->smoothValues();
+                    parameterUpdateCalculations (i);
+                }
+
+                AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, sampleNumber, controlBlockSize);
+
+                pluginProcessing (controlBlock);
+
+                sampleNumber += controlBlockSize;
+            }
+
+            int samplesLeft = numSamples - sampleNumber;
+
+            if (samplesLeft)
+            {
+                for (int i = 0; i < parameters.size(); ++i)
+                {
+                    parameters [i]->smoothValues();
+                    parameterUpdateCalculations (i);
+                }
+
+                AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, sampleNumber, samplesLeft);
+
+                pluginProcessing (controlBlock);
+            }
+
+            remainingControlBlockSamples = controlBlockSize - samplesLeft;
+        }
     }
     else
     {
-        if (remainingControlBlockSamples)
-        {
-            AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, remainingControlBlockSamples);
-
-            pluginProcessing (controlBlock);
-        }
-    
-        int numControlBlocks = (int) ((numSamples - remainingControlBlockSamples) / controlBlockSize);
-        int sampleNumber = remainingControlBlockSamples;
-
-        for (int block = 0; block < numControlBlocks; ++block)
-        {
-            for (int i = 0; i < parameters.size(); ++i)
-            {
-                parameters [i]->smoothValues();
-                parameterUpdateCalculations (i);
-            }
-
-            AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, sampleNumber, controlBlockSize);
-
-            pluginProcessing (controlBlock);
-
-            sampleNumber += controlBlockSize;
-        }
-
-        int samplesLeft = numSamples - sampleNumber;
-
-        if (samplesLeft)
-        {
-            for (int i = 0; i < parameters.size(); ++i)
-            {
-                parameters [i]->smoothValues();
-                parameterUpdateCalculations (i);
-            }
-
-            AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, sampleNumber, samplesLeft);
-
-            pluginProcessing (controlBlock);
-        }
-
-        remainingControlBlockSamples = controlBlockSize - samplesLeft;
+        pluginProcessing (buffer);
+        remainingControlBlockSamples = 0;
     }
 
     // In case we have more outputs than inputs, we'll clear any output
