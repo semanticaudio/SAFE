@@ -672,7 +672,7 @@ void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& /*
 
         pluginProcessing (controlBlock);
 
-        remainingControlBlockSamples = controlBlockSize - remainingControlBlockSamples;
+        remainingControlBlockSamples -= numSamples;
     }
     else
     {
@@ -715,6 +715,8 @@ void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& /*
 
             pluginProcessing (controlBlock);
         }
+
+        remainingControlBlockSamples = controlBlockSize - samplesLeft;
     }
 
     // In case we have more outputs than inputs, we'll clear any output
