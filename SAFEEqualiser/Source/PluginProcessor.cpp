@@ -131,14 +131,14 @@ void SafeequaliserAudioProcessor::releaseResources()
 {
 }
 
-void SafeequaliserAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
-{
+void SafeequaliserAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer)
+{    
     int numSamples = buffer.getNumSamples();
     
     for (int channel = 0; channel < numChannels; ++channel)
-    {
+    {    
         float* channelData = buffer.getWritePointer (channel);
-    
+        
         for (int band = 0; band < numFilters; ++band)
         {
             eqFilters [band * numChannels + channel]->processSamples (channelData, numSamples);

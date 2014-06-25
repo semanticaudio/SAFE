@@ -93,7 +93,7 @@ void SafedistortionAudioProcessor::releaseResources()
 {
 }
 
-void SafedistortionAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
+void SafedistortionAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer)
 {
     int numSamples = buffer.getNumSamples();
     

@@ -11,7 +11,14 @@ SAFEParameter::SAFEParameter (String nameInit, float& valueRef, float initialVal
     defaultValue = initialValue;
     skewFactor = skewFactorInit;
     units = unitsInit;
-    
+
+    interpolating = false;
+    initialised = false;
+    sampleRate = 44100;
+    controlRate = 64;
+    interpolationTime = 100;
+    updateBlockSizes();
+
     setScaledValue (defaultValue);
 }
 
@@ -30,8 +37,8 @@ void SAFEParameter::setBaseValue (float newBaseValue)
     scaledValue = range * pow (baseValue, (1 / skewFactor)) + minValue;
     
     gainValue = Decibels::decibelsToGain (scaledValue);
-    
-    updateOutputValue();
+
+    startInterpolating();
 }
 
 void SAFEParameter::setScaledValue (float newScaledValue)
@@ -43,8 +50,8 @@ void SAFEParameter::setScaledValue (float newScaledValue)
     float range = maxValue - minValue;
     float proportion = scaledValue - minValue;
     baseValue = pow ((proportion / range), skewFactor);  
-    
-    updateOutputValue();
+
+    startInterpolating();
 }
 
 float SAFEParameter::getBaseValue() const
@@ -95,10 +102,87 @@ const String SAFEParameter::getUnits() const
     return units;
 }
 
-void SAFEParameter::updateOutputValue()
+//==========================================================================
+//      Smoothing Bits
+//==========================================================================
+void SAFEParameter::setSampleRate (double newSampleRate)
 {
-    if (convertToGain)
-        outputValue = gainValue;
+    sampleRate = newSampleRate;
+    updateBlockSizes();
+}
+
+void SAFEParameter::setControlRate (double newControlRate)
+{
+    controlRate = newControlRate;
+    updateBlockSizes();
+}
+
+void SAFEParameter::setInterpolationTime (double newInterpolationTime)
+{
+    interpolationTime = newInterpolationTime;
+    updateBlockSizes();
+}
+
+bool SAFEParameter::isInterpolating() const
+{
+    return interpolating;
+}
+
+void SAFEParameter::smoothValues()
+{
+    if (interpolating)
+    {
+        smoothedValue += interpolationStep;
+        ++currentControlBlock;
+
+        if (currentControlBlock >= controlBlocksPerChange)
+        {
+            smoothedValue = baseValue;
+            interpolating = false;
+        }
+
+        float range = maxValue - minValue;
+        float smoothedScaledValue = range * pow (smoothedValue, (1 / skewFactor)) + minValue;
+
+        if (convertToGain)
+            outputValue = Decibels::decibelsToGain (smoothedScaledValue);
+        else
+            outputValue = smoothedScaledValue;
+    }
     else
-        outputValue = scaledValue;
+    {
+        if (convertToGain)
+            outputValue = gainValue;
+        else
+            outputValue = scaledValue;
+    }
+}
+
+void SAFEParameter::updateBlockSizes()
+{
+    controlBlockSize = (int) (sampleRate / controlRate);
+    interpolationBlockSize = (int) (interpolationTime * sampleRate / 1000.0);
+    controlBlocksPerChange = (int) (interpolationBlockSize / controlBlockSize);
+}
+
+void SAFEParameter::startInterpolating()
+{
+    if (! initialised)
+    {
+        smoothedValue = baseValue;
+        
+        if (convertToGain)
+            outputValue = gainValue;
+        else
+            outputValue = scaledValue;
+
+        initialised = true;
+    }
+    else
+    {
+        interpolationStep = (baseValue - smoothedValue) / controlBlocksPerChange;
+        currentControlBlock = 1;
+
+        interpolating = ! (smoothedValue == baseValue);
+    }
 }

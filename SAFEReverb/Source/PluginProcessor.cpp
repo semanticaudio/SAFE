@@ -93,7 +93,7 @@ void SafereverbAudioProcessor::releaseResources()
 {
 }
 
-void SafereverbAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
+void SafereverbAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer)
 {
     int numSamples = buffer.getNumSamples();
     int numChannels = buffer.getNumChannels();

@@ -27,16 +27,38 @@ public:
     
     const String getName() const;
     const String getUnits() const;
-    
+
+    //==========================================================================
+    //      Smoothing Bits
+    //==========================================================================
+    void setSampleRate (double newSampleRate);
+    void setControlRate (double newControlRate);
+    void setInterpolationTime (double newInterpolationTime);
+
+    bool isInterpolating() const;
+
+    void smoothValues();
+
 private:
     float baseValue, minValue, maxValue, defaultValue, skewFactor, scaledValue, gainValue;
+    float smoothedValue;
+
+    double sampleRate, controlRate, interpolationTime;
+    float interpolationStep;
+    
+    int controlBlockSize, interpolationBlockSize;
+    int controlBlocksPerChange, currentControlBlock;
+
+    bool interpolating, initialised;
     float& outputValue;
     
     String name, units;
     
     bool convertToGain;
-    
-    void updateOutputValue();
+
+    void updateBlockSizes();
+
+    void startInterpolating();
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SAFEParameter)
 };

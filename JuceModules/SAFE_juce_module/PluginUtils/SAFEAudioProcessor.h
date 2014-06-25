@@ -117,7 +117,7 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) final;
     virtual void pluginPreparation (double sampleRate, int samplesPerBlock) = 0;
     void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages) final;
-    virtual void pluginProcessing (AudioSampleBuffer& buffer, MidiBuffer& midiMessages) = 0;
+    virtual void pluginProcessing (AudioSampleBuffer& buffer) = 0;
 
     //==========================================================================
     //      Playing & Recording Info
@@ -182,6 +182,10 @@ private:
     int unprocessedTap, processedTap;
 
     OwnedArray <SAFEFeatureExtractor> unprocessedFeatureExtractors, processedFeatureExtractors;
+
+    double controlRate;
+    int controlBlockSize;
+    int remainingControlBlockSamples;
 
     #if JUCE_LINUX
     SharedResourcePointer <CurlHolder> curl;

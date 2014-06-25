@@ -70,6 +70,10 @@ SAFEAudioProcessor::SAFEAudioProcessor()
     numOutputs = 1;
 
     analysisThread = new AnalysisThread (this);
+
+    controlRate = 64;
+    controlBlockSize = (int) (44100.0 / controlRate);
+    remainingControlBlockSamples = 0;
 }
 
 SAFEAudioProcessor::~SAFEAudioProcessor()
@@ -640,19 +644,78 @@ void SAFEAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
         processedFeatureExtractors.add (new SAFEFeatureExtractor);
         processedFeatureExtractors [outputChannel]->initialise (numAnalysisFrames, analysisFrameLength, sampleRate);
     }
+
+    for (int i = 0; i < parameters.size(); ++i)
+    {
+        parameters [i]->setSampleRate (sampleRate);
+    }
+
+    controlBlockSize = (int) (sampleRate / controlRate);
     
     // call any prep the plugin processing wants to do
     pluginPreparation (sampleRate, samplesPerBlock);
 }
 
-void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
+void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& /*midiMessages*/)
 {
     localRecording = recording;
 
     recordUnprocessedSamples (buffer);
 
     // call the plugin dsp
-    pluginProcessing (buffer, midiMessages);
+    int numChannels = buffer.getNumChannels();
+    int numSamples = buffer.getNumSamples();
+
+    if (numSamples < remainingControlBlockSamples)
+    {
+        AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, numSamples);
+
+        pluginProcessing (controlBlock);
+
+        remainingControlBlockSamples = controlBlockSize - remainingControlBlockSamples;
+    }
+    else
+    {
+        if (remainingControlBlockSamples)
+        {
+            AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, remainingControlBlockSamples);
+
+            pluginProcessing (controlBlock);
+        }
+    
+        int numControlBlocks = (int) ((numSamples - remainingControlBlockSamples) / controlBlockSize);
+        int sampleNumber = remainingControlBlockSamples;
+
+        for (int block = 0; block < numControlBlocks; ++block)
+        {
+            for (int i = 0; i < parameters.size(); ++i)
+            {
+                parameters [i]->smoothValues();
+                parameterUpdateCalculations (i);
+            }
+
+            AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, sampleNumber, controlBlockSize);
+
+            pluginProcessing (controlBlock);
+
+            sampleNumber += controlBlockSize;
+        }
+
+        int samplesLeft = numSamples - sampleNumber;
+
+        if (samplesLeft)
+        {
+            for (int i = 0; i < parameters.size(); ++i)
+            {
+                parameters [i]->smoothValues();
+                parameterUpdateCalculations (i);
+            }
+
+            AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, sampleNumber, samplesLeft);
+
+            pluginProcessing (controlBlock);
+        }
+    }
 
     // In case we have more outputs than inputs, we'll clear any output
     // channels that didn't contain input data, (because these aren't

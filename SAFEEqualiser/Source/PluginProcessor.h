@@ -32,8 +32,8 @@ public:
     void pluginPreparation (double sampleRate, int samplesPerBlock);
     void releaseResources();
 
-    void pluginProcessing (AudioSampleBuffer& buffer, MidiBuffer& midiMessages);
-
+    void pluginProcessing (AudioSampleBuffer& buffer);
+    
     //==============================================================================
     AudioProcessorEditor* createEditor();
     bool hasEditor() const;
