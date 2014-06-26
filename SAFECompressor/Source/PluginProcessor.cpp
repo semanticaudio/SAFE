@@ -57,7 +57,7 @@ void SafecompressorAudioProcessor::releaseResources()
 {    
 }
 
-void SafecompressorAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer)
+void SafecompressorAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
     numSamples = buffer.getNumSamples();
     numChannels = buffer.getNumChannels();

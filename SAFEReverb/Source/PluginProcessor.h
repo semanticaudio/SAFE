@@ -30,7 +30,7 @@ public:
     void pluginPreparation (double sampleRate, int samplesPerBlock);
     void releaseResources();
 
-    void pluginProcessing (AudioSampleBuffer& buffer);
+    void pluginProcessing (AudioSampleBuffer& buffer, MidiBuffer& midiMessages);
 
     enum Parameters
 	{

@@ -117,7 +117,7 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) final;
     virtual void pluginPreparation (double sampleRate, int samplesPerBlock) = 0;
     void processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages) final;
-    virtual void pluginProcessing (AudioSampleBuffer& buffer) = 0;
+    virtual void pluginProcessing (AudioSampleBuffer& buffer, MidiBuffer& midiMessages) = 0;
 
     //==========================================================================
     //      Playing & Recording Info
@@ -186,6 +186,7 @@ private:
     double controlRate;
     int controlBlockSize;
     int remainingControlBlockSamples;
+    MidiBuffer midiControlBlock;
 
     #if JUCE_LINUX
     SharedResourcePointer <CurlHolder> curl;

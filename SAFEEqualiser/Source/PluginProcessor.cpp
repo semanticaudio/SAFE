@@ -131,7 +131,7 @@ void SafeequaliserAudioProcessor::releaseResources()
 {
 }
 
-void SafeequaliserAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer)
+void SafeequaliserAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {    
     int numSamples = buffer.getNumSamples();
     

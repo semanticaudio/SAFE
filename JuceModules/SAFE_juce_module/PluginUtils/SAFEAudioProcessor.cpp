@@ -651,12 +651,14 @@ void SAFEAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     }
 
     controlBlockSize = (int) (sampleRate / controlRate);
+    midiControlBlock.ensureSize (2048);
+    midiControlBlock.clear();
     
     // call any prep the plugin processing wants to do
     pluginPreparation (sampleRate, samplesPerBlock);
 }
 
-void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& /*midiMessages*/)
+void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
     localRecording = recording;
 
@@ -679,7 +681,10 @@ void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& /*
         {
             AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, numSamples);
 
-            pluginProcessing (controlBlock);
+            midiControlBlock.clear();
+            midiControlBlock.addEvents (midiMessages, 0, numSamples, 0);
+
+            pluginProcessing (controlBlock, midiControlBlock);
 
             remainingControlBlockSamples -= numSamples;
         }
@@ -689,7 +694,10 @@ void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& /*
             {
                 AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, remainingControlBlockSamples);
 
-                pluginProcessing (controlBlock);
+                midiControlBlock.clear();
+                midiControlBlock.addEvents (midiMessages, 0, remainingControlBlockSamples, 0);
+
+                pluginProcessing (controlBlock, midiControlBlock);
             }
         
             int numControlBlocks = (int) ((numSamples - remainingControlBlockSamples) / controlBlockSize);
@@ -705,7 +713,10 @@ void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& /*
 
                 AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, sampleNumber, controlBlockSize);
 
-                pluginProcessing (controlBlock);
+                midiControlBlock.clear();
+                midiControlBlock.addEvents (midiMessages, sampleNumber, controlBlockSize, 0);
+
+                pluginProcessing (controlBlock, midiControlBlock);
 
                 sampleNumber += controlBlockSize;
             }
@@ -722,7 +733,10 @@ void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& /*
 
                 AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, sampleNumber, samplesLeft);
 
-                pluginProcessing (controlBlock);
+                midiControlBlock.clear();
+                midiControlBlock.addEvents (midiMessages, sampleNumber, samplesLeft, 0);
+
+                pluginProcessing (controlBlock, midiControlBlock);
             }
 
             remainingControlBlockSamples = controlBlockSize - samplesLeft;
@@ -730,7 +744,7 @@ void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& /*
     }
     else
     {
-        pluginProcessing (buffer);
+        pluginProcessing (buffer, midiMessages);
         remainingControlBlockSamples = 0;
     }
 
