@@ -1,7 +1,7 @@
 //==========================================================================
 //      Constructor and Destructor
 //==========================================================================
-SAFEParameter::SAFEParameter (String nameInit, float& valueRef, float initialValue, float minValueInit, float maxValueInit, String unitsInit, float skewFactorInit, bool convertDBToGainValue)
+SAFEParameter::SAFEParameter (String nameInit, float& valueRef, float initialValue, float minValueInit, float maxValueInit, String unitsInit, float skewFactorInit, bool convertDBToGainValue, double interpolationTimeInit)
     : outputValue (valueRef),
       convertToGain (convertDBToGainValue)
 {
@@ -16,7 +16,7 @@ SAFEParameter::SAFEParameter (String nameInit, float& valueRef, float initialVal
     initialised = false;
     sampleRate = 44100;
     controlRate = 64;
-    interpolationTime = 100;
+    interpolationTime = interpolationTimeInit;
     updateBlockSizes();
 
     setScaledValue (defaultValue);

@@ -7,7 +7,7 @@ public:
     //==========================================================================
     //      Constructor and Destructor
     //==========================================================================
-    SAFEParameter (String nameInit, float& valueRef, float initialValue = 1, float minValueInit = 0, float maxValueInit = 1, String unitsInit = String::empty, float skewFactorInit = 1, bool convertDBToGainValue = false);
+    SAFEParameter (String nameInit, float& valueRef, float initialValue = 1, float minValueInit = 0, float maxValueInit = 1, String unitsInit = String::empty, float skewFactorInit = 1, bool convertDBToGainValue = false, double interpolationTimeInit = 100);
     ~SAFEParameter();
     
     //==========================================================================

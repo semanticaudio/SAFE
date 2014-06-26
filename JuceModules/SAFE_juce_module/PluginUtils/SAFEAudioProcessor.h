@@ -131,9 +131,9 @@ protected:
     //==========================================================================
     //      Methods to Create New Parameters
     //==========================================================================
-    void addParameter (String name, float& valueRef, float initialValue = 1, float minValue = 0, float maxValue = 1, String units = String::empty, float skewFactor = 1, bool convertDBToGainValue = false);
+    void addParameter (String name, float& valueRef, float initialValue = 1, float minValue = 0, float maxValue = 1, String units = String::empty, float skewFactor = 1, bool convertDBToGainValue = false, double interpolationTime = 100);
 
-    void addDBParameter (String name, float& valueRef, float initialValue = 1, float minValue = 0, float maxValue = 1, String units = String::empty, float skewFactor = 1);
+    void addDBParameter (String name, float& valueRef, float initialValue = 1, float minValue = 0, float maxValue = 1, String units = String::empty, float skewFactor = 1, double interpolationTimeInit = 100);
 
     //==========================================================================
     //      Buffer Playing Audio For Analysis

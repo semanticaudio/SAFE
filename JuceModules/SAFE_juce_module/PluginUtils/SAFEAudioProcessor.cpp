@@ -799,16 +799,16 @@ bool SAFEAudioProcessor::isReadyToSave()
 //==========================================================================
 //      Methods to Create New Parameters
 //==========================================================================
-void SAFEAudioProcessor::addParameter (String name, float& valueRef, float initialValue, float minValue, float maxValue, String units, float skewFactor, bool convertDBToGainValue)
+void SAFEAudioProcessor::addParameter (String name, float& valueRef, float initialValue, float minValue, float maxValue, String units, float skewFactor, bool convertDBToGainValue, double interpolationTime)
 {
-    parameters.add (new SAFEParameter (name, valueRef, initialValue, minValue, maxValue, units, skewFactor, convertDBToGainValue));
+    parameters.add (new SAFEParameter (name, valueRef, initialValue, minValue, maxValue, units, skewFactor, convertDBToGainValue, interpolationTime));
 
     parametersToSave.add (0);
 }
 
-void SAFEAudioProcessor::addDBParameter (String name, float& valueRef, float initialValue, float minValue, float maxValue, String units, float skewFactor)
+void SAFEAudioProcessor::addDBParameter (String name, float& valueRef, float initialValue, float minValue, float maxValue, String units, float skewFactor, double interpolationTime)
 {
-    parameters.add (new SAFEParameter (name, valueRef, initialValue, minValue, maxValue, units, skewFactor, true));
+    parameters.add (new SAFEParameter (name, valueRef, initialValue, minValue, maxValue, units, skewFactor, true, interpolationTime));
 
     parametersToSave.add (0);
 }
