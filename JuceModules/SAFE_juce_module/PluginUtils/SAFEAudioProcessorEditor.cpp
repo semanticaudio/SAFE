@@ -102,6 +102,12 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
 
     fileAccessButton.addListener (this);
 
+    availableDescriptorList.setTextWhenNothingSelected ("Available Descriptors");
+    availableDescriptorList.setColour (ComboBox::backgroundColourId, SAFEColours::textEditorGrey);
+    availableDescriptorList.addListener (this);
+    availableDescriptorList.setColour (ComboBox::arrowColourId, Colours::black);
+    updateAvailableDescriptorList();
+
     warningVisible = false;
     warningFlagged = false;
     flaggedWarningID = NoWarning;
@@ -253,6 +259,8 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
             fileAccessButton.setMode (SAFEButton::GlobalFile);
             fileAccessButtonPressed = true;
         }
+
+        updateAvailableDescriptorList();
     }
 }
 
@@ -270,6 +278,42 @@ void SAFEAudioProcessorEditor::sliderValueChanged (Slider* slider)
     }
 
     sliderUpdate (slider);
+}
+
+void SAFEAudioProcessorEditor::comboBoxChanged (ComboBox *comboBoxThatChanged)
+{
+    SAFEAudioProcessor* ourProcessor = getProcessor();
+
+    if (fileAccessButtonPressed && ! canReachServer())
+    {
+        displayWarning (CannotReachServer);
+        return;
+    }
+
+    if (! (ourProcessor->isRecording()))
+    {
+        // select param settings from either local/global db...
+        WarningID warning;
+        
+        if (fileAccessButtonPressed) //select between the local of global file based on usr:global/local button
+        {
+            warning = ourProcessor->getServerData (comboBoxThatChanged->getText());
+        }
+        else
+        {
+            warning = ourProcessor->loadSemanticData (comboBoxThatChanged->getText());
+        }
+        
+        // load the descriptor and warn if it's not found...
+        if (warning != NoWarning)
+        {
+            displayWarning (warning);
+        }
+    }
+    else
+    {
+        displayWarning (LoadingDisabled);
+    }
 }
 
 //==========================================================================
@@ -409,6 +453,43 @@ void SAFEAudioProcessorEditor::displayWarning (WarningID id, int durationInMilli
         warningVisible = true;
         startTimer (warningTimer, durationInMilliseconds);
     }
+}
+
+//==========================================================================
+//      Update Available Descriptors
+//==========================================================================
+void SAFEAudioProcessorEditor::updateAvailableDescriptorList()
+{
+    StringArray descriptors;
+
+    if (fileAccessButtonPressed)
+    {
+        URL descriptorURL ("http://193.60.133.151/SAFE/getDescriptors.php");
+        descriptorURL = descriptorURL.withParameter ("PluginName", JucePlugin_Name);
+        
+        String allDescriptors = descriptorURL.readEntireTextStream();
+        descriptors.addTokens (allDescriptors, true);
+    }
+    else
+    {
+        SAFEAudioProcessor* ourProcessor = getProcessor();
+        XmlElement* localSemanticData = ourProcessor->getSemanticDataElement();
+
+        forEachXmlChildElement (*localSemanticData, entry)
+        {
+            for (int i = 0; i < entry->getNumAttributes(); ++i)
+            {
+                descriptors.add (entry->getStringAttribute (String ("Descriptor") + String (i)));
+            }
+        }
+    }
+
+    descriptors.removeEmptyStrings();
+    descriptors.removeDuplicates (true);
+    descriptors.sort (true);
+    
+    availableDescriptorList.clear (dontSendNotification);
+    availableDescriptorList.addItemList (descriptors, 1);
 }
 
 //==========================================================================

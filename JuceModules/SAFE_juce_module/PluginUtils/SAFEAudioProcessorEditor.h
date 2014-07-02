@@ -4,7 +4,8 @@
 class SAFEAudioProcessorEditor : public AudioProcessorEditor,
                                  public Button::Listener,
                                  public Slider::Listener,
-                                 public MultiTimer
+                                 public MultiTimer,
+                                 public ComboBox::Listener
 {
 public:
     //==========================================================================
@@ -19,6 +20,7 @@ public:
     void buttonClicked (Button* button);
     void sliderValueChanged (Slider* slider);
     virtual void sliderUpdate (Slider*) {}
+    void comboBoxChanged (ComboBox *comboBoxThatChanged);
 
     //==========================================================================
     //      GUI Update Timer
@@ -44,6 +46,8 @@ protected:
     void setMetaDataScreenPosition (int x, int y);
 
     SAFEButton fileAccessButton;
+
+    ComboBox availableDescriptorList;
 
 private:
     enum Timers
@@ -76,6 +80,11 @@ private:
     bool warningFlagged;
     WarningID flaggedWarningID;
     void displayWarning (WarningID id, int durationInMilliseconds = 1000);
+
+    //==========================================================================
+    //      Update Available Descriptors
+    //==========================================================================
+    void updateAvailableDescriptorList();
 
     //==========================================================================
     //      Test Connection to Server

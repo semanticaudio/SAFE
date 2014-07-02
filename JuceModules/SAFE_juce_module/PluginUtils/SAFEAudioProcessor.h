@@ -99,6 +99,7 @@ public:
     //      Semantic Data Parsing
     //==========================================================================
     void initialiseSemanticDataFile();
+    XmlElement* getSemanticDataElement();
     WarningID populateXmlElementWithSemanticData (XmlElement* element, const SAFEMetaData& metaData);
     WarningID saveSemanticData (const String& newDescriptors, const SAFEMetaData& metaData);
     WarningID loadSemanticData (const String& descriptor);

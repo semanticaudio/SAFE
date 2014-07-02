@@ -281,6 +281,11 @@ void SAFEAudioProcessor::initialiseSemanticDataFile()
     }
 }
 
+XmlElement* SAFEAudioProcessor::getSemanticDataElement()
+{
+    return semanticDataElement.get();
+}
+
 WarningID SAFEAudioProcessor::populateXmlElementWithSemanticData (XmlElement* element, const SAFEMetaData& metaData)
 {
     // analyse the buffered samples
