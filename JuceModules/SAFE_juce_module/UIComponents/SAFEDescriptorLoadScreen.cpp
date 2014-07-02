@@ -25,7 +25,6 @@ SAFEDescriptorLoadScreen::SAFEDescriptorLoadScreen()
     searchButton.setBounds (345, 55, 25, 25);
     searchButton.addListener (this);
 
-    updateDescriptors();
     descriptorBox.setModel (this);
     addAndMakeVisible (&descriptorBox);
     descriptorBox.setBounds (20, 90, 350, 160);
@@ -82,6 +81,41 @@ void SAFEDescriptorLoadScreen::paintListBoxItem (int rowNumber, Graphics &g, int
 }
 
 //==========================================================================
+//      Get Descriptors
+//==========================================================================
+void SAFEDescriptorLoadScreen::updateDescriptors (bool fromServer, XmlElement* localSemanticDataElement)
+{
+    allDescriptors.clear();
+
+    if (fromServer)
+    {
+        URL descriptorURL ("http://193.60.133.151/SAFE/getDescriptors.php");
+        descriptorURL = descriptorURL.withParameter ("PluginName", JucePlugin_Name);
+
+        String loadableDescriptors = descriptorURL.readEntireTextStream();
+        allDescriptors.addTokens (loadableDescriptors, true);
+    }
+    else if (localSemanticDataElement)
+    {
+        forEachXmlChildElement (*localSemanticDataElement, entry)
+        {
+            for (int i = 0; i < entry->getNumAttributes(); ++i)
+            {
+                allDescriptors.add (entry->getStringAttribute (String ("Descriptor") + String (i)));
+            }
+        }
+    }
+    
+    allDescriptors.removeEmptyStrings();
+    allDescriptors.removeDuplicates (true);
+    allDescriptors.sort (true);
+
+    searchedDescriptors = allDescriptors;
+
+    descriptorBox.updateContent();
+}
+
+//==========================================================================
 //      Descriptor Search
 //==========================================================================
 void SAFEDescriptorLoadScreen::buttonClicked (Button *buttonThatWasClicked)
@@ -102,21 +136,4 @@ void SAFEDescriptorLoadScreen::buttonClicked (Button *buttonThatWasClicked)
 
         descriptorBox.updateContent();
     }
-}
-
-//==========================================================================
-//      Get Descriptors
-//==========================================================================
-void SAFEDescriptorLoadScreen::updateDescriptors()
-{
-    URL descriptorURL ("http://193.60.133.151/SAFE/getDescriptors.php");
-    descriptorURL = descriptorURL.withParameter ("PluginName", JucePlugin_Name);
-    
-    String loadableDescriptors = descriptorURL.readEntireTextStream();
-    allDescriptors.addTokens (loadableDescriptors, true);
-    allDescriptors.removeEmptyStrings();
-    allDescriptors.removeDuplicates (true);
-    allDescriptors.sort (true);
-
-    searchedDescriptors = allDescriptors;
 }

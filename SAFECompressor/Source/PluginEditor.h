@@ -48,8 +48,6 @@ private:
     {
         return static_cast <SafecompressorAudioProcessor*> (getAudioProcessor());
     }
-    
-    SAFEDescriptorLoadScreen loadScreen;
 };
 
 #endif  // PLUGINEDITOR_H_INCLUDED

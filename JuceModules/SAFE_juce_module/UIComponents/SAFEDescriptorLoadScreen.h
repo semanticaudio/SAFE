@@ -24,6 +24,11 @@ public:
     void paintListBoxItem (int rowNumber, Graphics &g, int width, int height, bool rowIsSelected);
 
     //==========================================================================
+    //      Get Descriptors
+    //==========================================================================
+    void updateDescriptors (bool fromServer, XmlElement* localSemanticDataElement);
+
+    //==========================================================================
     //      Descriptor Search
     //==========================================================================
     void buttonClicked (Button *buttonThatWasClicked);
@@ -40,10 +45,6 @@ private:
 
     TextButton searchButton;
 
-    //==========================================================================
-    //      Get Descriptors
-    //==========================================================================
-    void updateDescriptors();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SAFEDescriptorLoadScreen)
 };

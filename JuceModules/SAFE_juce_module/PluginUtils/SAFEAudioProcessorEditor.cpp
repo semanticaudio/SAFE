@@ -64,6 +64,17 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
     metaDataButton.setMode (SAFEButton::MetaData);
     metaDataButton.addListener (this);
 
+    // stuff for the descriptor load screen
+    loadScreenXPos = 1200;
+    loadScreenYPos = 0;
+    addAndMakeVisible (&descriptorLoadScreen);
+    descriptorLoadScreen.setBounds (loadScreenXPos, loadScreenYPos, 390, 295);
+    descriptorLoadScreen.setAlwaysOnTop (true);
+    descriptorLoadScreen.setEnabled (false);
+    descriptorLoadScreen.closeButton.addListener (this);
+
+    extraScreenVisible = false;
+
     File documentsDirectory (File::getSpecialLocation (File::userDocumentsDirectory));
 
     File dataDirectory (documentsDirectory.getChildFile ("SAFEPluginData"));
@@ -102,11 +113,7 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
 
     fileAccessButton.addListener (this);
 
-    availableDescriptorList.setTextWhenNothingSelected ("Available Descriptors");
-    availableDescriptorList.setColour (ComboBox::backgroundColourId, SAFEColours::textEditorGrey);
-    availableDescriptorList.addListener (this);
-    availableDescriptorList.setColour (ComboBox::arrowColourId, Colours::black);
-    updateAvailableDescriptorList();
+    descriptorLoadScreen.updateDescriptors (fileAccessButtonPressed, ownerFilter->getSemanticDataElement());
 
     warningVisible = false;
     warningFlagged = false;
@@ -170,43 +177,43 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
     // load button
     else if (button == &loadButton) 
     {
-        if (fileAccessButtonPressed && ! canReachServer())
+        // disable all the components
+        int numComponents = getNumChildComponents();
+
+        for (int component = 0; component < numComponents; ++component)
         {
-            displayWarning (CannotReachServer);
-            return;
+            getChildComponent (component)->setEnabled (false);
         }
 
-        if (! (ourProcessor->isRecording()))
+        descriptorLoadScreen.setEnabled (true);
+
+        // animate the meta data screen
+        Rectangle <int> loadScreenPosition = descriptorLoadScreen.getBoundsInParent();
+        loadScreenPosition.setX (loadScreenXPos);
+
+        animator.animateComponent (&descriptorLoadScreen, loadScreenPosition, 0xff, 1000, false, 0, 0);
+
+        extraScreenVisible = true;
+    }
+    else if (button == &descriptorLoadScreen.closeButton)
+    {
+        // enable all the components
+        int numComponents = getNumChildComponents();
+
+        for (int component = 0; component < numComponents; ++component)
         {
-            if (descriptorBoxContent.containsNonWhitespaceChars())
-            {
-                // select param settings from either local/global db...
-                WarningID warning;
-                
-                if (fileAccessButtonPressed) //select between the local of global file based on usr:global/local button
-                {
-                    warning = ourProcessor->getServerData (descriptorBoxContent);
-                }
-                else
-                {
-                    warning = ourProcessor->loadSemanticData (descriptorBoxContent);
-                }
-                
-                // load the descriptor and warn if it's not found...
-                if (warning != NoWarning)
-                {
-                    displayWarning (warning);
-                }
-            }
-            else
-            {
-                displayWarning (DescriptorBoxEmpty);
-            }
+            getChildComponent (component)->setEnabled (true);
         }
-        else
-        {
-            displayWarning (LoadingDisabled);
-        }
+
+        descriptorLoadScreen.setEnabled (false);
+
+        // animate the meta data screen
+        Rectangle <int> loadScreenPosition = descriptorLoadScreen.getBoundsInParent();
+        loadScreenPosition.setX (getWidth());
+
+        animator.animateComponent (&descriptorLoadScreen, loadScreenPosition, 0xff, 1000, false, 0, 0);
+
+        extraScreenVisible = false;
     }
     // meta data button
     else if (button == &metaDataButton)
@@ -226,6 +233,8 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
         metaDataPosition.setX (metaDataXPos);
 
         animator.animateComponent (&metaDataScreen, metaDataPosition, 0xff, 1000, false, 0, 0);
+
+        extraScreenVisible = true;
     }
     // submit button
     else if (button == &metaDataScreen.submitButton)
@@ -245,6 +254,8 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
         metaDataPosition.setX (-390);
 
         animator.animateComponent (&metaDataScreen, metaDataPosition, 0xff, 1000, false, 0, 0);
+
+        extraScreenVisible = false;
     }
     // file access button
     else if (button == &fileAccessButton)
@@ -260,7 +271,7 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
             fileAccessButtonPressed = true;
         }
 
-        updateAvailableDescriptorList();
+        descriptorLoadScreen.updateDescriptors (fileAccessButtonPressed, ourProcessor->getSemanticDataElement());
     }
 }
 
@@ -280,42 +291,6 @@ void SAFEAudioProcessorEditor::sliderValueChanged (Slider* slider)
     sliderUpdate (slider);
 }
 
-void SAFEAudioProcessorEditor::comboBoxChanged (ComboBox *comboBoxThatChanged)
-{
-    SAFEAudioProcessor* ourProcessor = getProcessor();
-
-    if (fileAccessButtonPressed && ! canReachServer())
-    {
-        displayWarning (CannotReachServer);
-        return;
-    }
-
-    if (! (ourProcessor->isRecording()))
-    {
-        // select param settings from either local/global db...
-        WarningID warning;
-        
-        if (fileAccessButtonPressed) //select between the local of global file based on usr:global/local button
-        {
-            warning = ourProcessor->getServerData (comboBoxThatChanged->getText());
-        }
-        else
-        {
-            warning = ourProcessor->loadSemanticData (comboBoxThatChanged->getText());
-        }
-        
-        // load the descriptor and warn if it's not found...
-        if (warning != NoWarning)
-        {
-            displayWarning (warning);
-        }
-    }
-    else
-    {
-        displayWarning (LoadingDisabled);
-    }
-}
-
 //==========================================================================
 //      Timers
 //==========================================================================
@@ -330,7 +305,6 @@ void SAFEAudioProcessorEditor::timerCallback (int timerID)
         {
             recordButton.setMode (SAFEButton::Save);
 
-            if (! isTimerRunning (warningTimer))
             {
                 recordButton.setEnabled (true);
             }
@@ -393,6 +367,14 @@ void SAFEAudioProcessorEditor::setMetaDataScreenPosition (int x, int y)
     Rectangle <int> metaDataPosition = metaDataScreen.getBoundsInParent();
     metaDataPosition.setY (metaDataYPos);
     metaDataScreen.setBounds (metaDataPosition);
+    
+    loadScreenXPos = x;
+    loadScreenYPos = y;
+    
+    Rectangle <int> loadScreenPosition = descriptorLoadScreen.getBoundsInParent();
+    loadScreenPosition.setX (getWidth());
+    loadScreenPosition.setY (loadScreenYPos);
+    descriptorLoadScreen.setBounds (loadScreenPosition);
 }
 
 //==========================================================================
@@ -453,43 +435,6 @@ void SAFEAudioProcessorEditor::displayWarning (WarningID id, int durationInMilli
         warningVisible = true;
         startTimer (warningTimer, durationInMilliseconds);
     }
-}
-
-//==========================================================================
-//      Update Available Descriptors
-//==========================================================================
-void SAFEAudioProcessorEditor::updateAvailableDescriptorList()
-{
-    StringArray descriptors;
-
-    if (fileAccessButtonPressed)
-    {
-        URL descriptorURL ("http://193.60.133.151/SAFE/getDescriptors.php");
-        descriptorURL = descriptorURL.withParameter ("PluginName", JucePlugin_Name);
-        
-        String allDescriptors = descriptorURL.readEntireTextStream();
-        descriptors.addTokens (allDescriptors, true);
-    }
-    else
-    {
-        SAFEAudioProcessor* ourProcessor = getProcessor();
-        XmlElement* localSemanticData = ourProcessor->getSemanticDataElement();
-
-        forEachXmlChildElement (*localSemanticData, entry)
-        {
-            for (int i = 0; i < entry->getNumAttributes(); ++i)
-            {
-                descriptors.add (entry->getStringAttribute (String ("Descriptor") + String (i)));
-            }
-        }
-    }
-
-    descriptors.removeEmptyStrings();
-    descriptors.removeDuplicates (true);
-    descriptors.sort (true);
-    
-    availableDescriptorList.clear (dontSendNotification);
-    availableDescriptorList.addItemList (descriptors, 1);
 }
 
 //==========================================================================
