@@ -72,6 +72,7 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
     descriptorLoadScreen.setAlwaysOnTop (true);
     descriptorLoadScreen.setEnabled (false);
     descriptorLoadScreen.closeButton.addListener (this);
+    descriptorLoadScreen.loadButton.addListener (this);
 
     extraScreenVisible = false;
 
@@ -214,6 +215,44 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
         animator.animateComponent (&descriptorLoadScreen, loadScreenPosition, 0xff, 1000, false, 0, 0);
 
         extraScreenVisible = false;
+    }
+    else if (button == &descriptorLoadScreen.loadButton)
+    {
+        buttonClicked (&descriptorLoadScreen.closeButton);
+
+        String selectedDescriptor = descriptorLoadScreen.getSelectedDescriptor();
+
+        if (fileAccessButtonPressed && ! canReachServer())
+        {
+            displayWarning (CannotReachServer);
+            return;
+        }
+
+        if (! (ourProcessor->isRecording()))
+        {
+            // select param settings from either local/global db...
+            WarningID warning;
+            
+            if (fileAccessButtonPressed) //select between the local of global file based on usr:global/local button
+            {
+                warning = ourProcessor->getServerData (selectedDescriptor);
+            }
+            else
+            {
+                warning = ourProcessor->loadSemanticData (selectedDescriptor);
+            }
+            
+            // load the descriptor and warn if it's not found...
+            if (warning != NoWarning)
+            {
+                displayWarning (warning);
+            }
+        }
+        else
+        {
+            displayWarning (LoadingDisabled);
+        }
+
     }
     // meta data button
     else if (button == &metaDataButton)

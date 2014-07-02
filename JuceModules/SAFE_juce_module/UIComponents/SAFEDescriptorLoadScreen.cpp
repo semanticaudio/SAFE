@@ -115,6 +115,12 @@ void SAFEDescriptorLoadScreen::updateDescriptors (bool fromServer, XmlElement* l
     descriptorBox.updateContent();
 }
 
+String SAFEDescriptorLoadScreen::getSelectedDescriptor()
+{
+    int selectedRow = descriptorBox.getSelectedRow();
+    return searchedDescriptors [selectedRow];
+}
+
 //==========================================================================
 //      Descriptor Search
 //==========================================================================

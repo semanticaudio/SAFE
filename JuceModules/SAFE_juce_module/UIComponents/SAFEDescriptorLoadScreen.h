@@ -27,6 +27,7 @@ public:
     //      Get Descriptors
     //==========================================================================
     void updateDescriptors (bool fromServer, XmlElement* localSemanticDataElement);
+    String getSelectedDescriptor();
 
     //==========================================================================
     //      Descriptor Search
