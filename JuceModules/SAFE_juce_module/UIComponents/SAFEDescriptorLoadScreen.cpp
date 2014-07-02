@@ -88,6 +88,19 @@ void SAFEDescriptorLoadScreen::buttonClicked (Button *buttonThatWasClicked)
 {
     if (buttonThatWasClicked == &searchButton)
     {
+        String searchTerm = searchBox.getText();
+
+        searchedDescriptors.clear();
+
+        for (int i = 0; i < allDescriptors.size(); ++i)
+        {
+            if (allDescriptors [i].startsWithIgnoreCase (searchTerm))
+            {
+                searchedDescriptors.add (allDescriptors [i]);
+            }
+        }
+
+        descriptorBox.updateContent();
     }
 }
 
