@@ -99,6 +99,9 @@ SafereverbAudioProcessorEditor::SafereverbAudioProcessorEditor (SafereverbAudioP
     earlySlider->setColour (SAFEColours::red);
     earlySlider->setText ("Early");
     
+    addAndMakeVisible (&availableDescriptorList);
+    availableDescriptorList.setBounds (361, 216, 130, 26);
+    
 }
 
 SafereverbAudioProcessorEditor::~SafereverbAudioProcessorEditor()

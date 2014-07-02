@@ -170,6 +170,9 @@ SafeequaliserAudioProcessorEditor::SafeequaliserAudioProcessorEditor (Safeequali
     display.setControlParameters (2, 1000, 0, 0.71);
     display.setControlParameters (3, 3300, 0, 0.71);
     display.setControlParameters (4, 8200, 0, 0.71);
+    
+    addAndMakeVisible (&availableDescriptorList);
+    availableDescriptorList.setBounds (581, 216 + filterGraphVerticalOffset, 130, 26);
 }
 
 SafeequaliserAudioProcessorEditor::~SafeequaliserAudioProcessorEditor()
