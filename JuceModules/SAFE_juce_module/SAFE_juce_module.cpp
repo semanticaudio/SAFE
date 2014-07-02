@@ -23,6 +23,7 @@ namespace juce
 #include "UIComponents/SAFEButton.cpp"
 #include "UIComponents/SAFESlider.cpp"
 #include "UIComponents/SAFEMetaDataScreen.cpp"
+#include "UIComponents/SAFEDescriptorLoadScreen.cpp"
 #include "UIComponents/LevelMeterTimer.cpp"
 #include "UIComponents/LevelMeter.cpp"
 #include "UIComponents/FunctionGraph.cpp"

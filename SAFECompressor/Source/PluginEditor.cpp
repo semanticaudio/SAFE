@@ -20,7 +20,7 @@ SafecompressorAudioProcessorEditor::SafecompressorAudioProcessorEditor (Safecomp
     : SAFEAudioProcessorEditor (ownerFilter)
 {
     // This is where our plugin's editor size is set.
-    setSize (844, 404);
+    setSize (844 + 390, 404);
     
     File imageDirectory (IMAGE_DIRECTORY);
 
@@ -104,6 +104,9 @@ SafecompressorAudioProcessorEditor::SafecompressorAudioProcessorEditor (Safecomp
     
     addAndMakeVisible (&availableDescriptorList);
     availableDescriptorList.setBounds (613, 218, 130, 26);
+    
+    addAndMakeVisible (&loadScreen);
+    loadScreen.setBounds (844, 0, 390, 295);
 }
 
 SafecompressorAudioProcessorEditor::~SafecompressorAudioProcessorEditor()
@@ -115,7 +118,7 @@ void SafecompressorAudioProcessorEditor::paint (Graphics& g)
 {
     g.fillAll (Colours::grey);
     
-    int width = getWidth();
+    int width = 844;//getWidth();
     int height = getHeight();
     int imageWidth = backgroundImage.getWidth();
     int imageHeight = backgroundImage.getHeight();
