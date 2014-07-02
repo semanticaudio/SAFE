@@ -669,7 +669,7 @@ void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
 
     for (int i = 0; i < parameters.size(); ++i)
     {
-        parametersInterpolating |= parameters [i]->isInterpolating();
+        parametersInterpolating = parametersInterpolating || parameters [i]->isInterpolating();
     }
 
     if (parametersInterpolating)

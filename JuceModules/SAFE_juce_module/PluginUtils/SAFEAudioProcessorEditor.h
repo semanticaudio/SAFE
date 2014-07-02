@@ -62,6 +62,8 @@ private:
 
     SAFEMetaDataScreen metaDataScreen;
     int metaDataXPos, metaDataYPos;
+    File metaDataFile;
+    ScopedPointer <XmlElement> metaDataElement;
 
     int numParameters;
     const OwnedArray <SAFEParameter>& parameters;

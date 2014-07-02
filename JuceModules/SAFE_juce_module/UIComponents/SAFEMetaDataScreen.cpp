@@ -122,3 +122,16 @@ SAFEMetaData SAFEMetaDataScreen::getMetaData()
 
     return metaData;
 }
+
+//==========================================================================
+//      Set the Data
+//==========================================================================
+void SAFEMetaDataScreen::setMetaData (const SAFEMetaData& metaData)
+{
+    genreBox.setText (metaData.genre);
+    instrumentBox.setText (metaData.instrument);
+    experienceBox.setText (metaData.experience);
+    locationBox.setText (metaData.location);
+    ageBox.setText (metaData.age);
+    languageBox.setText (metaData.language);
+}

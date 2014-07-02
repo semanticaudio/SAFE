@@ -25,6 +25,11 @@ public:
     //==========================================================================
     SAFEMetaData getMetaData();
 
+    //==========================================================================
+    //      Set the Data
+    //==========================================================================
+    void setMetaData (const SAFEMetaData& metaData);
+
     // button made accessible so listeners can easily be added
     SAFEButton submitButton;
 

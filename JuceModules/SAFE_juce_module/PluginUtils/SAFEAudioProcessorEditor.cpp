@@ -64,6 +64,31 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
     metaDataButton.setMode (SAFEButton::MetaData);
     metaDataButton.addListener (this);
 
+    File documentsDirectory (File::getSpecialLocation (File::userDocumentsDirectory));
+
+    File dataDirectory (documentsDirectory.getChildFile ("SAFEPluginData"));
+    
+    metaDataFile = dataDirectory.getChildFile ("SAFEMetaData.xml");
+
+    if (metaDataFile.exists())
+    {
+        XmlDocument metaDataDocument (metaDataFile);
+        metaDataElement = metaDataDocument.getDocumentElement();
+
+        SAFEMetaData metaData;
+        metaData.location = metaDataElement->getStringAttribute ("Location", "");
+        metaData.experience = metaDataElement->getStringAttribute ("Experience", "");
+        metaData.age = metaDataElement->getStringAttribute ("Age", "");
+        metaData.language = metaDataElement->getStringAttribute ("Language", "");
+
+        metaDataScreen.setMetaData (metaData);
+    }
+    else
+    {
+        metaDataElement = new XmlElement ("MetaData");
+    }
+
+    // file access button settings
     if (canReachServer())
     {
         fileAccessButton.setMode (SAFEButton::GlobalFile);
@@ -88,6 +113,14 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
 
 SAFEAudioProcessorEditor::~SAFEAudioProcessorEditor()
 {
+    SAFEMetaData metaData = metaDataScreen.getMetaData();
+
+    metaDataElement->setAttribute ("Location", metaData.location);
+    metaDataElement->setAttribute ("Experience", metaData.experience);
+    metaDataElement->setAttribute ("Age", metaData.age);
+    metaDataElement->setAttribute ("Language", metaData.language);
+
+    metaDataElement->writeToFile (metaDataFile, "");
 }
 
 //==========================================================================
