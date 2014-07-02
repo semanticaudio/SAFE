@@ -97,7 +97,7 @@ SafereverbAudioProcessorEditor::SafereverbAudioProcessorEditor (SafereverbAudioP
     addAndMakeVisible (earlySlider);
     earlySlider->setBounds (250, 285, 80, 100);
     earlySlider->setColour (SAFEColours::red);
-    earlySlider->setText ("Early");
+    earlySlider->setText ("ER/\nVerb");
     
     addAndMakeVisible (&availableDescriptorList);
     availableDescriptorList.setBounds (361, 216, 130, 26);
