@@ -44,18 +44,21 @@ SafereverbAudioProcessorEditor::SafereverbAudioProcessorEditor (SafereverbAudioP
     // density, decay, size,
     SAFESlider* densitySlider = sliders [SafereverbAudioProcessor::PARAMdensity];
     addAndMakeVisible (densitySlider);
+    densitySlider->setNumDecimalPlaces (2);
     densitySlider->setBounds (30, 80, 80, 100);
     densitySlider->setColour (SAFEColours::green);
     densitySlider->setText ("Dense");
     
     SAFESlider* decaySlider = sliders [SafereverbAudioProcessor::PARAMdecay];
     addAndMakeVisible (decaySlider);
+    decaySlider->setNumDecimalPlaces (2);
     decaySlider->setBounds (30, 182, 80, 100);
     decaySlider->setColour (SAFEColours::green);
     decaySlider->setText ("Decay");
 
     SAFESlider* sizeSlider = sliders [SafereverbAudioProcessor::PARAMsize];
     addAndMakeVisible (sizeSlider);
+    sizeSlider->setNumDecimalPlaces (2);
     sizeSlider->setBounds (30, 285, 80, 100);
     sizeSlider->setColour (SAFEColours::green);
     sizeSlider->setText ("Size");
@@ -63,18 +66,21 @@ SafereverbAudioProcessorEditor::SafereverbAudioProcessorEditor (SafereverbAudioP
     // dampingFreq, bandwidthFreq, predelay
     SAFESlider* dampingSlider = sliders [SafereverbAudioProcessor::PARAMdampingFreq];
     addAndMakeVisible (dampingSlider);
+    dampingSlider->setNumDecimalPlaces (2);
     dampingSlider->setBounds (140, 80, 80, 100);
     dampingSlider->setColour (SAFEColours::yellow);
     dampingSlider->setText ("Damp");
     
     SAFESlider* bandwidthSlider = sliders [SafereverbAudioProcessor::PARAMbandwidthFreq];
     addAndMakeVisible (bandwidthSlider);
+    bandwidthSlider->setNumDecimalPlaces (2);
     bandwidthSlider->setBounds (140, 182, 80, 100);
     bandwidthSlider->setColour (SAFEColours::yellow);
     bandwidthSlider->setText ("Bwth");
     
     SAFESlider* predelaySlider = sliders [SafereverbAudioProcessor::PARAMpredelay];
     addAndMakeVisible (predelaySlider);
+    predelaySlider->setNumDecimalPlaces (2);
     predelaySlider->setBounds (140, 285, 80, 100);
     predelaySlider->setColour (SAFEColours::yellow);
     predelaySlider->setText ("PreDly");
@@ -83,6 +89,7 @@ SafereverbAudioProcessorEditor::SafereverbAudioProcessorEditor (SafereverbAudioP
     // gain, mix, earlyMix;
     SAFESlider* gainSlider = sliders [SafereverbAudioProcessor::PARAMgain];
     addAndMakeVisible (gainSlider);
+    gainSlider->setNumDecimalPlaces (2);
     gainSlider->setBounds (250, 80, 80, 100);
     gainSlider->setColour (SAFEColours::red);
     gainSlider->setText ("Gain");
@@ -91,17 +98,13 @@ SafereverbAudioProcessorEditor::SafereverbAudioProcessorEditor (SafereverbAudioP
     addAndMakeVisible (mixSlider);
     mixSlider->setBounds (250, 182, 80, 100);
     mixSlider->setColour (SAFEColours::red);
-    mixSlider->setText ("Mix");
+    mixSlider->setText ("Dry\n/Wet");
     
     SAFESlider* earlySlider = sliders [SafereverbAudioProcessor::PARAMearlyMix];
     addAndMakeVisible (earlySlider);
     earlySlider->setBounds (250, 285, 80, 100);
     earlySlider->setColour (SAFEColours::red);
-    earlySlider->setText ("ER/\nVerb");
-    
-    addAndMakeVisible (&availableDescriptorList);
-    availableDescriptorList.setBounds (361, 216, 130, 26);
-    
+    earlySlider->setText ("Early\n/Late");    
 }
 
 SafereverbAudioProcessorEditor::~SafereverbAudioProcessorEditor()
