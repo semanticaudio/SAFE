@@ -19,6 +19,7 @@ SAFEDescriptorLoadScreen::SAFEDescriptorLoadScreen()
     addAndMakeVisible (&searchBox);
     searchBox.setBounds (20, 55, 310, 25);
     searchBox.setColour (TextEditor::backgroundColourId, SAFEColours::textEditorGrey);
+    searchBox.addListener (this);
 
     // add the search button
     addAndMakeVisible (&searchButton);
@@ -27,6 +28,7 @@ SAFEDescriptorLoadScreen::SAFEDescriptorLoadScreen()
 
     descriptorBox.setModel (this);
     addAndMakeVisible (&descriptorBox);
+    descriptorBox.setColour (ListBox::backgroundColourId, SAFEColours::textEditorGrey);
     descriptorBox.setBounds (20, 90, 350, 160);
 
     addAndMakeVisible (&closeButton);
@@ -78,6 +80,11 @@ void SAFEDescriptorLoadScreen::paintListBoxItem (int rowNumber, Graphics &g, int
     g.setFont (height * 0.7f);
 
     g.drawText (searchedDescriptors [rowNumber], 5, 0, width, height, Justification::centredLeft, true);
+}
+
+void SAFEDescriptorLoadScreen::listBoxItemDoubleClicked (int row, const MouseEvent& e)
+{
+    loadButton.triggerClick();
 }
 
 //==========================================================================
@@ -143,4 +150,9 @@ void SAFEDescriptorLoadScreen::buttonClicked (Button *buttonThatWasClicked)
 
         descriptorBox.updateContent();
     }
+}
+
+void SAFEDescriptorLoadScreen::textEditorReturnKeyPressed (TextEditor&)
+{
+    buttonClicked (&searchButton);
 }

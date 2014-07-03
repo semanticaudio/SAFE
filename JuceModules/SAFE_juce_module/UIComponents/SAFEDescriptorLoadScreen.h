@@ -3,7 +3,8 @@
 
 class SAFEDescriptorLoadScreen : public Component,
                                  public ListBoxModel,
-                                 public Button::Listener
+                                 public Button::Listener,
+                                 public TextEditor::Listener
 {
 public:
     //==========================================================================
@@ -22,6 +23,7 @@ public:
     //==========================================================================
     int getNumRows();
     void paintListBoxItem (int rowNumber, Graphics &g, int width, int height, bool rowIsSelected);
+    void listBoxItemDoubleClicked (int row, const MouseEvent& e);
 
     //==========================================================================
     //      Get Descriptors
@@ -33,6 +35,7 @@ public:
     //      Descriptor Search
     //==========================================================================
     void buttonClicked (Button *buttonThatWasClicked);
+    void textEditorReturnKeyPressed (TextEditor&);
 
     // button made accessible so listeners can easily be added
     TextButton closeButton, loadButton;
