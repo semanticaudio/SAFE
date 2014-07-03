@@ -75,7 +75,7 @@
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;..\..\..\JuceModules;c:\vstsdk2.4;$(SolutionDir)../../../LibXtract;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;IMAGE_DIRECTORY=&quot;C:/Users/id115387/Documents/ResearchWork/SAFE/Utils/SAFE_juce_module/LookAndFeel&quot;;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.0.0;JUCE_APP_VERSION_HEX=0x10000;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;IMAGE_DIRECTORY=&quot;C:/Users/id115387/Documents/ResearchWork/SAFE/Utils/SAFE_juce_module/LookAndFeel&quot;;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.25;JUCE_APP_VERSION_HEX=0x11900;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
@@ -119,7 +119,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;..\..\..\JuceModules;c:\vstsdk2.4;$(SolutionDir)../../../LibXtract;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;IMAGE_DIRECTORY=&quot;C:/Users/id115387/Documents/ResearchWork/SAFE/Utils/SAFE_juce_module/LookAndFeel&quot;;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.0.0;JUCE_APP_VERSION_HEX=0x10000;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;IMAGE_DIRECTORY=&quot;C:/Users/id115387/Documents/ResearchWork/SAFE/Utils/SAFE_juce_module/LookAndFeel&quot;;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.25;JUCE_APP_VERSION_HEX=0x11900;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
@@ -164,7 +164,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;..\..\..\JuceModules;c:\vstsdk2.4;$(SolutionDir)../../../LibXtract;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;IMAGE_DIRECTORY=&quot;C:/Users/id115387/Documents/ResearchWork/SAFE/Utils/SAFE_juce_module/LookAndFeel&quot;;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.0.0;JUCE_APP_VERSION_HEX=0x10000;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;IMAGE_DIRECTORY=&quot;C:/Users/id115387/Documents/ResearchWork/SAFE/Utils/SAFE_juce_module/LookAndFeel&quot;;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.25;JUCE_APP_VERSION_HEX=0x11900;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>

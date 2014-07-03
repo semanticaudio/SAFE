@@ -46,6 +46,8 @@ SafecompressorAudioProcessorEditor::SafecompressorAudioProcessorEditor (Safecomp
     
     setMetaDataScreenPosition (227, 54);
     
+    versionUpdateLabel.setBounds (612, 22, 210, 150);
+    
     // threshold slider
     SAFESlider* thresholdSlider = sliders [SafecompressorAudioProcessor::PARAMthreshold];
     addAndMakeVisible (thresholdSlider);
@@ -101,9 +103,6 @@ SafecompressorAudioProcessorEditor::SafecompressorAudioProcessorEditor (Safecomp
     addAndMakeVisible (&meter);
     meter.setBounds (864, 10, 30, 380);
     meterInputs = display.getInputValues();
-    
-    addAndMakeVisible (&availableDescriptorList);
-    availableDescriptorList.setBounds (613, 218, 130, 26);
 }
 
 SafecompressorAudioProcessorEditor::~SafecompressorAudioProcessorEditor()
