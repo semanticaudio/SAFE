@@ -35,6 +35,7 @@ public:
     //      Descriptor Search
     //==========================================================================
     void buttonClicked (Button *buttonThatWasClicked);
+    void textEditorTextChanged (TextEditor&);
     void textEditorReturnKeyPressed (TextEditor&);
 
     // button made accessible so listeners can easily be added
@@ -48,6 +49,7 @@ private:
     Label titleLabel;
 
     TextButton searchButton;
+    String previousSearchTerm;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SAFEDescriptorLoadScreen)
