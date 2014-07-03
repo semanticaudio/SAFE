@@ -515,7 +515,6 @@ WarningID SAFEAudioProcessor::sendDataToServer (const String& newDescriptors, co
     dataUpload = dataUpload.withFileToUpload ("DataFile", tempDataFile, "text/xml");
 
     ScopedPointer <InputStream> stream (dataUpload.createInputStream (true));
-    String serverResponse = stream->readEntireStreamAsString();
     #endif
 
     tempDataFile.deleteFile();
