@@ -93,6 +93,7 @@ void SAFEDescriptorLoadScreen::updateDescriptors (bool fromServer, XmlElement* l
         descriptorURL = descriptorURL.withParameter ("PluginName", JucePlugin_Name);
 
         String loadableDescriptors = descriptorURL.readEntireTextStream();
+        loadableDescriptors = loadableDescriptors.removeCharacters ("()[]{}<>");
         allDescriptors.addTokens (loadableDescriptors, true);
     }
     else if (localSemanticDataElement)
