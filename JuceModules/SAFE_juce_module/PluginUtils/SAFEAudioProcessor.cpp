@@ -594,8 +594,8 @@ WarningID SAFEAudioProcessor::startAnalysisThread()
     else
     {
         analysisThread->setParameters (descriptorsToSave, metaDataToSave, sendToServer);
-        analysisThread->startThread();
         resetRecording();
+        analysisThread->startThread();
     }
 
     return NoWarning;
