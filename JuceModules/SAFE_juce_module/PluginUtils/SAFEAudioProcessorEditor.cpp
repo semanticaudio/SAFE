@@ -7,7 +7,10 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
       loadButton ("Load"),
       metaDataButton ("Meta Data"),
       fileAccessButton ("File Access"),
-      parameters (ownerFilter->getParameterArray())
+      parameters (ownerFilter->getParameterArray()),
+      versionUpdateLabel ("", "This plug-in is out of date!\n\n"
+                              "A newer version is available to download at\n"
+                              "www.semanticaudio.co.uk")
 {
     // set it to use our look and feel
     lookAndFeel = new SAFELookAndFeel;
@@ -111,6 +114,15 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
     warningVisible = false;
     warningFlagged = false;
     flaggedWarningID = NoWarning;
+
+    addChildComponent (&versionUpdateLabel);
+    versionUpdateLabel.setColour (Label::backgroundColourId, SAFEColours::red);
+    versionUpdateLabel.setFont (Font (18));
+    versionUpdateLabel.setJustificationType (Justification::centred);
+
+    URL versionCheck ("http://193.60.133.151/SAFE/mostRecentVersion.txt");
+    float mostRecentVersion = versionCheck.readEntireTextStream().getFloatValue();
+    versionUpdateLabel.setVisible (mostRecentVersion > JucePlugin_Version);
 
     // start timer to update sliders
     startTimer (parameterUpdateTimer, 100);

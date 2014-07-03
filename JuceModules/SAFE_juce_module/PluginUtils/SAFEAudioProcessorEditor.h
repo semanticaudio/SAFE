@@ -49,6 +49,8 @@ protected:
 
     ComboBox availableDescriptorList;
 
+    Label versionUpdateLabel;
+
 private:
     enum Timers
     {
