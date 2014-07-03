@@ -27,8 +27,8 @@ SafereverbAudioProcessor::SafereverbAudioProcessor()
     addParameter ("PreDelay", predelay, 0);
     addParameter ("Size", size, 0.5);
     addParameter ("Gain", gain, 1.0);
-    addParameter ("Mix", mix, 0.15);
-    addParameter ("Early Mix", earlyMix, 0.75);
+    addParameter ("Mix", mix, 15.0, 0.0, 100.0, "%");
+    addParameter ("Early Mix", earlyMix, 75.0, 0.0, 100.0, "%");
     
     for (int i = 0; i < 9; ++i)
     {
@@ -73,11 +73,11 @@ void SafereverbAudioProcessor::parameterUpdateCalculations (int index)
             break;
 
         case MVerb<float>::MIX:
-            reverb.setParameter (index, mix);
+            reverb.setParameter (index, mix / 100.0);
             break;
 
         case MVerb<float>::EARLYMIX:
-            reverb.setParameter (index, earlyMix);
+            reverb.setParameter (index, earlyMix / 100.0);
             break;
     }
 }

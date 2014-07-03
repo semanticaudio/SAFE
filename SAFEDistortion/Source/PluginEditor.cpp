@@ -45,6 +45,8 @@ SafedistortionAudioProcessorEditor::SafedistortionAudioProcessorEditor (Safedist
     
     setMetaDataScreenPosition (227, 54);
     
+    versionUpdateLabel.setBounds (612, 22, 210, 150);
+    
     // input gain slider
     SAFESlider* inputGainSlider = sliders [SafedistortionAudioProcessor::PARAMinputGain];
     addAndMakeVisible (inputGainSlider);
@@ -91,9 +93,6 @@ SafedistortionAudioProcessorEditor::SafedistortionAudioProcessorEditor (Safedist
     display.setLineSeparation (0.3);
     
     displayInputs = display.getInputValues();
-    
-    addAndMakeVisible (&availableDescriptorList);
-    availableDescriptorList.setBounds (613, 218, 130, 26);
 }
 
 SafedistortionAudioProcessorEditor::~SafedistortionAudioProcessorEditor()

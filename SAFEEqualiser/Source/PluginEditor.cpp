@@ -58,6 +58,8 @@ SafeequaliserAudioProcessorEditor::SafeequaliserAudioProcessorEditor (Safeequali
     
     setMetaDataScreenPosition (210, 251);
     
+    versionUpdateLabel.setBounds (580, 220, 210, 150);
+    
     // first band
     SAFESlider* gain0Slider = sliders [SafeequaliserAudioProcessor::PARAMgain0];
     addAndMakeVisible (gain0Slider);
@@ -170,9 +172,6 @@ SafeequaliserAudioProcessorEditor::SafeequaliserAudioProcessorEditor (Safeequali
     display.setControlParameters (2, 1000, 0, 0.71);
     display.setControlParameters (3, 3300, 0, 0.71);
     display.setControlParameters (4, 8200, 0, 0.71);
-    
-    addAndMakeVisible (&availableDescriptorList);
-    availableDescriptorList.setBounds (581, 216 + filterGraphVerticalOffset, 130, 26);
 }
 
 SafeequaliserAudioProcessorEditor::~SafeequaliserAudioProcessorEditor()

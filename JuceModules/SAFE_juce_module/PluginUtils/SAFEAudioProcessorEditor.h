@@ -45,6 +45,8 @@ protected:
 
     SAFEButton fileAccessButton;
 
+    Label versionUpdateLabel;
+
 private:
     enum Timers
     {
