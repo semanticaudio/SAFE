@@ -93,9 +93,6 @@ SafedistortionAudioProcessorEditor::SafedistortionAudioProcessorEditor (Safedist
     display.setLineSeparation (0.3);
     
     displayInputs = display.getInputValues();
-    
-    addAndMakeVisible (&availableDescriptorList);
-    availableDescriptorList.setBounds (613, 218, 130, 26);
 }
 
 SafedistortionAudioProcessorEditor::~SafedistortionAudioProcessorEditor()
