@@ -55,7 +55,7 @@ private:
     ListBox descriptorBox;
     Label titleLabel;
 
-    TextButton refreshButton;
+    SAFEButton refreshButton;
     String previousSearchTerm;
 
     bool getDataFromServer;

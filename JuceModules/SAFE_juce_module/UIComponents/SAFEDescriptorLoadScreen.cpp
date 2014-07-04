@@ -17,13 +17,14 @@ SAFEDescriptorLoadScreen::SAFEDescriptorLoadScreen()
 
     // add the search text box
     addAndMakeVisible (&searchBox);
-    searchBox.setBounds (20, 55, 310, 25);
+    searchBox.setBounds (20, 55, 315, 25);
     searchBox.setColour (TextEditor::backgroundColourId, SAFEColours::textEditorGrey);
     searchBox.addListener (this);
     searchBox.addKeyListener (this);
 
     // add the search button
     addAndMakeVisible (&refreshButton);
+    refreshButton.setMode (SAFEButton::Refresh);
     refreshButton.setBounds (345, 55, 25, 25);
     refreshButton.addListener (this);
 

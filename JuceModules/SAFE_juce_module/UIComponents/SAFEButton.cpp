@@ -163,26 +163,64 @@ void SAFEButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
             break;
     }
 
-    // get image dimensions and draw it
-    int imageWidth = imageToDraw.getWidth();
-    int mouseOverImageWidth = mouseOverImageToDraw.getWidth();
-    int mouseDownImageWidth = mouseDownImageToDraw.getWidth();
-
-    int imageHeight = imageToDraw.getHeight();
-    int mouseOverImageHeight = mouseOverImageToDraw.getHeight();
-    int mouseDownImageHeight = mouseDownImageToDraw.getHeight();
-
-    if (isButtonDown)
+    if (currentMode == Refresh)
     {
-        g.drawImage (mouseDownImageToDraw, 0, 0, width, height, 0, 0, mouseDownImageWidth, mouseDownImageHeight);
-    }
-    else if (isMouseOverButton)
-    {
-        g.drawImage (mouseOverImageToDraw, 0, 0, width, height, 0, 0, mouseOverImageWidth, mouseOverImageHeight);
+        Colour buttonColour;
+
+        if (isMouseOverButton && ! isButtonDown)
+        {
+            buttonColour = SAFEColours::mouseOverButtonGrey;
+        }
+        else
+        {
+            buttonColour = SAFEColours::buttonGrey;
+        }
+
+        g.setColour (buttonColour);
+        g.fillRect (0, 0, width, height);
+
+        Path symbolPath;
+        PathStrokeType symbolStroke (1.5);
+        float symbolRadius = width * 0.3;
+
+        symbolPath.addCentredArc (width / 2.0, height / 2.0, symbolRadius, symbolRadius, 0.0, 0.7 * double_Pi, 2.3 * double_Pi, true);
+
+        Point <float> arrowStartPoint (symbolPath.getCurrentPosition());
+        Point <float> arrowEndPoint (symbolPath.getCurrentPosition());
+        arrowEndPoint.addXY (2.0, 2.0);
+        Line <float> arrowLine (arrowStartPoint, arrowEndPoint);
+
+        symbolPath.addArrow (arrowLine, 1.0, 5.0, arrowLine.getLength());
+        
+        g.setColour (SAFEColours::green);
+        g.strokePath (symbolPath, symbolStroke);
+
+        g.setColour (Colours::black);
+        g.drawRect (0, 0, width, height, 2.0);
     }
     else
     {
-        g.drawImage (imageToDraw, 0, 0, width, height, 0, 0, imageWidth, imageHeight);
+        // get image dimensions and draw it
+        int imageWidth = imageToDraw.getWidth();
+        int mouseOverImageWidth = mouseOverImageToDraw.getWidth();
+        int mouseDownImageWidth = mouseDownImageToDraw.getWidth();
+
+        int imageHeight = imageToDraw.getHeight();
+        int mouseOverImageHeight = mouseOverImageToDraw.getHeight();
+        int mouseDownImageHeight = mouseDownImageToDraw.getHeight();
+
+        if (isButtonDown)
+        {
+            g.drawImage (mouseDownImageToDraw, 0, 0, width, height, 0, 0, mouseDownImageWidth, mouseDownImageHeight);
+        }
+        else if (isMouseOverButton)
+        {
+            g.drawImage (mouseOverImageToDraw, 0, 0, width, height, 0, 0, mouseOverImageWidth, mouseOverImageHeight);
+        }
+        else
+        {
+            g.drawImage (imageToDraw, 0, 0, width, height, 0, 0, imageWidth, imageHeight);
+        }
     }
 
 }

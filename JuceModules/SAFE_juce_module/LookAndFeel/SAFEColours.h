@@ -9,7 +9,9 @@ public:
                         yellow,
                         red,
                         textEditorGrey,
-                        metaDataGrey;
+                        metaDataGrey,
+                        buttonGrey,
+                        mouseOverButtonGrey;
 
 private:
     SAFEColours();

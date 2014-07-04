@@ -21,7 +21,8 @@ public:
         Load,
         MetaData,
         LocalFile,
-        GlobalFile
+        GlobalFile,
+        Refresh
     };
 
     //==========================================================================
