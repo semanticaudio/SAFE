@@ -196,7 +196,7 @@ void SAFEButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
         g.strokePath (symbolPath, symbolStroke);
 
         g.setColour (Colours::black);
-        g.drawRect (0, 0, width, height, 2.0);
+        g.drawRect (0, 0, width, height, 1.5);
     }
     else
     {

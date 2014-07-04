@@ -38,7 +38,8 @@ SAFEDescriptorLoadScreen::SAFEDescriptorLoadScreen()
     closeButton.setBounds (20, 260, 170, 25);
 
     addAndMakeVisible (&loadButton);
-    loadButton.setBounds (200, 260, 170, 25);
+    loadButton.setMode (SAFEButton::Load);
+    loadButton.setBounds (270, 260, 100, 22);
 }
 
 SAFEDescriptorLoadScreen::~SAFEDescriptorLoadScreen()

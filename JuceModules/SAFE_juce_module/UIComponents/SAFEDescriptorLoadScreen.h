@@ -46,7 +46,8 @@ public:
 
 
     // button made accessible so listeners can easily be added
-    TextButton closeButton, loadButton;
+    SAFEButton loadButton;
+    TextButton closeButton;
 
 private:
     // the various boxes and whatnot
