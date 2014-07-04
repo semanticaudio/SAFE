@@ -63,6 +63,7 @@ SAFESlider::SAFESlider()
       textBoxWidth (50),
       textBoxHeight (15),
       numDecimalPlaces (1),
+      textBoxScaleFactor (1),
       useSIPrefixes (true)
 {
     setSize (80, 80);
@@ -126,11 +127,11 @@ void SAFESlider::setValue (double newValue, NotificationType notification)
 
     if (units != String::empty && useSIPrefixes)
     {
-        valueString = makeSIValueString (newValue) + units;
+        valueString = makeSIValueString (newValue * textBoxScaleFactor) + units;
     }
     else
     {
-        valueString = String (newValue, numDecimalPlaces);
+        valueString = String (newValue * textBoxScaleFactor, numDecimalPlaces);
     }
 
     textBox.setText (valueString);
@@ -192,7 +193,7 @@ void SAFESlider::setText (String newText)
 //==========================================================================
 void SAFESlider::sliderValueChanged (Slider* /*movedSlider*/)
 {
-    double sliderValue = slider.getValue();
+    double sliderValue = slider.getValue() * textBoxScaleFactor;
 
     String valueString;
 
@@ -236,11 +237,16 @@ void SAFESlider::resized()
 }
 
 //==========================================================================
-//      Number of Decimal Places for Text Box Value
+//      Text Box Settings
 //==========================================================================
 void SAFESlider::setNumDecimalPlaces (int newNumDecimalPlaces)
 {
     numDecimalPlaces = newNumDecimalPlaces;
+}
+
+void SAFESlider::setTextBoxScaleFactor (double newScaleFactor)
+{
+    textBoxScaleFactor = newScaleFactor;
 }
 
 //==========================================================================

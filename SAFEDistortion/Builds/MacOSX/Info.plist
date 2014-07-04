@@ -16,9 +16,9 @@
     <key>CFBundleSignature</key>
     <string>PTul</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.25</string>
+    <string>1.26</string>
     <key>CFBundleVersion</key>
-    <string>1.25</string>
+    <string>1.26</string>
     <key>NSHumanReadableCopyright</key>
     <string>SAFE</string>
     <key>NSHighResolutionCapable</key>
@@ -39,7 +39,7 @@
         <key>subtype</key>
         <string>SFDT</string>
         <key>version</key>
-        <integer>71936</integer>
+        <integer>72192</integer>
       </dict>
     </array>
   </dict>

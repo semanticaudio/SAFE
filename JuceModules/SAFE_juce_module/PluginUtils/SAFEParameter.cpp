@@ -1,7 +1,7 @@
 //==========================================================================
 //      Constructor and Destructor
 //==========================================================================
-SAFEParameter::SAFEParameter (String nameInit, float& valueRef, float initialValue, float minValueInit, float maxValueInit, String unitsInit, float skewFactorInit, bool convertDBToGainValue, double interpolationTimeInit)
+SAFEParameter::SAFEParameter (String nameInit, float& valueRef, float initialValue, float minValueInit, float maxValueInit, String unitsInit, float skewFactorInit, bool convertDBToGainValue, double interpolationTimeInit, float UIScaleFactorInit)
     : outputValue (valueRef),
       convertToGain (convertDBToGainValue)
 {
@@ -18,6 +18,8 @@ SAFEParameter::SAFEParameter (String nameInit, float& valueRef, float initialVal
     controlRate = 64;
     interpolationTime = interpolationTimeInit;
     updateBlockSizes();
+
+    UIScaleFactor = UIScaleFactorInit;
 
     setScaledValue (defaultValue);
 }
@@ -64,6 +66,11 @@ float SAFEParameter::getScaledValue() const
     return scaledValue;
 }
 
+float SAFEParameter::getUIScaledValue() const
+{
+    return scaledValue * UIScaleFactor;
+}
+
 float SAFEParameter::getGainValue() const
 {
     if (convertToGain)
@@ -100,6 +107,11 @@ const String SAFEParameter::getName() const
 const String SAFEParameter::getUnits() const
 {
     return units;
+}
+
+float SAFEParameter::getUIScaleFactor() const
+{
+    return UIScaleFactor;
 }
 
 //==========================================================================

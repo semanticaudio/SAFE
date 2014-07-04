@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="NmiwIo" name="SAFEReverb" projectType="audioplug" version="1.25"
+<JUCERPROJECT id="NmiwIo" name="SAFEReverb" projectType="audioplug" version="1.26"
               bundleIdentifier="com.SAFEProject.SAFEReverb" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="0" buildAU="1" buildRTAS="0" buildAAX="0"
               pluginName="SAFEReverb" pluginDesc="SAFEReverb" pluginManufacturer="SAFE"
