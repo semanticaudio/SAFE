@@ -255,6 +255,8 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
             {
                 warning = ourProcessor->loadSemanticData (selectedDescriptor);
             }
+
+            descriptorBox.setText (selectedDescriptor);
             
             // load the descriptor and warn if it's not found...
             if (warning != NoWarning)

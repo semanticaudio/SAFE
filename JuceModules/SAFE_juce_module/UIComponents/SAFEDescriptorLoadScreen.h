@@ -29,7 +29,7 @@ public:
     //==========================================================================
     //      Get Descriptors
     //==========================================================================
-    void updateDescriptors (bool fromServer, XmlElement* localSemanticDataElement);
+    void updateDescriptors (bool fromServer, const XmlElement* localSemanticDataElement);
     String getSelectedDescriptor();
 
     //==========================================================================
@@ -55,9 +55,16 @@ private:
     ListBox descriptorBox;
     Label titleLabel;
 
-    TextButton searchButton;
+    TextButton refreshButton;
     String previousSearchTerm;
 
+    bool getDataFromServer;
+    const XmlElement *localSemanticData;
+
+    //==========================================================================
+    //      Descriptor Search
+    //==========================================================================
+    void searchDescriptors();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SAFEDescriptorLoadScreen)
 };
