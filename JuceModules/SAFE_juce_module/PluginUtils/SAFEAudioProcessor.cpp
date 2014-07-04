@@ -137,7 +137,7 @@ const String SAFEAudioProcessor::getParameterName (int index)
 const String SAFEAudioProcessor::getParameterText (int index)
 {
     SAFEParameter* info = parameters [index];
-    return String (info->getScaledValue(), 2) + info->getUnits();
+    return String (info->getUIScaledValue(), 2) + info->getUnits();
 }
 
 const OwnedArray <SAFEParameter>& SAFEAudioProcessor::getParameterArray()
@@ -803,16 +803,16 @@ bool SAFEAudioProcessor::isReadyToSave()
 //==========================================================================
 //      Methods to Create New Parameters
 //==========================================================================
-void SAFEAudioProcessor::addParameter (String name, float& valueRef, float initialValue, float minValue, float maxValue, String units, float skewFactor, bool convertDBToGainValue, double interpolationTime)
+void SAFEAudioProcessor::addParameter (String name, float& valueRef, float initialValue, float minValue, float maxValue, String units, float skewFactor, bool convertDBToGainValue, double interpolationTime, float UIScaleFactor)
 {
-    parameters.add (new SAFEParameter (name, valueRef, initialValue, minValue, maxValue, units, skewFactor, convertDBToGainValue, interpolationTime));
+    parameters.add (new SAFEParameter (name, valueRef, initialValue, minValue, maxValue, units, skewFactor, convertDBToGainValue, interpolationTime, UIScaleFactor));
 
     parametersToSave.add (0);
 }
 
-void SAFEAudioProcessor::addDBParameter (String name, float& valueRef, float initialValue, float minValue, float maxValue, String units, float skewFactor, double interpolationTime)
+void SAFEAudioProcessor::addDBParameter (String name, float& valueRef, float initialValue, float minValue, float maxValue, String units, float skewFactor, double interpolationTime, float UIScaleFactor)
 {
-    parameters.add (new SAFEParameter (name, valueRef, initialValue, minValue, maxValue, units, skewFactor, true, interpolationTime));
+    parameters.add (new SAFEParameter (name, valueRef, initialValue, minValue, maxValue, units, skewFactor, true, interpolationTime, UIScaleFactor));
 
     parametersToSave.add (0);
 }

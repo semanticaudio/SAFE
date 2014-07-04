@@ -47,11 +47,13 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
         float currentDefaultValue = currentParameter->getDefaultValue();
         float currentSkewFactor = currentParameter->getSkewFactor();
         String currentUnits = currentParameter->getUnits();
+        float currentUIScaleFactor = currentParameter->getUIScaleFactor();
 
         currentSlider->setRange (currentMinValue, currentMaxValue, 0.01);
         currentSlider->setDefaultValue (currentDefaultValue);
         currentSlider->setSkewFactor (currentSkewFactor);
         currentSlider->setTextValueSuffix (currentUnits);
+        currentSlider->setTextBoxScaleFactor (currentUIScaleFactor);
         currentSlider->addListener (this);
     }
 

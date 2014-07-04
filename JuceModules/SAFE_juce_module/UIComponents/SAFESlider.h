@@ -57,10 +57,11 @@ public:
     void resized();
 
     //==========================================================================
-    //      Number of Decimal Places for Text Box Value
+    //      Text Box Settings
     //==========================================================================
     void setUseSIPrefixes (bool newValue);
     void setNumDecimalPlaces (int newNumDecimalPlaces);
+    void setTextBoxScaleFactor (double newScaleFactor);
 
 private:
     Label label;
@@ -103,6 +104,8 @@ private:
     int textBoxWidth, textBoxHeight;
     String units;
     int numDecimalPlaces;
+
+    double textBoxScaleFactor;
 
     bool useSIPrefixes;
 

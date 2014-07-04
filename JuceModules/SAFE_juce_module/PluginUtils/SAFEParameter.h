@@ -7,7 +7,7 @@ public:
     //==========================================================================
     //      Constructor and Destructor
     //==========================================================================
-    SAFEParameter (String nameInit, float& valueRef, float initialValue = 1, float minValueInit = 0, float maxValueInit = 1, String unitsInit = String::empty, float skewFactorInit = 1, bool convertDBToGainValue = false, double interpolationTimeInit = 100);
+    SAFEParameter (String nameInit, float& valueRef, float initialValue = 1, float minValueInit = 0, float maxValueInit = 1, String unitsInit = String::empty, float skewFactorInit = 1, bool convertDBToGainValue = false, double interpolationTimeInit = 100, float UIScaleFactorInit = 1);
     ~SAFEParameter();
     
     //==========================================================================
@@ -18,6 +18,7 @@ public:
     
     float getBaseValue() const;   
     float getScaledValue() const;
+    float getUIScaledValue() const;
     float getGainValue() const;
     float getDefaultValue() const;
     
@@ -27,6 +28,8 @@ public:
     
     const String getName() const;
     const String getUnits() const;
+
+    float getUIScaleFactor() const;
 
     //==========================================================================
     //      Smoothing Bits
@@ -55,6 +58,8 @@ private:
     String name, units;
     
     bool convertToGain;
+
+    double UIScaleFactor;
 
     void updateBlockSizes();
 
