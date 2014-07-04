@@ -20,6 +20,7 @@ SAFEDescriptorLoadScreen::SAFEDescriptorLoadScreen()
     searchBox.setBounds (20, 55, 310, 25);
     searchBox.setColour (TextEditor::backgroundColourId, SAFEColours::textEditorGrey);
     searchBox.addListener (this);
+    searchBox.addKeyListener (this);
 
     // add the search button
     addAndMakeVisible (&searchButton);
@@ -137,6 +138,12 @@ void SAFEDescriptorLoadScreen::buttonClicked (Button *buttonThatWasClicked)
     if (buttonThatWasClicked == &searchButton)
     {
         String searchTerm = searchBox.getText();
+
+        if (searchTerm == previousSearchTerm)
+        {
+            return;
+        }
+
         StringArray descriptorsToSearch;
 
         if (searchTerm.startsWithIgnoreCase (previousSearchTerm))
@@ -235,5 +242,24 @@ void SAFEDescriptorLoadScreen::textEditorTextChanged (TextEditor&)
 
 void SAFEDescriptorLoadScreen::textEditorReturnKeyPressed (TextEditor&)
 {
-    buttonClicked (&searchButton);
+    if (descriptorBox.getNumSelectedRows() != 0)
+    {
+        loadButton.triggerClick();
+    }
+}
+
+//==========================================================================
+//      Key Listener Stuff
+//==========================================================================
+bool SAFEDescriptorLoadScreen::keyPressed (const KeyPress &key, Component *originatingComponent)
+{
+    if (key.isKeyCode (KeyPress::downKey) || key.isKeyCode (KeyPress::upKey))
+    {
+        descriptorBox.keyPressed (key);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }

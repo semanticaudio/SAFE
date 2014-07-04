@@ -4,7 +4,8 @@
 class SAFEDescriptorLoadScreen : public Component,
                                  public ListBoxModel,
                                  public Button::Listener,
-                                 public TextEditor::Listener
+                                 public TextEditor::Listener,
+                                 public KeyListener
 {
 public:
     //==========================================================================
@@ -37,6 +38,12 @@ public:
     void buttonClicked (Button *buttonThatWasClicked);
     void textEditorTextChanged (TextEditor&);
     void textEditorReturnKeyPressed (TextEditor&);
+
+    //==========================================================================
+    //      Key Listener Stuff
+    //==========================================================================
+    bool keyPressed (const KeyPress &key, Component *originatingComponent);
+
 
     // button made accessible so listeners can easily be added
     TextButton closeButton, loadButton;
