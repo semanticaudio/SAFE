@@ -114,9 +114,13 @@ void SAFEButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 {
     int width = getWidth();
     int height = getHeight();
+
+    bool drawFromImage = false;
+    bool drawSymbol = false;
     
     // select the relevant image according to the current mode
     Image imageToDraw, mouseOverImageToDraw, mouseDownImageToDraw;
+    void (SAFEButton::*symbolFunction) (Graphics&);
 
     switch (currentMode)
     {
@@ -124,46 +128,63 @@ void SAFEButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
             imageToDraw = recordImage;
             mouseOverImageToDraw = recordMouseOverImage;
             mouseDownImageToDraw = recordImage;
+            drawFromImage = true;
             break;
 
         case Recording:
             imageToDraw = recordingImage;
             mouseOverImageToDraw = recordingImage;
             mouseDownImageToDraw = recordingImage;
+            drawFromImage = true;
             break;
 
         case Save:
             imageToDraw = saveImage;
             mouseOverImageToDraw = saveMouseOverImage;
             mouseDownImageToDraw = saveImage;
+            drawFromImage = true;
             break;
 
         case Load:
             imageToDraw = loadImage;
             mouseOverImageToDraw = loadMouseOverImage;
             mouseDownImageToDraw = loadImage;
+            drawFromImage = true;
             break;
 
         case MetaData:
             imageToDraw = metaDataImage;
             mouseOverImageToDraw = metaDataMouseOverImage;
             mouseDownImageToDraw = metaDataImage;
+            drawFromImage = true;
             break;
 
         case LocalFile:
             imageToDraw = localFileImage;
             mouseOverImageToDraw = localFileMouseOverImage;
             mouseDownImageToDraw = localFileImage;
+            drawFromImage = true;
             break;
             
         case GlobalFile:
             imageToDraw = globalFileImage;
             mouseOverImageToDraw = globalFileMouseOverImage;
             mouseDownImageToDraw = globalFileImage;
+            drawFromImage = true;
+            break;
+
+        case Refresh:
+            symbolFunction = &SAFEButton::drawRefreshSymbol;
+            drawSymbol = true;
+            break;
+
+        case Close:
+            symbolFunction = &SAFEButton::drawCloseSymbol;
+            drawSymbol = true;
             break;
     }
 
-    if (currentMode == Refresh)
+    if (drawSymbol)
     {
         Colour buttonColour;
 
@@ -179,26 +200,12 @@ void SAFEButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
         g.setColour (buttonColour);
         g.fillRect (0, 0, width, height);
 
-        Path symbolPath;
-        PathStrokeType symbolStroke (1.5);
-        float symbolRadius = width * 0.3;
-
-        symbolPath.addCentredArc (width / 2.0, height / 2.0, symbolRadius, symbolRadius, 0.0, 0.7 * double_Pi, 2.3 * double_Pi, true);
-
-        Point <float> arrowStartPoint (symbolPath.getCurrentPosition());
-        Point <float> arrowEndPoint (symbolPath.getCurrentPosition());
-        arrowEndPoint.addXY (2.0, 2.0);
-        Line <float> arrowLine (arrowStartPoint, arrowEndPoint);
-
-        symbolPath.addArrow (arrowLine, 1.0, 5.0, arrowLine.getLength());
-        
-        g.setColour (SAFEColours::green);
-        g.strokePath (symbolPath, symbolStroke);
+        (this->*symbolFunction) (g);
 
         g.setColour (Colours::black);
         g.drawRect (0, 0, width, height, 1.5);
     }
-    else
+    else if (drawFromImage)
     {
         // get image dimensions and draw it
         int imageWidth = imageToDraw.getWidth();
@@ -232,4 +239,44 @@ void SAFEButton::setMode (ButtonMode newMode)
 {
     currentMode = newMode;
     repaint();
+}
+
+void SAFEButton::drawRefreshSymbol (Graphics& g)
+{
+    int width = getWidth();
+    int height = getHeight();
+
+    Path symbolPath;
+    PathStrokeType symbolStroke (1.5);
+    float symbolRadius = width * 0.3;
+
+    symbolPath.addCentredArc (width / 2.0, height / 2.0, symbolRadius, symbolRadius, 0.0, 0.7 * double_Pi, 2.3 * double_Pi, true);
+
+    Point <float> arrowStartPoint (symbolPath.getCurrentPosition());
+    Point <float> arrowEndPoint (symbolPath.getCurrentPosition());
+    arrowEndPoint.addXY (2.0, 2.0);
+    Line <float> arrowLine (arrowStartPoint, arrowEndPoint);
+
+    symbolPath.addArrow (arrowLine, 1.0, 5.0, arrowLine.getLength());
+    
+    g.setColour (SAFEColours::green);
+    g.strokePath (symbolPath, symbolStroke);
+}
+
+void SAFEButton::drawCloseSymbol (Graphics& g)
+{
+    int width = getWidth();
+    int height = getHeight();
+
+    Path symbolPath;
+    PathStrokeType symbolStroke (1.5, PathStrokeType::mitered, PathStrokeType::rounded);
+
+    symbolPath.startNewSubPath (5, 5);
+    symbolPath.lineTo (width - 5, height - 5);
+
+    symbolPath.startNewSubPath (5, height - 5);
+    symbolPath.lineTo (width - 5, 5);
+
+    g.setColour (SAFEColours::red);
+    g.strokePath (symbolPath, symbolStroke);
 }

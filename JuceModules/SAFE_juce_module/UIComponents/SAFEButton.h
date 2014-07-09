@@ -22,7 +22,8 @@ public:
         MetaData,
         LocalFile,
         GlobalFile,
-        Refresh
+        Refresh,
+        Close
     };
 
     //==========================================================================
@@ -46,6 +47,9 @@ private:
     Image metaDataImage, metaDataMouseOverImage, metaDataMouseDownImage;
     Image localFileImage, localFileMouseOverImage, localFileMouseDownImage;
     Image globalFileImage, globalFileMouseOverImage, globalFileMouseDownImage;
+
+    void drawRefreshSymbol (Graphics& g);
+    void drawCloseSymbol (Graphics& g);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SAFEButton)
 };

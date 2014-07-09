@@ -3,9 +3,9 @@
 //==========================================================================
 SAFEDescriptorLoadScreen::SAFEDescriptorLoadScreen()
     : titleLabel ("", "Available Descriptors"),
-      refreshButton ("Refresh List"),
-      closeButton ("Close"),
-      loadButton ("Load")
+      refreshButton (""),
+      closeButton (""),
+      loadButton ("")
 {
     setSize (390, 295);
 
@@ -17,7 +17,7 @@ SAFEDescriptorLoadScreen::SAFEDescriptorLoadScreen()
 
     // add the search text box
     addAndMakeVisible (&searchBox);
-    searchBox.setBounds (20, 55, 315, 25);
+    searchBox.setBounds (20, 55, 290, 25);
     searchBox.setColour (TextEditor::backgroundColourId, SAFEColours::textEditorGrey);
     searchBox.addListener (this);
     searchBox.addKeyListener (this);
@@ -25,7 +25,7 @@ SAFEDescriptorLoadScreen::SAFEDescriptorLoadScreen()
     // add the search button
     addAndMakeVisible (&refreshButton);
     refreshButton.setMode (SAFEButton::Refresh);
-    refreshButton.setBounds (345, 55, 25, 25);
+    refreshButton.setBounds (315, 55, 25, 25);
     refreshButton.addListener (this);
 
     descriptorBox.setModel (this);
@@ -35,7 +35,8 @@ SAFEDescriptorLoadScreen::SAFEDescriptorLoadScreen()
     descriptorBox.addKeyListener (this);
 
     addAndMakeVisible (&closeButton);
-    closeButton.setBounds (20, 260, 170, 25);
+    closeButton.setMode (SAFEButton::Close);
+    closeButton.setBounds (345, 55, 25, 25);
 
     addAndMakeVisible (&loadButton);
     loadButton.setMode (SAFEButton::Load);
