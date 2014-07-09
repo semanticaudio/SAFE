@@ -43,7 +43,7 @@ SafedistortionAudioProcessorEditor::SafedistortionAudioProcessorEditor (Safedist
     addAndMakeVisible (&fileAccessButton);
     fileAccessButton.setBounds (792, 216, 30, 30);
     
-    setMetaDataScreenPosition (227, 54);
+    setExtraScreenPosition (227, 54);
     
     versionUpdateLabel.setBounds (612, 22, 210, 150);
     

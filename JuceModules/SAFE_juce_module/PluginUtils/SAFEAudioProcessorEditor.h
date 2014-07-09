@@ -34,16 +34,13 @@ public:
 
 protected:
     TextEditor descriptorBox;
-    SAFEButton recordButton, loadButton;
+    SAFEButton recordButton, loadButton, metaDataButton, fileAccessButton;
     OwnedArray <SAFESlider> sliders;
 
     //==========================================================================
-    //      Set Meta Data Screen Position
+    //      Set Position of Extra Screens
     //==========================================================================
-    SAFEButton metaDataButton;
-    void setMetaDataScreenPosition (int x, int y);
-
-    SAFEButton fileAccessButton;
+    void setExtraScreenPosition (int x, int y);
 
     Label versionUpdateLabel;
 

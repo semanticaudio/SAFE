@@ -56,7 +56,7 @@ SafeequaliserAudioProcessorEditor::SafeequaliserAudioProcessorEditor (Safeequali
     addAndMakeVisible (&fileAccessButton);
     fileAccessButton.setBounds (760, 214 + filterGraphVerticalOffset, 30, 30);
     
-    setMetaDataScreenPosition (210, 251);
+    setExtraScreenPosition (210, 251);
     
     versionUpdateLabel.setBounds (580, 220, 210, 150);
     

@@ -356,7 +356,7 @@ void SAFEAudioProcessorEditor::timerCallback (int timerID)
         // update sliders to new values
         SAFEAudioProcessor* ourProcessor = getProcessor();
 
-        if (ourProcessor->isReadyToSave())
+        if (ourProcessor->isReadyToSave() && ! extraScreenVisible)
         {
             recordButton.setMode (SAFEButton::Save);
 
@@ -394,6 +394,7 @@ void SAFEAudioProcessorEditor::timerCallback (int timerID)
 
             recordButton.setEnabled (true);
             loadButton.setEnabled (true);
+            metaDataButton.setEnabled (true);
         }
     }
     else if (timerID == meterTimer)
@@ -414,7 +415,7 @@ void SAFEAudioProcessorEditor::flagWarning (WarningID id)
 //==========================================================================
 //      Set Meta Data Screen Position
 //==========================================================================
-void SAFEAudioProcessorEditor::setMetaDataScreenPosition (int x, int y)
+void SAFEAudioProcessorEditor::setExtraScreenPosition (int x, int y)
 {
     metaDataXPos = x;
     metaDataYPos = y;
@@ -482,6 +483,7 @@ void SAFEAudioProcessorEditor::displayWarning (WarningID id, int durationInMilli
 
         recordButton.setEnabled (false);
         loadButton.setEnabled (false);
+        metaDataButton.setEnabled (false);
 
         savedDescriptorBoxContent = descriptorBox.getText();
         descriptorBox.setColour (TextEditor::textColourId, Colours::indianred);

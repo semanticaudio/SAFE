@@ -38,7 +38,7 @@ SafereverbAudioProcessorEditor::SafereverbAudioProcessorEditor (SafereverbAudioP
     addAndMakeVisible (&fileAccessButton);
     fileAccessButton.setBounds (540, 214, 30, 30);
     
-    setMetaDataScreenPosition (102, 54);
+    setExtraScreenPosition (102, 54);
     
     versionUpdateLabel.setBounds (360, 22, 210, 150);
 
