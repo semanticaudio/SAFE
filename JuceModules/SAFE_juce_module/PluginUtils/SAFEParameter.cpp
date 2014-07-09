@@ -190,6 +190,11 @@ void SAFEParameter::startInterpolating()
 
         initialised = true;
     }
+    else if (interpolationTime < 1000.0 / controlRate)
+    {
+        interpolating = false;
+        smoothValues();
+    }
     else
     {
         interpolationStep = (baseValue - smoothedValue) / controlBlocksPerChange;

@@ -711,8 +711,11 @@ void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             {
                 for (int i = 0; i < parameters.size(); ++i)
                 {
-                    parameters [i]->smoothValues();
-                    parameterUpdateCalculations (i);
+                    if (parameters [i]->isInterpolating())
+                    {
+                        parameters [i]->smoothValues();
+                        parameterUpdateCalculations (i);
+                    }
                 }
 
                 AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, sampleNumber, controlBlockSize);
@@ -731,8 +734,11 @@ void SAFEAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& mi
             {
                 for (int i = 0; i < parameters.size(); ++i)
                 {
-                    parameters [i]->smoothValues();
-                    parameterUpdateCalculations (i);
+                    if (parameters [i]->isInterpolating())
+                    {
+                        parameters [i]->smoothValues();
+                        parameterUpdateCalculations (i);
+                    }
                 }
 
                 AudioSampleBuffer controlBlock (buffer.getArrayOfWritePointers(), numChannels, sampleNumber, samplesLeft);
