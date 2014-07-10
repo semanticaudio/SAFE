@@ -201,43 +201,11 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
     // load button
     else if (button == &loadButton) 
     {
-        // disable all the components
-        int numComponents = getNumChildComponents();
-
-        for (int component = 0; component < numComponents; ++component)
-        {
-            getChildComponent (component)->setEnabled (false);
-        }
-
-        descriptorLoadScreen.setEnabled (true);
-
-        // animate the meta data screen
-        Rectangle <int> loadScreenPosition = descriptorLoadScreen.getBoundsInParent();
-        loadScreenPosition.setX (extraScreenXPos);
-
-        animator.animateComponent (&descriptorLoadScreen, loadScreenPosition, 0xff, 1000, false, 0, 0);
-
-        extraScreenVisible = true;
+        showExtraScreen (descriptorLoadScreen);
     }
     else if (button == &descriptorLoadScreen.closeButton)
     {
-        // enable all the components
-        int numComponents = getNumChildComponents();
-
-        for (int component = 0; component < numComponents; ++component)
-        {
-            getChildComponent (component)->setEnabled (true);
-        }
-
-        descriptorLoadScreen.setEnabled (false);
-
-        // animate the meta data screen
-        Rectangle <int> loadScreenPosition = descriptorLoadScreen.getBoundsInParent();
-        loadScreenPosition.setX (getWidth());
-
-        animator.animateComponent (&descriptorLoadScreen, loadScreenPosition, 0xff, 1000, false, 0, 0);
-
-        extraScreenVisible = false;
+        hideExtraScreen (descriptorLoadScreen, 1);
     }
     else if (button == &descriptorLoadScreen.loadButton)
     {
@@ -282,85 +250,21 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
     // meta data button
     else if (button == &metaDataButton)
     {
-        // disable all the components
-        int numComponents = getNumChildComponents();
-
-        for (int component = 0; component < numComponents; ++component)
-        {
-            getChildComponent (component)->setEnabled (false);
-        }
-
-        metaDataScreen.setEnabled (true);
-
-        // animate the meta data screen
-        Rectangle <int> metaDataPosition = metaDataScreen.getBoundsInParent();
-        metaDataPosition.setX (extraScreenXPos);
-
-        animator.animateComponent (&metaDataScreen, metaDataPosition, 0xff, 1000, false, 0, 0);
-
-        extraScreenVisible = true;
+        showExtraScreen (metaDataScreen);
     }
     // submit button
     else if (button == &metaDataScreen.submitButton)
     {
-        // enable all the components
-        int numComponents = getNumChildComponents();
-
-        for (int component = 0; component < numComponents; ++component)
-        {
-            getChildComponent (component)->setEnabled (true);
-        }
-
-        metaDataScreen.setEnabled (false);
-
-        // animate the meta data screen
-        Rectangle <int> metaDataPosition = metaDataScreen.getBoundsInParent();
-        metaDataPosition.setX (-390);
-
-        animator.animateComponent (&metaDataScreen, metaDataPosition, 0xff, 1000, false, 0, 0);
-
-        extraScreenVisible = false;
+        hideExtraScreen (metaDataScreen, 0);
     }
     // info button
     else if (button == &infoButton)
     {
-        // disable all the components
-        int numComponents = getNumChildComponents();
-
-        for (int component = 0; component < numComponents; ++component)
-        {
-            getChildComponent (component)->setEnabled (false);
-        }
-
-        infoScreen.setEnabled (true);
-
-        // animate the meta data screen
-        Rectangle <int> infoPosition = infoScreen.getBoundsInParent();
-        infoPosition.setY (extraScreenYPos);
-
-        animator.animateComponent (&infoScreen, infoPosition, 0xff, 1000, false, 0, 0);
-
-        extraScreenVisible = true;
+        showExtraScreen (infoScreen);
     }
     else if (button == &infoScreen.closeButton)
     {
-        // enable all the components
-        int numComponents = getNumChildComponents();
-
-        for (int component = 0; component < numComponents; ++component)
-        {
-            getChildComponent (component)->setEnabled (true);
-        }
-
-        infoScreen.setEnabled (false);
-
-        // animate the meta data screen
-        Rectangle <int> infoPosition = infoScreen.getBoundsInParent();
-        infoPosition.setY (-295);
-
-        animator.animateComponent (&infoScreen, infoPosition, 0xff, 1000, false, 0, 0);
-
-        extraScreenVisible = false;
+        hideExtraScreen (infoScreen, 2);
     }
     // file access button
     else if (button == &fileAccessButton)
@@ -482,6 +386,70 @@ void SAFEAudioProcessorEditor::setExtraScreenPosition (int x, int y)
     Rectangle <int> infoPosition = infoScreen.getBoundsInParent();
     infoPosition.setX (extraScreenXPos);
     infoScreen.setBounds (infoPosition);
+}
+
+//==========================================================================
+//      Extra Screen Bits
+//==========================================================================
+void SAFEAudioProcessorEditor::showExtraScreen (SAFEExtraScreen& screenToShow)
+{
+    // disable all the components
+    int numComponents = getNumChildComponents();
+
+    for (int component = 0; component < numComponents; ++component)
+    {
+        getChildComponent (component)->setEnabled (false);
+    }
+
+    screenToShow.setEnabled (true);
+
+    // animate the screen
+    Rectangle <int> screenPosition = screenToShow.getBoundsInParent();
+    screenPosition.setX (extraScreenXPos);
+    screenPosition.setY (extraScreenYPos);
+
+    animator.animateComponent (&screenToShow, screenPosition, 0xff, 1000, false, 0, 0);
+
+    extraScreenVisible = true;
+}
+
+void SAFEAudioProcessorEditor::hideExtraScreen (SAFEExtraScreen& screenToHide, int direction)
+{
+    // enable all the components
+    int numComponents = getNumChildComponents();
+
+    for (int component = 0; component < numComponents; ++component)
+    {
+        getChildComponent (component)->setEnabled (true);
+    }
+
+    screenToHide.setEnabled (false);
+
+    // animate the meta data screen
+    Rectangle <int> screenPosition = screenToHide.getBoundsInParent();
+
+    switch (direction)
+    {
+        case 0:
+            screenPosition.setX (-390);
+            break;
+
+        case 1:
+            screenPosition.setX (getWidth());
+            break;
+
+        case 2:
+            screenPosition.setY (-295);
+            break;
+
+        case 3:
+            screenPosition.setY (getHeight());
+            break;
+    }
+
+    animator.animateComponent (&screenToHide, screenPosition, 0xff, 1000, false, 0, 0);
+
+    extraScreenVisible = false;
 }
 
 //==========================================================================

@@ -74,6 +74,9 @@ private:
     int extraScreenXPos, extraScreenYPos;
     bool extraScreenVisible;
 
+    void showExtraScreen (SAFEExtraScreen& screenToShow);
+    void hideExtraScreen (SAFEExtraScreen& screenToHide, int direction);
+
     int numParameters;
     const OwnedArray <SAFEParameter>& parameters;
 
