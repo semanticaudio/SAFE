@@ -1,7 +1,7 @@
 #ifndef __SAFEDESCRIPTORLOADSCREEN__
 #define __SAFEDESCRIPTORLOADSCREEN__
 
-class SAFEDescriptorLoadScreen : public Component,
+class SAFEDescriptorLoadScreen : public SAFEExtraScreen,
                                  public ListBoxModel,
                                  public Button::Listener,
                                  public TextEditor::Listener,
@@ -13,11 +13,6 @@ public:
     //==========================================================================
     SAFEDescriptorLoadScreen();
     ~SAFEDescriptorLoadScreen();
-
-    //==========================================================================
-    //      Paint the Thing
-    //==========================================================================
-    void paint (Graphics& g);
 
     //==========================================================================
     //      List Box Model Stuff
@@ -53,7 +48,6 @@ private:
     TextEditor searchBox;
     StringArray allDescriptors, searchedDescriptors;
     ListBox descriptorBox;
-    Label titleLabel;
 
     SAFEButton refreshButton;
     String previousSearchTerm;

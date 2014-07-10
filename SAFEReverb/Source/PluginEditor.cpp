@@ -35,6 +35,9 @@ SafereverbAudioProcessorEditor::SafereverbAudioProcessorEditor (SafereverbAudioP
     addAndMakeVisible (&metaDataButton);
     metaDataButton.setBounds (500, 214,	 30, 30);
     
+    addAndMakeVisible (&infoButton);
+    infoButton.setBounds (460, 214,	 30, 30);
+    
     addAndMakeVisible (&fileAccessButton);
     fileAccessButton.setBounds (540, 214, 30, 30);
     

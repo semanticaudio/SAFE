@@ -6,7 +6,7 @@ struct SAFEMetaData
     String genre, instrument, location, experience, language, age;
 };
 
-class SAFEMetaDataScreen : public Component
+class SAFEMetaDataScreen : public SAFEExtraScreen
 {
 public:
     //==========================================================================
@@ -14,11 +14,6 @@ public:
     //==========================================================================
     SAFEMetaDataScreen();
     ~SAFEMetaDataScreen();
-
-    //==========================================================================
-    //      Paint the Thing
-    //==========================================================================
-    void paint (Graphics& g);
 
     //==========================================================================
     //      Get the Data
@@ -36,7 +31,7 @@ public:
 private:
     // the various boxes and whatnot
     TextEditor genreBox, instrumentBox, locationBox, languageBox, experienceBox, ageBox;
-    Label titleLabel, genreLabel, instrumentLabel, locationLabel, languageLabel, experienceLabel, ageLabel;
+    Label genreLabel, instrumentLabel, locationLabel, languageLabel, experienceLabel, ageLabel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SAFEMetaDataScreen)
 };

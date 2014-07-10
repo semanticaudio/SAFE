@@ -35,6 +35,7 @@ public:
 protected:
     TextEditor descriptorBox;
     SAFEButton recordButton, loadButton, metaDataButton, fileAccessButton;
+    TextButton infoButton;
     OwnedArray <SAFESlider> sliders;
 
     //==========================================================================
@@ -57,16 +58,20 @@ private:
 
     bool fileAccessButtonPressed;
 
+    //==========================================================================
+    //      Extra Screen Bits
+    //==========================================================================
     ComponentAnimator animator;
 
     SAFEMetaDataScreen metaDataScreen;
-    int metaDataXPos, metaDataYPos;
     File metaDataFile;
     ScopedPointer <XmlElement> metaDataElement;
 
     SAFEDescriptorLoadScreen descriptorLoadScreen;
-    int loadScreenXPos, loadScreenYPos;
 
+    SAFEInfoScreen infoScreen;
+
+    int extraScreenXPos, extraScreenYPos;
     bool extraScreenVisible;
 
     int numParameters;

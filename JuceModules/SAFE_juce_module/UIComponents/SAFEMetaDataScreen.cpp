@@ -3,7 +3,6 @@
 //==========================================================================
 SAFEMetaDataScreen::SAFEMetaDataScreen()
     : submitButton ("Submit"),
-      titleLabel ("", "Additional Information"),
       genreLabel ("", "Genre:"),
       instrumentLabel ("", "Musical Instrument:"),
       locationLabel ("", "Current Location:"),
@@ -11,13 +10,9 @@ SAFEMetaDataScreen::SAFEMetaDataScreen()
       experienceLabel ("", "Production Experience:"),
       ageLabel ("", "Age")
 {
-    setSize (390, 295);
-
     // add the main title
     addAndMakeVisible (&titleLabel);
-    titleLabel.setFont (Font (22));
-    titleLabel.setBounds (15, 15, 360, 25);
-    titleLabel.setJustificationType (Justification::centred);
+    titleLabel.setText ("Additional Information", dontSendNotification);
 
     // add the genre text box
     addAndMakeVisible (&genreLabel);
@@ -88,21 +83,6 @@ SAFEMetaDataScreen::SAFEMetaDataScreen()
 
 SAFEMetaDataScreen::~SAFEMetaDataScreen()
 {
-}
-
-//==========================================================================
-//      Paint the Thing
-//==========================================================================
-void SAFEMetaDataScreen::paint (Graphics& g)
-{
-    int width = getWidth();
-    int height = getHeight();
-
-    g.setColour (SAFEColours::metaDataGrey);
-    g.fillRoundedRectangle (2.0f, 2.0f, (float) (width - 4.0f), (float) (height - 4.0f), 20.0f);
-
-    g.setColour (Colour (0xff000000));
-    g.drawRoundedRectangle (2.0f, 2.0f, (float) (width - 4.0f), (float) height - 4.0f, 20.0f, 4.0f);
 }
 
 //==========================================================================

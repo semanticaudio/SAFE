@@ -7,6 +7,7 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
       loadButton ("Load"),
       metaDataButton ("Meta Data"),
       fileAccessButton ("File Access"),
+      infoButton ("i"),
       parameters (ownerFilter->getParameterArray()),
       versionUpdateLabel ("", "This plug-in is out of date!\n\n"
                               "A newer version is available to download at\n"
@@ -57,11 +58,12 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
         currentSlider->addListener (this);
     }
 
+
+    extraScreenXPos = extraScreenYPos = -400;
+
     // stuff for the meta data screen
-    metaDataXPos = -390;
-    metaDataYPos = 0;
     addAndMakeVisible (&metaDataScreen);
-    metaDataScreen.setBounds (metaDataXPos, metaDataYPos, 390, 295);
+    metaDataScreen.setBounds (extraScreenXPos, extraScreenYPos, 390, 295);
     metaDataScreen.setAlwaysOnTop (true);
     metaDataScreen.setEnabled (false);
     metaDataScreen.submitButton.addListener (this);
@@ -70,14 +72,21 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
     metaDataButton.addListener (this);
 
     // stuff for the descriptor load screen
-    loadScreenXPos = 1200;
-    loadScreenYPos = 0;
     addAndMakeVisible (&descriptorLoadScreen);
-    descriptorLoadScreen.setBounds (loadScreenXPos, loadScreenYPos, 390, 295);
+    descriptorLoadScreen.setBounds (extraScreenXPos, extraScreenYPos, 390, 295);
     descriptorLoadScreen.setAlwaysOnTop (true);
     descriptorLoadScreen.setEnabled (false);
     descriptorLoadScreen.closeButton.addListener (this);
     descriptorLoadScreen.loadButton.addListener (this);
+
+    // stuff for the info screen
+    addAndMakeVisible (&infoScreen);
+    infoScreen.setBounds (extraScreenXPos, extraScreenYPos, 390, 295);
+    infoScreen.setAlwaysOnTop (true);
+    infoScreen.setEnabled (false);
+    infoScreen.closeButton.addListener (this);
+
+    infoButton.addListener (this);
 
     extraScreenVisible = false;
 
@@ -204,7 +213,7 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
 
         // animate the meta data screen
         Rectangle <int> loadScreenPosition = descriptorLoadScreen.getBoundsInParent();
-        loadScreenPosition.setX (loadScreenXPos);
+        loadScreenPosition.setX (extraScreenXPos);
 
         animator.animateComponent (&descriptorLoadScreen, loadScreenPosition, 0xff, 1000, false, 0, 0);
 
@@ -285,7 +294,7 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
 
         // animate the meta data screen
         Rectangle <int> metaDataPosition = metaDataScreen.getBoundsInParent();
-        metaDataPosition.setX (metaDataXPos);
+        metaDataPosition.setX (extraScreenXPos);
 
         animator.animateComponent (&metaDataScreen, metaDataPosition, 0xff, 1000, false, 0, 0);
 
@@ -309,6 +318,47 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
         metaDataPosition.setX (-390);
 
         animator.animateComponent (&metaDataScreen, metaDataPosition, 0xff, 1000, false, 0, 0);
+
+        extraScreenVisible = false;
+    }
+    // info button
+    else if (button == &infoButton)
+    {
+        // disable all the components
+        int numComponents = getNumChildComponents();
+
+        for (int component = 0; component < numComponents; ++component)
+        {
+            getChildComponent (component)->setEnabled (false);
+        }
+
+        infoScreen.setEnabled (true);
+
+        // animate the meta data screen
+        Rectangle <int> infoPosition = infoScreen.getBoundsInParent();
+        infoPosition.setY (extraScreenYPos);
+
+        animator.animateComponent (&infoScreen, infoPosition, 0xff, 1000, false, 0, 0);
+
+        extraScreenVisible = true;
+    }
+    else if (button == &infoScreen.closeButton)
+    {
+        // enable all the components
+        int numComponents = getNumChildComponents();
+
+        for (int component = 0; component < numComponents; ++component)
+        {
+            getChildComponent (component)->setEnabled (true);
+        }
+
+        infoScreen.setEnabled (false);
+
+        // animate the meta data screen
+        Rectangle <int> infoPosition = infoScreen.getBoundsInParent();
+        infoPosition.setY (-295);
+
+        animator.animateComponent (&infoScreen, infoPosition, 0xff, 1000, false, 0, 0);
 
         extraScreenVisible = false;
     }
@@ -417,20 +467,21 @@ void SAFEAudioProcessorEditor::flagWarning (WarningID id)
 //==========================================================================
 void SAFEAudioProcessorEditor::setExtraScreenPosition (int x, int y)
 {
-    metaDataXPos = x;
-    metaDataYPos = y;
+    extraScreenXPos = x;
+    extraScreenYPos = y;
     
     Rectangle <int> metaDataPosition = metaDataScreen.getBoundsInParent();
-    metaDataPosition.setY (metaDataYPos);
+    metaDataPosition.setY (extraScreenYPos);
     metaDataScreen.setBounds (metaDataPosition);
-    
-    loadScreenXPos = x;
-    loadScreenYPos = y;
     
     Rectangle <int> loadScreenPosition = descriptorLoadScreen.getBoundsInParent();
     loadScreenPosition.setX (getWidth());
-    loadScreenPosition.setY (loadScreenYPos);
+    loadScreenPosition.setY (extraScreenYPos);
     descriptorLoadScreen.setBounds (loadScreenPosition);
+
+    Rectangle <int> infoPosition = infoScreen.getBoundsInParent();
+    infoPosition.setX (extraScreenXPos);
+    infoScreen.setBounds (infoPosition);
 }
 
 //==========================================================================
