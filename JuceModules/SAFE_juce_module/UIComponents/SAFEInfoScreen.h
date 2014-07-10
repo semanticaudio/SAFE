@@ -17,6 +17,10 @@ public:
     //      Paint the Thing
     //==========================================================================
     void paint (Graphics& g);
+
+private:
+    Label text1, text2;
+    SAFEButton metaDataButton;
 };
 
 //==========================================================================
@@ -35,6 +39,8 @@ public:
     SAFEButton closeButton;
 
 private:
+    Viewport viewport;
+    SAFEInfo info;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SAFEInfoScreen)
 };

@@ -20,6 +20,8 @@ SAFELookAndFeel::SAFELookAndFeel()
     greenSliderImage    = ImageCache::getFromMemory(SAFEImages::knob_green_png, SAFEImages::knob_green_pngSize);
     redSliderImage      = ImageCache::getFromMemory(SAFEImages::knob_red_png, SAFEImages::knob_red_pngSize);
     yellowSliderImage   = ImageCache::getFromMemory(SAFEImages::knob_yellow_png, SAFEImages::knob_yellow_pngSize);
+
+    setColour (ScrollBar::thumbColourId, Colours::black);
 }
 
 SAFELookAndFeel::~SAFELookAndFeel()
