@@ -53,6 +53,14 @@ private:
         meterTimer
     };
 
+    enum ExtraScreenLocation
+    {
+        Left,
+        Right,
+        Top,
+        Bottom
+    };
+
     bool warningVisible;
     String savedDescriptorBoxContent;
 
@@ -75,7 +83,7 @@ private:
     bool extraScreenVisible;
 
     void showExtraScreen (SAFEExtraScreen& screenToShow);
-    void hideExtraScreen (SAFEExtraScreen& screenToHide, int direction);
+    void hideExtraScreen (SAFEExtraScreen& screenToHide, ExtraScreenLocation direction);
 
     int numParameters;
     const OwnedArray <SAFEParameter>& parameters;

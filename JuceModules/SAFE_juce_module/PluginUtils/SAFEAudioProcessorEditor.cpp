@@ -205,7 +205,7 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
     }
     else if (button == &descriptorLoadScreen.closeButton)
     {
-        hideExtraScreen (descriptorLoadScreen, 1);
+        hideExtraScreen (descriptorLoadScreen, Right);
     }
     else if (button == &descriptorLoadScreen.loadButton)
     {
@@ -255,7 +255,7 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
     // submit button
     else if (button == &metaDataScreen.submitButton)
     {
-        hideExtraScreen (metaDataScreen, 0);
+        hideExtraScreen (metaDataScreen, Left);
     }
     // info button
     else if (button == &infoButton)
@@ -264,7 +264,7 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
     }
     else if (button == &infoScreen.closeButton)
     {
-        hideExtraScreen (infoScreen, 2);
+        hideExtraScreen (infoScreen, Top);
     }
     // file access button
     else if (button == &fileAccessButton)
@@ -413,7 +413,7 @@ void SAFEAudioProcessorEditor::showExtraScreen (SAFEExtraScreen& screenToShow)
     extraScreenVisible = true;
 }
 
-void SAFEAudioProcessorEditor::hideExtraScreen (SAFEExtraScreen& screenToHide, int direction)
+void SAFEAudioProcessorEditor::hideExtraScreen (SAFEExtraScreen& screenToHide, ExtraScreenLocation direction)
 {
     // enable all the components
     int numComponents = getNumChildComponents();
@@ -430,19 +430,19 @@ void SAFEAudioProcessorEditor::hideExtraScreen (SAFEExtraScreen& screenToHide, i
 
     switch (direction)
     {
-        case 0:
+        case Left:
             screenPosition.setX (-390);
             break;
 
-        case 1:
+        case Right:
             screenPosition.setX (getWidth());
             break;
 
-        case 2:
+        case Top:
             screenPosition.setY (-295);
             break;
 
-        case 3:
+        case Bottom:
             screenPosition.setY (getHeight());
             break;
     }
