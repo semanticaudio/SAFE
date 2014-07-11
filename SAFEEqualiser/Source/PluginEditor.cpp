@@ -29,7 +29,7 @@ SafeequaliserAudioProcessorEditor::SafeequaliserAudioProcessorEditor (Safeequali
     backgroundImage = ImageCache::getFromMemory(SAFEImages::eq_background_png, SAFEImages::eq_background_pngSize);
 
     
-    int filterGraphVerticalOffset = 200;
+    int filterGraphVerticalOffset = 201;
     int col1X = 30;
     int col2X = 140;
     int col3X = 250;
@@ -51,7 +51,10 @@ SafeequaliserAudioProcessorEditor::SafeequaliserAudioProcessorEditor (Safeequali
     descriptorBox.setBounds (580, 254 + filterGraphVerticalOffset, 210, 94);
     
     addAndMakeVisible (&metaDataButton);
-    metaDataButton.setBounds (720, 214 + filterGraphVerticalOffset, 30, 30);
+    metaDataButton.setBounds (721, 214 + filterGraphVerticalOffset, 30, 30);
+    
+    addAndMakeVisible (&infoButton);
+    infoButton.setBounds (680, 214 + filterGraphVerticalOffset,	 30, 30);
     
     addAndMakeVisible (&fileAccessButton);
     fileAccessButton.setBounds (760, 214 + filterGraphVerticalOffset, 30, 30);

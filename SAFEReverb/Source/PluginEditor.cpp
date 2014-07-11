@@ -27,7 +27,7 @@ SafereverbAudioProcessorEditor::SafereverbAudioProcessorEditor (SafereverbAudioP
     recordButton.setBounds (360, 359, 100, 22);
     
     addAndMakeVisible (&loadButton);
-    loadButton.setBounds (470,  359, 100, 22);
+    loadButton.setBounds (470, 359, 100, 22);
     
     addAndMakeVisible (&descriptorBox);
     descriptorBox.setBounds (360, 254, 210, 94);

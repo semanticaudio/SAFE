@@ -40,6 +40,9 @@ SafedistortionAudioProcessorEditor::SafedistortionAudioProcessorEditor (Safedist
     addAndMakeVisible (&metaDataButton);
     metaDataButton.setBounds (752, 216, 30, 30);
     
+    addAndMakeVisible (&infoButton);
+    infoButton.setBounds (712, 216,	 30, 30);
+    
     addAndMakeVisible (&fileAccessButton);
     fileAccessButton.setBounds (792, 216, 30, 30);
     
