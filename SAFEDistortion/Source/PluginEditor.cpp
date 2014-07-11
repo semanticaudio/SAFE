@@ -45,8 +45,6 @@ SafedistortionAudioProcessorEditor::SafedistortionAudioProcessorEditor (Safedist
     
     setExtraScreenPosition (227, 54);
     
-    versionUpdateLabel.setBounds (612, 22, 210, 150);
-    
     // input gain slider
     SAFESlider* inputGainSlider = sliders [SafedistortionAudioProcessor::PARAMinputGain];
     addAndMakeVisible (inputGainSlider);

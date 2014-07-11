@@ -18,9 +18,16 @@ public:
     //==========================================================================
     void paint (Graphics& g);
 
+    //==========================================================================
+    //      Set Version Number
+    //==========================================================================
+    void setMostRecentVersion (float versionNumber);
+
 private:
     Label text1, text2;
     SAFEButton metaDataButton;
+
+    Label versionUpdateLabel;
 };
 
 //==========================================================================
@@ -38,7 +45,6 @@ public:
     // button made accessible so listeners can easily be added
     SAFEButton closeButton;
 
-private:
     Viewport viewport;
     SAFEInfo info;
 

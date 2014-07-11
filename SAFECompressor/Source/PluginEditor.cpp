@@ -46,8 +46,6 @@ SafecompressorAudioProcessorEditor::SafecompressorAudioProcessorEditor (Safecomp
     
     setExtraScreenPosition (227, 54);
     
-    versionUpdateLabel.setBounds (612, 22, 210, 150);
-    
     // threshold slider
     SAFESlider* thresholdSlider = sliders [SafecompressorAudioProcessor::PARAMthreshold];
     addAndMakeVisible (thresholdSlider);

@@ -43,8 +43,6 @@ protected:
     //==========================================================================
     void setExtraScreenPosition (int x, int y);
 
-    Label versionUpdateLabel;
-
 private:
     enum Timers
     {

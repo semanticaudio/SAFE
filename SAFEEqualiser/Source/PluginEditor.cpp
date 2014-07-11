@@ -58,8 +58,6 @@ SafeequaliserAudioProcessorEditor::SafeequaliserAudioProcessorEditor (Safeequali
     
     setExtraScreenPosition (210, 251);
     
-    versionUpdateLabel.setBounds (580, 220, 210, 150);
-    
     // first band
     SAFESlider* gain0Slider = sliders [SafeequaliserAudioProcessor::PARAMgain0];
     addAndMakeVisible (gain0Slider);

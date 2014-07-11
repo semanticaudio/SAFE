@@ -9,6 +9,11 @@ SAFEInfo::SAFEInfo()
 {
     setSize (330, 400);
 
+    addChildComponent (&versionUpdateLabel);
+    versionUpdateLabel.setColour (Label::backgroundColourId, SAFEColours::red);
+    versionUpdateLabel.setJustificationType (Justification::centred);
+    versionUpdateLabel.setBounds (0, 0, 330, 80);
+
     addAndMakeVisible (&text1);
     text1.setBounds (0, 0, 330, 300);
     text1.setText ("Once you have used this plug-in to get your"
@@ -50,6 +55,39 @@ SAFEInfo::~SAFEInfo()
 void SAFEInfo::paint (Graphics& g)
 {
     g.fillAll (SAFEColours::metaDataGrey);
+}
+
+//==========================================================================
+//      Set Version Number
+//==========================================================================
+void SAFEInfo::setMostRecentVersion (float versionNumber)
+{
+    if (JucePlugin_Version < versionNumber)
+    {
+        setSize (330, 480);
+
+        versionUpdateLabel.setText (String ("A newer version of this plug-in is available.\n"
+                                            "This is version ") 
+                                    + JucePlugin_VersionString
+                                    + String (", the most recent version is ")
+                                    + String (versionNumber) + String (".\n")
+                                    + String ("Go to www.semanticaudio.co.uk to download the "
+                                              "newer version.")
+                                    , dontSendNotification);
+        versionUpdateLabel.setVisible (true);
+
+        text1.setTopLeftPosition (0, 80);
+        metaDataButton.setTopLeftPosition (160, 380);
+        text2.setTopLeftPosition (0, 415);
+    }
+    else
+    {
+        setSize (330, 400);
+
+        text1.setTopLeftPosition (0, 0);
+        metaDataButton.setTopLeftPosition (160, 300);
+        text2.setTopLeftPosition (0, 335);
+    }
 }
 
 //==========================================================================
