@@ -12,30 +12,36 @@ SAFEButton::SAFEButton(const String& buttonName)
     File imageDirectory (IMAGE_DIRECTORY);
 
     // -----read the buttons from Memory (lookandfeel.h) -----------------------------------
-    recordImage             = ImageCache::getFromMemory(SAFEImages::record_png, SAFEImages::record_pngSize);
-    recordMouseOverImage    = ImageCache::getFromMemory(SAFEImages::record_mo_png, SAFEImages::record_mo_pngSize);
-    recordMouseDownImage    = ImageCache::getFromMemory(SAFEImages::record_png, SAFEImages::record_pngSize);
-    recordingImage          = ImageCache::getFromMemory(SAFEImages::recording_png, SAFEImages::recording_pngSize);
+    recordImage = ImageCache::getFromMemory (SAFEImages::record_png, SAFEImages::record_pngSize);
+    recordMouseOverImage  = ImageCache::getFromMemory (SAFEImages::record_mo_png, SAFEImages::record_mo_pngSize);
+    recordMouseDownImage  = ImageCache::getFromMemory (SAFEImages::record_png, SAFEImages::record_pngSize);
+    recordingImage = ImageCache::getFromMemory (SAFEImages::recording_png, SAFEImages::recording_pngSize);
     
-    saveImage               = ImageCache::getFromMemory(SAFEImages::save_png, SAFEImages::save_pngSize);
-    saveMouseOverImage      = ImageCache::getFromMemory(SAFEImages::save_mo_png, SAFEImages::save_mo_pngSize);
-    saveMouseDownImage      = ImageCache::getFromMemory(SAFEImages::save_png, SAFEImages::save_pngSize);
+    saveImage = ImageCache::getFromMemory (SAFEImages::save_png, SAFEImages::save_pngSize);
+    saveMouseOverImage = ImageCache::getFromMemory (SAFEImages::save_mo_png, SAFEImages::save_mo_pngSize);
+    saveMouseDownImage = ImageCache::getFromMemory (SAFEImages::save_png, SAFEImages::save_pngSize);
     
-    loadImage               = ImageCache::getFromMemory(SAFEImages::load_png, SAFEImages::load_pngSize);
-    loadMouseOverImage      = ImageCache::getFromMemory(SAFEImages::load_mo_png, SAFEImages::load_mo_pngSize);
-    loadMouseDownImage      = ImageCache::getFromMemory(SAFEImages::load_png, SAFEImages::load_pngSize);
+    loadImage = ImageCache::getFromMemory (SAFEImages::load_png, SAFEImages::load_pngSize);
+    loadMouseOverImage = ImageCache::getFromMemory (SAFEImages::load_mo_png, SAFEImages::load_mo_pngSize);
+    loadMouseDownImage = ImageCache::getFromMemory (SAFEImages::load_png, SAFEImages::load_pngSize);
     
-    metaDataImage           = ImageCache::getFromMemory(SAFEImages::metadata_png, SAFEImages::metadata_pngSize);
-    metaDataMouseOverImage  = ImageCache::getFromMemory(SAFEImages::metadata_mo_png, SAFEImages::metadata_mo_pngSize);
-    metaDataMouseDownImage  = ImageCache::getFromMemory(SAFEImages::metadata_png, SAFEImages::metadata_pngSize);
+    metaDataImage = ImageCache::getFromMemory (SAFEImages::metadata_png, SAFEImages::metadata_pngSize);
+    metaDataMouseOverImage = ImageCache::getFromMemory (SAFEImages::metadata_mo_png, SAFEImages::metadata_mo_pngSize);
+    metaDataMouseDownImage = ImageCache::getFromMemory (SAFEImages::metadata_png, SAFEImages::metadata_pngSize);
     
-    localFileImage          = ImageCache::getFromMemory(SAFEImages::usr_local_png, SAFEImages::usr_local_pngSize);
-    localFileMouseOverImage = ImageCache::getFromMemory(SAFEImages::usr_local_mo_png, SAFEImages::usr_local_mo_pngSize);
-    localFileMouseDownImage = ImageCache::getFromMemory(SAFEImages::usr_local_png, SAFEImages::usr_local_pngSize);
+    localFileImage = ImageCache::getFromMemory (SAFEImages::usr_local_png, SAFEImages::usr_local_pngSize);
+    localFileMouseOverImage = ImageCache::getFromMemory (SAFEImages::usr_local_mo_png, SAFEImages::usr_local_mo_pngSize);
+    localFileMouseDownImage = ImageCache::getFromMemory (SAFEImages::usr_local_png, SAFEImages::usr_local_pngSize);
     
-    globalFileImage          = ImageCache::getFromMemory(SAFEImages::usr_global_png, SAFEImages::usr_global_pngSize);
-    globalFileMouseOverImage = ImageCache::getFromMemory(SAFEImages::usr_global_mo_png, SAFEImages::usr_global_mo_pngSize);
-    globalFileMouseDownImage = ImageCache::getFromMemory(SAFEImages::usr_global_png, SAFEImages::usr_global_pngSize);
+    globalFileImage = ImageCache::getFromMemory (SAFEImages::usr_global_png, SAFEImages::usr_global_pngSize);
+    globalFileMouseOverImage = ImageCache::getFromMemory (SAFEImages::usr_global_mo_png, SAFEImages::usr_global_mo_pngSize);
+    globalFileMouseDownImage = ImageCache::getFromMemory (SAFEImages::usr_global_png, SAFEImages::usr_global_pngSize);
+
+    infoImage = ImageCache::getFromMemory (SAFEImages::info_yellow_png, SAFEImages::info_yellow_pngSize);
+    infoMouseOverImage = ImageCache::getFromMemory (SAFEImages::info_yellow_mo_png, SAFEImages::info_yellow_mo_pngSize);
+
+    infoWarningImage = ImageCache::getFromMemory (SAFEImages::info_red_png, SAFEImages::info_red_pngSize);
+    infoWarningMouseOverImage = ImageCache::getFromMemory (SAFEImages::info_red_mo_png, SAFEImages::info_red_mo_pngSize);
 
     // -----read the buttons from file-----------------------------------
     // load images for record button
@@ -181,6 +187,20 @@ void SAFEButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
         case Close:
             symbolFunction = &SAFEButton::drawCloseSymbol;
             drawSymbol = true;
+            break;
+
+        case info:
+            imageToDraw = infoImage;
+            mouseOverImageToDraw = infoMouseOverImage;
+            mouseDownImageToDraw = infoImage;
+            drawFromImage = true;
+            break;
+
+        case infoWarning:
+            imageToDraw = infoWarningImage;
+            mouseOverImageToDraw = infoWarningMouseOverImage;
+            mouseDownImageToDraw = infoWarningImage;
+            drawFromImage = true;
             break;
     }
 

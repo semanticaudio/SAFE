@@ -136,6 +136,15 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
 
     infoScreen.info.setMostRecentVersion (mostRecentVersion);
 
+    if (JucePlugin_Version < mostRecentVersion)
+    {
+        infoButton.setMode (SAFEButton::infoWarning);
+    }
+    else
+    {
+        infoButton.setMode (SAFEButton::info);
+    }
+
     // start timer to update sliders
     startTimer (parameterUpdateTimer, 100);
     startTimer (meterTimer, 50);

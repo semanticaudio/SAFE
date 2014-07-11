@@ -34,8 +34,7 @@ public:
 
 protected:
     TextEditor descriptorBox;
-    SAFEButton recordButton, loadButton, metaDataButton, fileAccessButton;
-    TextButton infoButton;
+    SAFEButton recordButton, loadButton, metaDataButton, fileAccessButton, infoButton;
     OwnedArray <SAFESlider> sliders;
 
     //==========================================================================

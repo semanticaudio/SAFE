@@ -23,7 +23,9 @@ public:
         LocalFile,
         GlobalFile,
         Refresh,
-        Close
+        Close,
+        info,
+        infoWarning
     };
 
     //==========================================================================
@@ -47,6 +49,8 @@ private:
     Image metaDataImage, metaDataMouseOverImage, metaDataMouseDownImage;
     Image localFileImage, localFileMouseOverImage, localFileMouseDownImage;
     Image globalFileImage, globalFileMouseOverImage, globalFileMouseDownImage;
+    Image infoImage, infoMouseOverImage;
+    Image infoWarningImage, infoWarningMouseOverImage;
 
     void drawRefreshSymbol (Graphics& g);
     void drawCloseSymbol (Graphics& g);
