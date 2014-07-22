@@ -36,8 +36,8 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "SAFEReverb";
-    const char* const  versionString  = "1.26";
-    const int          versionNumber  = 0x11a00;
+    const char* const  versionString  = "1.3";
+    const int          versionNumber  = 0x10300;
 }
 
 #endif   // __APPHEADERFILE_NMIWIO__

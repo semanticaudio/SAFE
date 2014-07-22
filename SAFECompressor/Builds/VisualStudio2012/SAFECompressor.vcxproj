@@ -75,7 +75,7 @@
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;..\..\..\JuceModules;c:\vstsdk2.4;$(SolutionDir)../../../LibXtract;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.26;JUCE_APP_VERSION_HEX=0x11a00;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.3;JUCE_APP_VERSION_HEX=0x10300;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
@@ -119,7 +119,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;..\..\..\JuceModules;c:\vstsdk2.4;$(SolutionDir)../../../LibXtract;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.26;JUCE_APP_VERSION_HEX=0x11a00;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.3;JUCE_APP_VERSION_HEX=0x10300;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
@@ -164,7 +164,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;..\..\..\JuceModules;c:\vstsdk2.4;$(SolutionDir)../../../LibXtract;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.26;JUCE_APP_VERSION_HEX=0x11a00;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.3;JUCE_APP_VERSION_HEX=0x10300;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
@@ -1199,6 +1199,15 @@
     <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFEButton.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFEDescriptorLoadScreen.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFEExtraScreen.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFEInfoScreen.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFEMetaDataScreen.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -1670,6 +1679,9 @@
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\LevelMeter.h"/>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\LevelMeterTimer.h"/>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFEButton.h"/>
+    <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFEDescriptorLoadScreen.h"/>
+    <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFEExtraScreen.h"/>
+    <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFEInfoScreen.h"/>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFEMetaDataScreen.h"/>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFESlider.h"/>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\Effects\MVerb.h"/>

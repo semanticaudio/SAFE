@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="FVImuj" name="SAFEDistortion" projectType="audioplug" version="1.26"
+<JUCERPROJECT id="FVImuj" name="SAFEDistortion" projectType="audioplug" version="1.3"
               bundleIdentifier="com.SAFEProject.SAFEDistortion" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="0" buildAU="1" buildRTAS="0" buildAAX="0"
               pluginName="SAFEDistortion" pluginDesc="SAFEDistortion" pluginManufacturer="SAFE"
