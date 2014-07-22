@@ -99,8 +99,11 @@ void SafecompressorAudioProcessor::compress(AudioSampleBuffer &buffer)
 	    rmsDetector.copyFrom (0, rmsCounter, buffer, 0, sample, 1);
 	    ++rmsCounter %= 4096;
 	    
-	    inputIndB = Decibels::gainToDecibels (rmsDetector.getRMSLevel (0, 0, 4096));
-	    currentInputLevel = inputIndB;
+	    if ((rmsCounter % 100) == 0)
+	    {
+	        inputIndB = Decibels::gainToDecibels (rmsDetector.getRMSLevel (0, 0, 4096));
+	        currentInputLevel = inputIndB;
+	    }
 	    
 		// Gain computer- static apply input/output curve
 		if (inputIndB >= thresholdIndB + kneeIndB / 2.0f)
