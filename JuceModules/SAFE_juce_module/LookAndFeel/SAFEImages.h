@@ -14,6 +14,12 @@ namespace SAFEImages
     extern const char*  eq_background_png;
     const int           eq_background_pngSize = 30288;
 
+    extern const char*  infopanecurrent_png;
+    const int           infopanecurrent_pngSize = 78909;
+
+    extern const char*  infopaneupdate_png;
+    const int           infopaneupdate_pngSize = 78763;
+
     extern const char*  info_red_png;
     const int           info_red_pngSize = 700;
 

@@ -24,10 +24,9 @@ public:
     void setMostRecentVersion (float versionNumber);
 
 private:
-    Label text1, text2;
-    SAFEButton metaDataButton;
+    Image currentImage, updateImage;
 
-    Label versionUpdateLabel;
+    float version;
 };
 
 //==========================================================================
