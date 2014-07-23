@@ -24,7 +24,7 @@
   </MAINGROUP>
   <EXPORTFORMATS>
     <VS2012 targetFolder="Builds/VisualStudio2012" vstFolder="c:\vstsdk2.4"
-            externalLibraries="LibXtract.lib" extraDefs="">
+            externalLibraries="LibXtract.lib" extraDefs="" toolset="v110_xp">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
                        isDebug="1" optimisation="1" targetName="SAFECompressor" headerPath="$(SolutionDir)../../../LibXtract"

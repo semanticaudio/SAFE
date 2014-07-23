@@ -1,18 +1,24 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2012
-Project("{5372E22D-C597-0668-98D3-C78F4F91A572}") = "SAFEReverb", "SAFEReverb.vcxproj", "{FA10D054-AFAA-E162-201E-A6C46A69940B}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Desktop
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SAFEReverb", "SAFEReverb.vcxproj", "{FA10D054-AFAA-E162-201E-A6C46A69940B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
 		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+		Release64|Win32 = Release64|Win32
 		Release64|x64 = Release64|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FA10D054-AFAA-E162-201E-A6C46A69940B}.Debug|Win32.ActiveCfg = Debug|Win32
 		{FA10D054-AFAA-E162-201E-A6C46A69940B}.Debug|Win32.Build.0 = Debug|Win32
+		{FA10D054-AFAA-E162-201E-A6C46A69940B}.Debug|x64.ActiveCfg = Debug|Win32
 		{FA10D054-AFAA-E162-201E-A6C46A69940B}.Release|Win32.ActiveCfg = Release|Win32
 		{FA10D054-AFAA-E162-201E-A6C46A69940B}.Release|Win32.Build.0 = Release|Win32
+		{FA10D054-AFAA-E162-201E-A6C46A69940B}.Release|x64.ActiveCfg = Release|Win32
+		{FA10D054-AFAA-E162-201E-A6C46A69940B}.Release64|Win32.ActiveCfg = Release64|x64
 		{FA10D054-AFAA-E162-201E-A6C46A69940B}.Release64|x64.ActiveCfg = Release64|x64
 		{FA10D054-AFAA-E162-201E-A6C46A69940B}.Release64|x64.Build.0 = Release64|x64
 	EndGlobalSection

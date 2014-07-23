@@ -17,26 +17,26 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{73B900B9-2FBB-6C2C-32DF-42DA7F8B6486}</ProjectGuid>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v110_xp</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v110_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v110_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v110</PlatformToolset>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v110_xp</PlatformToolset>
+    <PlatformToolset>v110_xp</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
   <ImportGroup Label="ExtensionSettings"/>
@@ -45,7 +45,7 @@
             Label="LocalAppDataPlatform"/>
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v110_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
@@ -61,7 +61,7 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">SAFECompressor</TargetName>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">true</GenerateManifest>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release64|x64'">$(LibraryPath);$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/x64/Release</LibraryPath>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v110_xp</PlatformToolset>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -1241,8 +1241,8 @@
     <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\RTAS\juce_RTAS_Wrapper.cpp">
       <CallingConvention>StdCall</CallingConvention>
     </ClCompile>
-    <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\VST\juce_VST_Wrapper.cpp"/>
     <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\VST3\juce_VST3_Wrapper.cpp"/>
+    <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\VST\juce_VST_Wrapper.cpp"/>
     <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\SAFE_juce_module.cpp"/>
   </ItemGroup>
   <ItemGroup>
@@ -1303,9 +1303,9 @@
     <ClInclude Include="..\..\..\JuceModules\juce_audio_processors\juce_audio_processors.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharacterFunctions.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_ASCII.h"/>
-    <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_UTF8.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_UTF16.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_UTF32.h"/>
+    <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_UTF8.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_Identifier.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_LocalisedStrings.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_NewLine.h"/>

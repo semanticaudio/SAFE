@@ -1441,10 +1441,10 @@
     <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\RTAS\juce_RTAS_Wrapper.cpp">
       <Filter>Juce Library Code</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\VST\juce_VST_Wrapper.cpp">
+    <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\VST3\juce_VST3_Wrapper.cpp">
       <Filter>Juce Library Code</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\VST3\juce_VST3_Wrapper.cpp">
+    <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\VST\juce_VST_Wrapper.cpp">
       <Filter>Juce Library Code</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\SAFE_juce_module.cpp">
@@ -1623,13 +1623,13 @@
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_ASCII.h">
       <Filter>Juce Modules\juce_core\text</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_UTF8.h">
-      <Filter>Juce Modules\juce_core\text</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_UTF16.h">
       <Filter>Juce Modules\juce_core\text</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_UTF32.h">
+      <Filter>Juce Modules\juce_core\text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_UTF8.h">
       <Filter>Juce Modules\juce_core\text</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_Identifier.h">

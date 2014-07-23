@@ -25,7 +25,7 @@
   <EXPORTFORMATS>
     <VS2012 targetFolder="Builds/VisualStudio2012" externalLibraries="LibXtract.lib"
             vstFolder="c:\vstsdk2.4" extraDefs="IMAGE_DIRECTORY=&quot;C:/Users/id115387/Documents/ResearchWork/SAFE/Utils/SAFE_juce_module/LookAndFeel&quot;"
-            extraCompilerFlags="">
+            extraCompilerFlags="" toolset="v110_xp">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
                        isDebug="1" optimisation="1" targetName="SAFEDistortion" libraryPath="$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/lib/Debug"
