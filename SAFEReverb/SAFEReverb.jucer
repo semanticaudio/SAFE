@@ -59,7 +59,7 @@
         <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
                        isDebug="1" optimisation="1" targetName="SAFEReverb" headerPath="/usr/local/include&#10;/usr/include"
                        libraryPath="/usr/local/lib&#10;/usr/lib"/>
-        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="64BitUniversal"
+        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="10.6 SDK" osxArchitecture="64BitUniversal"
                        isDebug="0" optimisation="3" targetName="SAFEReverb" libraryPath="/usr/local/lib&#10;/usr/lib"
                        headerPath="/usr/local/include&#10;/usr/include"/>
       </CONFIGURATIONS>

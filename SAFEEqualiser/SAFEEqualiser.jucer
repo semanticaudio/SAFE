@@ -59,7 +59,7 @@
         <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="64BitIntel"
                        isDebug="1" optimisation="1" targetName="SAFEEqualiser" headerPath="/usr/local/include"
                        libraryPath="/usr/local/lib&#10;"/>
-        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="64BitUniversal"
+        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="10.6 SDK" osxArchitecture="64BitUniversal"
                        isDebug="0" optimisation="3" targetName="SAFEEqualiser" headerPath="/usr/local/include"
                        libraryPath="/usr/local/lib&#10;"/>
       </CONFIGURATIONS>
