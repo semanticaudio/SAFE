@@ -22,6 +22,7 @@ namespace juce
 
 #include "UIComponents/SAFEButton.h"
 #include "UIComponents/SAFESlider.h"
+#include "UIComponents/XYSlider.h"
 #include "UIComponents/SAFEExtraScreen.h"
 #include "UIComponents/SAFEMetaDataScreen.h"
 #include "UIComponents/SAFEDescriptorLoadScreen.h"
