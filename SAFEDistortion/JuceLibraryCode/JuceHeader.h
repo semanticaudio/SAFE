@@ -36,8 +36,8 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "SAFEDistortion";
-    const char* const  versionString  = "1.3";
-    const int          versionNumber  = 0x10300;
+    const char* const  versionString  = "1.31";
+    const int          versionNumber  = 0x11f00;
 }
 
 #endif   // __APPHEADERFILE_FVIMUJ__

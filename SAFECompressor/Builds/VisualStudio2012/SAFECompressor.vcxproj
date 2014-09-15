@@ -75,7 +75,7 @@
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;..\..\..\JuceModules;c:\vstsdk2.4;$(SolutionDir)../../../LibXtract;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.3;JUCE_APP_VERSION_HEX=0x10300;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.31;JUCE_APP_VERSION_HEX=0x11f00;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
@@ -119,7 +119,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;..\..\..\JuceModules;c:\vstsdk2.4;$(SolutionDir)../../../LibXtract;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.3;JUCE_APP_VERSION_HEX=0x10300;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.31;JUCE_APP_VERSION_HEX=0x11f00;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
@@ -164,7 +164,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;..\..\..\JuceModules;c:\vstsdk2.4;$(SolutionDir)../../../LibXtract;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.3;JUCE_APP_VERSION_HEX=0x10300;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JUCER_VS2012_78A501F=1;JUCE_APP_VERSION=1.31;JUCE_APP_VERSION_HEX=0x11f00;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
@@ -1214,6 +1214,9 @@
     <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFESlider.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\XYSlider.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\AAX\juce_AAX_Wrapper.cpp"/>
     <ClCompile Include="..\..\..\JuceModules\juce_audio_basics\juce_audio_basics.cpp"/>
     <ClCompile Include="..\..\..\JuceModules\juce_audio_processors\juce_audio_processors.cpp"/>
@@ -1241,8 +1244,8 @@
     <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\RTAS\juce_RTAS_Wrapper.cpp">
       <CallingConvention>StdCall</CallingConvention>
     </ClCompile>
-    <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\VST3\juce_VST3_Wrapper.cpp"/>
     <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\VST\juce_VST_Wrapper.cpp"/>
+    <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\VST3\juce_VST3_Wrapper.cpp"/>
     <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\SAFE_juce_module.cpp"/>
   </ItemGroup>
   <ItemGroup>
@@ -1303,9 +1306,9 @@
     <ClInclude Include="..\..\..\JuceModules\juce_audio_processors\juce_audio_processors.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharacterFunctions.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_ASCII.h"/>
+    <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_UTF8.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_UTF16.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_UTF32.h"/>
-    <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_CharPointer_UTF8.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_Identifier.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_LocalisedStrings.h"/>
     <ClInclude Include="..\..\..\JuceModules\juce_core\text\juce_NewLine.h"/>
@@ -1684,6 +1687,7 @@
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFEInfoScreen.h"/>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFEMetaDataScreen.h"/>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFESlider.h"/>
+    <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\XYSlider.h"/>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\Effects\MVerb.h"/>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\SAFE_juce_module.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h"/>
