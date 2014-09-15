@@ -110,6 +110,7 @@ public:
     //      Analysis Thread
     //==========================================================================
     WarningID startAnalysisThread();
+    bool isThreadRunning();
     void sendWarningToEditor (WarningID warning);
     
     //==========================================================================

@@ -176,7 +176,11 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
     // record / save button
     if (button == &recordButton)
     {
-        if (descriptorBoxContent.containsNonWhitespaceChars())
+        if (ourProcessor->isThreadRunning())
+        {
+            displayWarning (AnalysisThreadBusy);
+        }
+        else if (descriptorBoxContent.containsNonWhitespaceChars())
         {
             if (fileAccessButtonPressed && ! canReachServer())
             {
@@ -312,7 +316,7 @@ void SAFEAudioProcessorEditor::timerCallback (int timerID)
         // update sliders to new values
         SAFEAudioProcessor* ourProcessor = getProcessor();
 
-        if (ourProcessor->isReadyToSave() && ! extraScreenVisible)
+        if (ourProcessor->isReadyToSave() && ! extraScreenVisible && ! warningVisible)
         {
             recordButton.setMode (SAFEButton::Save);
 
@@ -337,21 +341,16 @@ void SAFEAudioProcessorEditor::timerCallback (int timerID)
     else if (timerID == warningTimer)
     {
         // show warnings
-        if (warningVisible)
-        {
-            warningVisible = false;
-        }
-        else
-        {
-            stopTimer (warningTimer);
-            descriptorBox.setColour (TextEditor::textColourId, Colours::black);
-            descriptorBox.setText (savedDescriptorBoxContent);
-            descriptorBox.setReadOnly (false);
+        stopTimer (warningTimer);
+        descriptorBox.setColour (TextEditor::textColourId, Colours::black);
+        descriptorBox.setText (savedDescriptorBoxContent);
+        descriptorBox.setReadOnly (false);
 
-            recordButton.setEnabled (true);
-            loadButton.setEnabled (true);
-            metaDataButton.setEnabled (true);
-        }
+        recordButton.setEnabled (true);
+        loadButton.setEnabled (true);
+        metaDataButton.setEnabled (true);
+
+        warningVisible = false;
     }
     else if (timerID == meterTimer)
     {

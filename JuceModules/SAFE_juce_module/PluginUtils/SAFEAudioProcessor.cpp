@@ -600,6 +600,11 @@ WarningID SAFEAudioProcessor::startAnalysisThread()
     return NoWarning;
 }
 
+bool SAFEAudioProcessor::isThreadRunning()
+{
+    return analysisThread->isThreadRunning();
+}
+
 void SAFEAudioProcessor::sendWarningToEditor (WarningID warning)
 {
     SAFEAudioProcessorEditor* editor = static_cast <SAFEAudioProcessorEditor*> (getActiveEditor());
