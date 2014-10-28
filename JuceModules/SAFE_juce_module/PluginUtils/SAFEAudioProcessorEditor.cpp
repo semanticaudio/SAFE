@@ -145,6 +145,9 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
         infoButton.setMode (SAFEButton::info);
     }
 
+    // set up logging file
+    parameterLogFile = dataDirectory.getChildFile (JucePlugin_Name + String ("ParameterLog.txt"));
+
     // start timer to update sliders
     startTimer (parameterUpdateTimer, 100);
     startTimer (meterTimer, 50);
@@ -193,6 +196,8 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
                 ourProcessor->startRecording (descriptorBoxContent, metaData, fileAccessButtonPressed);
                 recordButton.setEnabled (false);
                 recordButton.setMode (SAFEButton::Recording);
+
+                logAction (String ("\"Descriptor Saved\", \"") + descriptorBoxContent + String("\""));
             }
             else
             {
@@ -292,6 +297,8 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
 
 void SAFEAudioProcessorEditor::sliderValueChanged (Slider* slider)
 {
+    String parameterName;
+
     // set the plugin's parameters
     SAFEAudioProcessor* ourProcessor = getProcessor();
 
@@ -300,10 +307,56 @@ void SAFEAudioProcessorEditor::sliderValueChanged (Slider* slider)
         if (slider == sliders [n]->getSliderPointer())
         {
             ourProcessor->setScaledParameterNotifyingHost (n, (float) sliders [n]->getValue());
+            parameterName = ourProcessor->getParameterName (n);
         }
     }
 
+    double parameterValue = slider->getValue();
+
+    logAction ("\"" + parameterName + "\", " + String (parameterValue) + ", 1");
+
     sliderUpdate (slider);
+}
+
+void SAFEAudioProcessorEditor::sliderDragStarted (Slider* slider)
+{
+    String parameterName;
+
+    // set the plugin's parameters
+    SAFEAudioProcessor* ourProcessor = getProcessor();
+
+    for (int n = 0; n < numParameters; ++n)
+    {
+        if (slider == sliders [n]->getSliderPointer())
+        {
+            parameterName = ourProcessor->getParameterName (n);
+        }
+    }
+
+    double parameterValue = slider->getValue();
+
+    logAction ("\"" + parameterName + "\", " + String (parameterValue) + ", 0");
+}
+
+void SAFEAudioProcessorEditor::sliderDragEnded (Slider* slider)
+{
+    String parameterName;
+
+    // set the plugin's parameters
+    SAFEAudioProcessor* ourProcessor = getProcessor();
+
+    for (int n = 0; n < numParameters; ++n)
+    {
+        if (slider == sliders [n]->getSliderPointer())
+        {
+            parameterName = ourProcessor->getParameterName (n);
+        }
+    }
+
+    double parameterValue = slider->getValue();
+
+    logAction ("\"" + parameterName + "\", " + String (parameterValue) + ", 2");
+    logBlankLine();
 }
 
 //==========================================================================
@@ -523,4 +576,16 @@ bool SAFEAudioProcessorEditor::canReachServer()
     String testString (serverConnectionTest.readEntireTextStream());
 
     return testString.contains ("Hi There!");
+}
+
+void SAFEAudioProcessorEditor::logAction (const String &logString)
+{
+    String timeString (Time::currentTimeMillis());
+
+    parameterLogFile.appendText (timeString + ", " + logString + "\n");
+}
+
+void SAFEAudioProcessorEditor::logBlankLine()
+{
+    parameterLogFile.appendText ("\n");
 }

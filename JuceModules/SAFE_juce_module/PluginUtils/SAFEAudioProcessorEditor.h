@@ -18,6 +18,8 @@ public:
     //==========================================================================
     void buttonClicked (Button* button);
     void sliderValueChanged (Slider* slider);
+    void sliderDragStarted (Slider* slider);
+    void sliderDragEnded (Slider* slider);
     virtual void sliderUpdate (Slider*) {}
 
     //==========================================================================
@@ -98,6 +100,13 @@ private:
     //      Test Connection to Server
     //==========================================================================
     bool canReachServer();
+
+    //==========================================================================
+    //      Parameter Logging
+    //==========================================================================
+    File parameterLogFile;
+    void logAction (const String &logString);
+    void logBlankLine();
 
     SAFEAudioProcessor* getProcessor()
     {
