@@ -44,6 +44,12 @@ protected:
     //==========================================================================
     void setExtraScreenPosition (int x, int y);
 
+    //==========================================================================
+    //      Parameter Logging
+    //==========================================================================
+    void logAction (const String &logString);
+    void logBlankLine();
+
 private:
     enum Timers
     {
@@ -105,8 +111,6 @@ private:
     //      Parameter Logging
     //==========================================================================
     File parameterLogFile;
-    void logAction (const String &logString);
-    void logBlankLine();
 
     SAFEAudioProcessor* getProcessor()
     {

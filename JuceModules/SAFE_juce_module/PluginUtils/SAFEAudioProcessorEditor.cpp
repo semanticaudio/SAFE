@@ -103,6 +103,7 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
         metaData.experience = metaDataElement->getStringAttribute ("Experience", "");
         metaData.age = metaDataElement->getStringAttribute ("Age", "");
         metaData.language = metaDataElement->getStringAttribute ("Language", "");
+        metaData.genre = metaDataElement->getStringAttribute ("Genre", "");
 
         metaDataScreen.setMetaData (metaData);
     }
@@ -161,6 +162,7 @@ SAFEAudioProcessorEditor::~SAFEAudioProcessorEditor()
     metaDataElement->setAttribute ("Experience", metaData.experience);
     metaDataElement->setAttribute ("Age", metaData.age);
     metaDataElement->setAttribute ("Language", metaData.language);
+    metaDataElement->setAttribute ("Genre", metaData.genre);
 
     metaDataElement->writeToFile (metaDataFile, "");
 }
@@ -198,6 +200,7 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
                 recordButton.setMode (SAFEButton::Recording);
 
                 logAction (String ("\"Descriptor Saved\", \"") + descriptorBoxContent + String("\""));
+                logBlankLine();
             }
             else
             {

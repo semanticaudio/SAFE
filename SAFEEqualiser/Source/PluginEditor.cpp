@@ -251,6 +251,9 @@ void SafeequaliserAudioProcessorEditor::filterControlChanged (int controlNum)
             display.setFilter (0, 44100, IIRCoefficients::makeLowShelf (44100, freq, 0.71, Decibels::decibelsToGain (gain)));
             sliders [0]->setValue (gain, dontSendNotification);
             sliders [1]->setValue (freq, dontSendNotification);
+            logAction ("\"" + ourProcessor->getParameterName (0) + "\", " + String (gain) + ", 1");
+            logAction ("\"" + ourProcessor->getParameterName (1) + "\", " + String (freq) + ", 1");
+            logBlankLine();
             break;  
             
         case 1:
@@ -264,6 +267,10 @@ void SafeequaliserAudioProcessorEditor::filterControlChanged (int controlNum)
             sliders [2]->setValue (gain, dontSendNotification);
             sliders [3]->setValue (freq, dontSendNotification);
             sliders [4]->setValue (qFactor, dontSendNotification);
+            logAction ("\"" + ourProcessor->getParameterName (2) + "\", " + String (gain) + ", 1");
+            logAction ("\"" + ourProcessor->getParameterName (3) + "\", " + String (freq) + ", 1");
+            logAction ("\"" + ourProcessor->getParameterName (4) + "\", " + String (qFactor) + ", 1");
+            logBlankLine();
             break; 
             
         case 2:
@@ -277,6 +284,10 @@ void SafeequaliserAudioProcessorEditor::filterControlChanged (int controlNum)
             sliders [5]->setValue (gain, dontSendNotification);
             sliders [6]->setValue (freq, dontSendNotification);
             sliders [7]->setValue (qFactor, dontSendNotification);
+            logAction ("\"" + ourProcessor->getParameterName (5) + "\", " + String (gain) + ", 1");
+            logAction ("\"" + ourProcessor->getParameterName (6) + "\", " + String (freq) + ", 1");
+            logAction ("\"" + ourProcessor->getParameterName (7) + "\", " + String (qFactor) + ", 1");
+            logBlankLine();
             break; 
             
         case 3:
@@ -290,6 +301,10 @@ void SafeequaliserAudioProcessorEditor::filterControlChanged (int controlNum)
             sliders [8]->setValue (gain, dontSendNotification);
             sliders [9]->setValue (freq, dontSendNotification);
             sliders [10]->setValue (qFactor, dontSendNotification);
+            logAction ("\"" + ourProcessor->getParameterName (8) + "\", " + String (gain) + ", 1");
+            logAction ("\"" + ourProcessor->getParameterName (9) + "\", " + String (freq) + ", 1");
+            logAction ("\"" + ourProcessor->getParameterName (10) + "\", " + String (qFactor) + ", 1");
+            logBlankLine();
             break; 
             
         case 4:
@@ -300,6 +315,9 @@ void SafeequaliserAudioProcessorEditor::filterControlChanged (int controlNum)
             display.setFilter (4, 44100, IIRCoefficients::makeHighShelf (44100, freq, 0.71, Decibels::decibelsToGain (gain)));
             sliders [11]->setValue (gain, dontSendNotification);
             sliders [12]->setValue (freq, dontSendNotification);
+            logAction ("\"" + ourProcessor->getParameterName (11) + "\", " + String (gain) + ", 1");
+            logAction ("\"" + ourProcessor->getParameterName (12) + "\", " + String (freq) + ", 1");
+            logBlankLine();
             break; 
     }
 }
