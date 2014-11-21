@@ -199,7 +199,7 @@ void SAFEAudioProcessorEditor::buttonClicked (Button* button)
                 recordButton.setEnabled (false);
                 recordButton.setMode (SAFEButton::Recording);
 
-                logAction (String ("\"Descriptor Saved\", \"") + descriptorBoxContent + String("\""));
+                logAction (String ("\"Descriptor Saved\", \"") + descriptorBoxContent + String("\", \"") + metaData.instrument + "\"");
                 logBlankLine();
             }
             else
