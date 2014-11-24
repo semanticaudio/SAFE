@@ -22,14 +22,14 @@ void SAFEAudioProcessor::AnalysisThread::run()
 {
     WarningID warning;
 
-    if (sendToServer)
-    {
+    /*if (sendToServer)
+    {*/
         warning = processor->sendDataToServer (descriptors, metaData);
-    }
+    /*}
     else
-    {
+    {*/
         warning = processor->saveSemanticData (descriptors, metaData);
-    }
+    //}
 
     if (warning != NoWarning)
     {
