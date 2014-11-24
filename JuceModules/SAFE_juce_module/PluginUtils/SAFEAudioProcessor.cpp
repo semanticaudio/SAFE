@@ -201,7 +201,7 @@ double SAFEAudioProcessor::getTailLengthSeconds() const
 //==========================================================================
 int SAFEAudioProcessor::getNumPrograms()
 {
-    return 0;
+    return 1;
 }
 
 int SAFEAudioProcessor::getCurrentProgram()
