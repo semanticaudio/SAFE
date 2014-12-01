@@ -129,6 +129,11 @@ public:
     bool isRecording();
     bool isReadyToSave();
 
+    //==========================================================================
+    //      Instance ID
+    //==========================================================================
+    int getInstanceID();
+
 protected:
     //==========================================================================
     //      Methods to Create New Parameters
@@ -206,6 +211,12 @@ private:
     //      Make String ok for use in XML
     //==========================================================================
     String makeXmlString (String input);
+
+    //==========================================================================
+    //      Instance ID Bits
+    //==========================================================================
+    static int numInstances;
+    int instanceID;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SAFEAudioProcessor);
 };

@@ -74,10 +74,14 @@ SAFEAudioProcessor::SAFEAudioProcessor()
     controlRate = 64;
     controlBlockSize = (int) (44100.0 / controlRate);
     remainingControlBlockSamples = 0;
+
+    // track instance numbers
+    instanceID = numInstances++;
 }
 
 SAFEAudioProcessor::~SAFEAudioProcessor()
 {
+    --numInstances;
 }
 
 //==========================================================================
@@ -990,3 +994,13 @@ String SAFEAudioProcessor::makeXmlString (String input)
 {
     return input.retainCharacters ("1234567890qwertyuioplkjhgfdsazxcvbnmMNBVCXZASDFGHJKLPOIUYTREWQ:-_");
 }
+
+//==========================================================================
+//      Instance ID
+//==========================================================================
+int SAFEAudioProcessor::getInstanceID()
+{
+    return instanceID;
+}
+
+int SAFEAudioProcessor::numInstances = 0;

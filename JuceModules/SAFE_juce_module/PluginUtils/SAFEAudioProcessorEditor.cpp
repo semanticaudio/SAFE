@@ -585,7 +585,10 @@ void SAFEAudioProcessorEditor::logAction (const String &logString)
 {
     String timeString (Time::currentTimeMillis());
 
-    parameterLogFile.appendText (timeString + ", " + logString + "\n");
+    SAFEAudioProcessor* ourProcessor = getProcessor();
+    int processorID = ourProcessor->getInstanceID();
+
+    parameterLogFile.appendText (timeString + ", " + String (processorID) + ", " + logString + "\n");
 }
 
 void SAFEAudioProcessorEditor::logBlankLine()
