@@ -81,7 +81,6 @@ SAFEAudioProcessor::SAFEAudioProcessor()
 
 SAFEAudioProcessor::~SAFEAudioProcessor()
 {
-    --numInstances;
 }
 
 //==========================================================================
