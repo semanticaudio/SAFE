@@ -1217,6 +1217,9 @@
     <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\XYSlider.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\Analysis\FundamentalTracker.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\AAX\juce_AAX_Wrapper.cpp"/>
     <ClCompile Include="..\..\..\JuceModules\juce_audio_basics\juce_audio_basics.cpp"/>
     <ClCompile Include="..\..\..\JuceModules\juce_audio_processors\juce_audio_processors.cpp"/>
@@ -1689,6 +1692,7 @@
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\SAFESlider.h"/>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\XYSlider.h"/>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\Effects\MVerb.h"/>
+    <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\Analysis\FundamentalTracker.h"/>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\SAFE_juce_module.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>

@@ -44,4 +44,6 @@ namespace juce
 #include "Filters/Resampler.cpp"
 #include "Filters/AllPassFilter.cpp"
 #include "Filters/QuadratureFilter.cpp"
+
+#include "Analysis/FundamentalTracker.cpp"
 }

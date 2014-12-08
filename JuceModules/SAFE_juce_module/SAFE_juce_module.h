@@ -52,6 +52,8 @@ namespace juce
 #include "Filters/QuadratureFilter.h"
 
 #include "Effects/MVerb.h"
+
+#include "Analysis/FundamentalTracker.h"
 }
 
 #endif   // SAFE_JUCE_MODULE

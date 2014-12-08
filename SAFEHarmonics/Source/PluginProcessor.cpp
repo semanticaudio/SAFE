@@ -18,7 +18,6 @@ SafeharmonicsAudioProcessor::SafeharmonicsAudioProcessor()
     : method (IAP),
       fundamental (0),
       smoothedFundamental (0),
-      analysisTap (0),
       realSignal (1, 1),
       imagSignal (1, 1),
       f1 (1, 1),
@@ -28,11 +27,7 @@ SafeharmonicsAudioProcessor::SafeharmonicsAudioProcessor()
       f5 (1, 1),
       numInputs (1),
       fs (44100)      
-{  
-    analysisBuffer.allocate (4096, true);
-    
-    xtract_init_wavelet_f0_state();
-    
+{      
     f0Smoother.setCoefficients (IIRCoefficients::makeLowPass (44100, 1000));
     amplitudeSmoother.setCoefficients (IIRCoefficients::makeLowPass (44100, 1000));
     
@@ -69,6 +64,7 @@ void SafeharmonicsAudioProcessor::parameterUpdateCalculations (int index)
 void SafeharmonicsAudioProcessor::pluginPreparation (double sampleRate, int samplesPerBlock)
 {
     fs = sampleRate;
+    f0Tracker.setSampleRate (sampleRate);
     
     f0Smoother.reset();
     amplitudeSmoother.reset();
@@ -107,27 +103,19 @@ void SafeharmonicsAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer, M
     const float* channelData = buffer.getReadPointer (0);
     
     for (int i = 0; i < numSamples; ++i)
+    {     
+        f0Tracker.addSample (channelData [i]);
+    }   
+    
+    
+    fundamental = f0Tracker.getFundamental();        
+    //smoothedFundamental = f0Smoother.processSingleSampleRaw (fundamental);           
+    IIRCoefficients coeffs = IIRCoefficients::makeLowPass (fs, fundamental);
+        
+    for (int channel = 0; channel < numInputs; ++channel)
     {
-        analysisBuffer [analysisTap] = channelData [i];
-        ++analysisTap %= 4096;
-        
-        if (analysisTap == 0)
-        {
-            xtract_wavelet_f0 (analysisBuffer, 4096, &fs, &fundamental);
-            smoothedFundamental = f0Smoother.processSingleSampleRaw (fundamental);
-            
-            IIRCoefficients coeffs = IIRCoefficients::makeLowPass (fs, smoothedFundamental);
-            
-            for (int channel = 0; channel < numInputs; ++channel)
-            {
-                f0Filters [channel]->setCoefficients (coeffs);
-            }
-        }
-        
-        for (int channel = 0; channel < numInputs; ++channel)
-        {
-            f0Filters [channel]->processSamples (buffer.getWritePointer (channel) + i, 1);
-        }
+        f0Filters [channel]->setCoefficients (coeffs);
+        f0Filters [channel]->processSamples (buffer.getWritePointer (channel), numSamples);           
     }
     
     for (int channel = 0; channel < numInputs; ++channel)
@@ -193,7 +181,7 @@ AudioProcessorEditor* SafeharmonicsAudioProcessor::createEditor()
 
 double SafeharmonicsAudioProcessor::getFundamental()
 {
-    return smoothedFundamental;
+    return fundamental;
 }
 
 //==============================================================================

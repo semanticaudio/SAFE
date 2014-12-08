@@ -246,6 +246,7 @@
 		354CB869A6E1E45B8B2C47A6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_OpenGLShaderProgram.h"; path = "../../../JuceModules/juce_opengl/opengl/juce_OpenGLShaderProgram.h"; sourceTree = "SOURCE_ROOT"; };
 		359188343434F1D717B54F24 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_Singleton.h"; path = "../../../JuceModules/juce_core/memory/juce_Singleton.h"; sourceTree = "SOURCE_ROOT"; };
 		359964610CE3224DA9829150 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_String.h"; path = "../../../JuceModules/juce_core/text/juce_String.h"; sourceTree = "SOURCE_ROOT"; };
+		359F2D31943230AB2F217164 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FundamentalTracker.h; path = "../../../JuceModules/SAFE_juce_module/Analysis/FundamentalTracker.h"; sourceTree = "SOURCE_ROOT"; };
 		35B74412385C73810B6F45FC = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AUOutputBase.cpp; path = Extras/CoreAudio/AudioUnits/AUPublic/OtherBases/AUOutputBase.cpp; sourceTree = "DEVELOPER_DIR"; };
 		35C86E85624D1B877D23DC04 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_ThreadPool.h"; path = "../../../JuceModules/juce_core/threads/juce_ThreadPool.h"; sourceTree = "SOURCE_ROOT"; };
 		35D0AC746BB1EE8407C2FEA9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_GZIPDecompressorInputStream.h"; path = "../../../JuceModules/juce_core/zip/juce_GZIPDecompressorInputStream.h"; sourceTree = "SOURCE_ROOT"; };
@@ -426,6 +427,7 @@
 		68E395AABF95ECD761D3B102 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_InterprocessConnection.h"; path = "../../../JuceModules/juce_events/interprocess/juce_InterprocessConnection.h"; sourceTree = "SOURCE_ROOT"; };
 		68F115C1EBB643E3884307E1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_AudioProcessorGraph.cpp"; path = "../../../JuceModules/juce_audio_processors/processors/juce_AudioProcessorGraph.cpp"; sourceTree = "SOURCE_ROOT"; };
 		691AD89E4FDA90254197CF3E = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_FilenameComponent.h"; path = "../../../JuceModules/juce_gui_basics/filebrowser/juce_FilenameComponent.h"; sourceTree = "SOURCE_ROOT"; };
+		69CD16D804D22D5ECA76741D = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FundamentalTracker.cpp; path = "../../../JuceModules/SAFE_juce_module/Analysis/FundamentalTracker.cpp"; sourceTree = "SOURCE_ROOT"; };
 		69E2314F95E808BBBB82A165 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_Drawable.cpp"; path = "../../../JuceModules/juce_gui_basics/drawables/juce_Drawable.cpp"; sourceTree = "SOURCE_ROOT"; };
 		6A18E3A41EAE46265D6079AA = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_graphics.h"; path = "../../../JuceModules/juce_graphics/juce_graphics.h"; sourceTree = "SOURCE_ROOT"; };
 		6A19BC75E1356961F7A5A64F = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_AudioDataConverters.h"; path = "../../../JuceModules/juce_audio_basics/buffers/juce_AudioDataConverters.h"; sourceTree = "SOURCE_ROOT"; };
@@ -1971,12 +1973,16 @@
 					4C65EEB9775F6C6BC0AB5484, ); name = UIComponents; sourceTree = "<group>"; };
 		F6A5888218F01575A9BC60A0 = {isa = PBXGroup; children = (
 					1FDC757B307A7B702E074573, ); name = Effects; sourceTree = "<group>"; };
+		3B5CBA23BDCCF572E9438E32 = {isa = PBXGroup; children = (
+					69CD16D804D22D5ECA76741D,
+					359F2D31943230AB2F217164, ); name = Analysis; sourceTree = "<group>"; };
 		DF05D76977BBBDC22E564A1C = {isa = PBXGroup; children = (
 					DEE5D1BCABA707A91BE4B184,
 					5A333B605BC0BA6266A07B94,
 					4F5FA9A96E6DE3446B6548A2,
 					C0853B36B9555C52CFCE60A9,
 					F6A5888218F01575A9BC60A0,
+					3B5CBA23BDCCF572E9438E32,
 					76FC79CE2BF58E1927B1EC58,
 					EB19F488DD2E4AE9B7F887EC, ); name = "SAFE_juce_module"; sourceTree = "<group>"; };
 		DC1D2A78159BC58308E91E2D = {isa = PBXGroup; children = (
