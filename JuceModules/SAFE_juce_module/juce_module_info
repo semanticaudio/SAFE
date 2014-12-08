@@ -19,5 +19,6 @@
                       "Filters/*",
                       "LookAndFeel/*",
                       "UIComponents/*",
-                      "Effects/*", ],
+                      "Effects/*",
+                      "Analysis/*" ],
 }

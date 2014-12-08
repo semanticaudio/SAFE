@@ -15,9 +15,9 @@ BEGIN
     BEGIN
       VALUE "CompanyName",  "SAFE\0"
       VALUE "FileDescription",  "SAFEHarmonics\0"
-      VALUE "FileVersion",  "1.0.0\0"
+      VALUE "FileVersion",  "1.0\0"
       VALUE "ProductName",  "SAFEHarmonics\0"
-      VALUE "ProductVersion",  "1.0.0\0"
+      VALUE "ProductVersion",  "1.0\0"
     END
   END
 

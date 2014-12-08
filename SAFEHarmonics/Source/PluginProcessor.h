@@ -59,8 +59,7 @@ public:
 private:
     double fundamental, smoothedFundamental;
     
-    int analysisTap;
-    HeapBlock <double> analysisBuffer;
+    FundamentalTracker f0Tracker;
     
     IIRFilter f0Smoother;
     IIRFilter amplitudeSmoother;

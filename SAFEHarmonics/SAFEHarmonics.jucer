@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="ZGxF4U" name="SAFEHarmonics" projectType="audioplug" version="1.0.0"
+<JUCERPROJECT id="ZGxF4U" name="SAFEHarmonics" projectType="audioplug" version="1.0"
               bundleIdentifier="com.yourcompany.SAFEHarmonics" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="0" buildAU="1" buildRTAS="0" buildAAX="0"
               pluginName="SAFEHarmonics" pluginDesc="SAFEHarmonics" pluginManufacturer="SAFE"
@@ -24,14 +24,13 @@
   </MAINGROUP>
   <EXPORTFORMATS>
     <VS2012 targetFolder="Builds/VisualStudio2012" vstFolder="c:\vstsdk2.4"
-            externalLibraries="LibXtract.lib">
+            externalLibraries="LibXtract.lib" toolset="v110_xp">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
                        isDebug="1" optimisation="1" targetName="SAFEHarmonics" headerPath="$(SolutionDir)../../../LibXtract"
                        libraryPath="$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/lib/Debug"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="2" targetName="SAFEHarmonics" headerPath="$(SolutionDir)../../../LibXtract"
-                       libraryPath="$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/lib/Release"/>
+                       isDebug="0" optimisation="2" targetName="SAFEHarmonics"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="SAFE_juce_module" path="../JuceModules"/>
@@ -41,11 +40,11 @@
         <MODULEPATH id="juce_graphics" path="../JuceModules"/>
         <MODULEPATH id="juce_events" path="../JuceModules"/>
         <MODULEPATH id="juce_data_structures" path="../JuceModules"/>
+        <MODULEPATH id="juce_cryptography" path="../JuceModules"/>
         <MODULEPATH id="juce_core" path="../JuceModules"/>
         <MODULEPATH id="juce_audio_processors" path="../JuceModules"/>
         <MODULEPATH id="juce_audio_plugin_client" path="../JuceModules"/>
         <MODULEPATH id="juce_audio_basics" path="../JuceModules"/>
-        <MODULEPATH id="juce_cryptography" path="../JuceModules"/>
       </MODULEPATHS>
     </VS2012>
   </EXPORTFORMATS>
