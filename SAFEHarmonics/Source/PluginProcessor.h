@@ -57,12 +57,11 @@ public:
     } method;
 
 private:
-    double fundamental, smoothedFundamental;
+    double fundamental;
     
     FundamentalTracker f0Tracker;
     
-    IIRFilter f0Smoother;
-    IIRFilter amplitudeSmoother;
+    HeapBlock <float> synthPhases;
     
     OwnedArray <IIRFilter> f0Filters;
     OwnedArray <QuadratureFilter> quadFilters;

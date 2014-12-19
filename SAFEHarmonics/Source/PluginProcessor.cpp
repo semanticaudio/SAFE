@@ -17,7 +17,6 @@
 SafeharmonicsAudioProcessor::SafeharmonicsAudioProcessor()
     : method (IAP),
       fundamental (0),
-      smoothedFundamental (0),
       realSignal (1, 1),
       imagSignal (1, 1),
       f1 (1, 1),
@@ -27,10 +26,7 @@ SafeharmonicsAudioProcessor::SafeharmonicsAudioProcessor()
       f5 (1, 1),
       numInputs (1),
       fs (44100)      
-{      
-    f0Smoother.setCoefficients (IIRCoefficients::makeLowPass (44100, 1000));
-    amplitudeSmoother.setCoefficients (IIRCoefficients::makeLowPass (44100, 1000));
-    
+{        
     addDBParameter ("F0", f0Amplitude, 0, -100, 12);
     addDBParameter ("F1", f1Amplitude, -100, -100, 12);
     addDBParameter ("F2", f2Amplitude, -100, -100, 12);
@@ -66,9 +62,6 @@ void SafeharmonicsAudioProcessor::pluginPreparation (double sampleRate, int samp
     fs = sampleRate;
     f0Tracker.setSampleRate (sampleRate);
     
-    f0Smoother.reset();
-    amplitudeSmoother.reset();
-    
     f0Filters.clear();
     quadFilters.clear();
     
@@ -81,6 +74,11 @@ void SafeharmonicsAudioProcessor::pluginPreparation (double sampleRate, int samp
         
         quadFilters.add (new QuadratureFilter);
         quadFilters [channel]->reset();
+    }
+    
+    if (! synthPhases.getData())
+    {
+        synthPhases.allocate (numInputs, true);
     }
     
     realSignal.setSize (numInputs, samplesPerBlock * 4);
@@ -109,8 +107,9 @@ void SafeharmonicsAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer, M
     
     
     fundamental = f0Tracker.getFundamental();        
-    //smoothedFundamental = f0Smoother.processSingleSampleRaw (fundamental);           
     IIRCoefficients coeffs = IIRCoefficients::makeLowPass (fs, fundamental);
+    
+    int phaseIncrement = 2 * double_Pi * fundamental / fs;
         
     for (int channel = 0; channel < numInputs; ++channel)
     {
@@ -133,28 +132,36 @@ void SafeharmonicsAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer, M
         
         for (int i = 0; i < numSamples; ++i)
         {
+            float currentSample = inputSamples [i];
+            float sinSample = currentSample * sin (synthPhases [channel]);
+            float cosSample = currentSample * cos (synthPhases [channel]);
+            float harmonicsGain = 1;//2 * sqrt (pow (sinSample, 2) + pow (cosSample, 2));
+            
             std::complex <float> currentComplexSample (realSamples [i], imagSamples [i]);
             
             switch (method)
             {
                 case SSB:
-                    f1Samples [i] = real (pow (currentComplexSample, 2)); 
-                    f2Samples [i] = real (pow (currentComplexSample, 3));
-                    f3Samples [i] = real (pow (currentComplexSample, 4));
-                    f4Samples [i] = real (pow (currentComplexSample, 5));
-                    f5Samples [i] = real (pow (currentComplexSample, 6));
+                    f1Samples [i] = harmonicsGain * real (pow (currentComplexSample, 2)); 
+                    f2Samples [i] = harmonicsGain * real (pow (currentComplexSample, 3));
+                    f3Samples [i] = harmonicsGain * real (pow (currentComplexSample, 4));
+                    f4Samples [i] = harmonicsGain * real (pow (currentComplexSample, 5));
+                    f5Samples [i] = harmonicsGain * real (pow (currentComplexSample, 6));
                     break;
                     
                 case IAP:
                     float phase = arg (currentComplexSample);
                     float amplitude = abs (currentComplexSample);
-                    f1Samples [i] = amplitude * cos (2 * phase);
-                    f2Samples [i] = amplitude * cos (3 * phase);
-                    f3Samples [i] = amplitude * cos (4 * phase);
-                    f4Samples [i] = amplitude * cos (5 * phase);
-                    f5Samples [i] = amplitude * cos (6 * phase);
+                    f1Samples [i] = harmonicsGain * amplitude * cos (2 * phase);
+                    f2Samples [i] = harmonicsGain * amplitude * cos (3 * phase);
+                    f3Samples [i] = harmonicsGain * amplitude * cos (4 * phase);
+                    f4Samples [i] = harmonicsGain * amplitude * cos (5 * phase);
+                    f5Samples [i] = harmonicsGain * amplitude * cos (6 * phase);
                     break;
             }
+            
+            synthPhases [channel] += phaseIncrement;
+            synthPhases [channel] = fmod (synthPhases [channel], 2 * double_Pi);
         }
         
         buffer.applyGain (channel, 0, numSamples, f0Amplitude);
