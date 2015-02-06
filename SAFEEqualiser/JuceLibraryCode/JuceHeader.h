@@ -37,8 +37,8 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "SAFEEqualiser";
-    const char* const  versionString  = "1.31";
-    const int          versionNumber  = 0x11f00;
+    const char* const  versionString  = "1.32";
+    const int          versionNumber  = 0x12000;
 }
 #endif
 

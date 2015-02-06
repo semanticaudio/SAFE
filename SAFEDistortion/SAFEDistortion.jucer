@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="FVImuj" name="SAFEDistortion" projectType="audioplug" version="1.31"
+<JUCERPROJECT id="FVImuj" name="SAFEDistortion" projectType="audioplug" version="1.32"
               bundleIdentifier="com.SAFEProject.SAFEDistortion" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="0" buildAU="1" buildRTAS="0" buildAAX="0"
               pluginName="SAFEDistortion" pluginDesc="SAFEDistortion" pluginManufacturer="SAFE"
@@ -9,7 +9,7 @@
               pluginWantsMidiIn="0" pluginProducesMidiOut="0" pluginSilenceInIsSilenceOut="0"
               pluginEditorRequiresKeys="0" pluginAUExportPrefix="SAFEDistortionAU"
               pluginRTASCategory="" aaxIdentifier="com.yourcompany.SAFEDistortion"
-              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="3.1.0"
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="3.1.1"
               companyName="SAFE">
   <MAINGROUP id="NNtJXl" name="SAFEDistortion">
     <GROUP id="{B2BFC0FB-3D60-860A-B523-8CA08C2AF4FE}" name="Source">

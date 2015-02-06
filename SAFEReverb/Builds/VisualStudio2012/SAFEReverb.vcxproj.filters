@@ -287,6 +287,9 @@
     <Filter Include="Juce Modules\SAFE_juce_module\Effects">
       <UniqueIdentifier>{55E4C9DF-E7D7-F246-EF66-A063C9AA8293}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Juce Modules\SAFE_juce_module\Analysis">
+      <UniqueIdentifier>{DD9AB9B8-2828-7575-7F8E-D3ACA6020446}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Juce Library Code">
       <UniqueIdentifier>{8B4D1BAA-6DB4-CAEC-A0FA-271F354D5C61}</UniqueIdentifier>
     </Filter>
@@ -1392,6 +1395,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\UIComponents\XYSlider.cpp">
       <Filter>Juce Modules\SAFE_juce_module\UIComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\JuceModules\SAFE_juce_module\Analysis\FundamentalTracker.cpp">
+      <Filter>Juce Modules\SAFE_juce_module\Analysis</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\JuceModules\juce_audio_plugin_client\AAX\juce_AAX_Wrapper.cpp">
       <Filter>Juce Library Code</Filter>
@@ -2774,6 +2780,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\Effects\MVerb.h">
       <Filter>Juce Modules\SAFE_juce_module\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\Analysis\FundamentalTracker.h">
+      <Filter>Juce Modules\SAFE_juce_module\Analysis</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\JuceModules\SAFE_juce_module\SAFE_juce_module.h">
       <Filter>Juce Modules\SAFE_juce_module</Filter>
