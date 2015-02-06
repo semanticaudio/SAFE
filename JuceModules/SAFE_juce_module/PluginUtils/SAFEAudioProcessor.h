@@ -33,6 +33,11 @@ private:
         String descriptors;
         SAFEMetaData metaData;
         bool sendToServer;
+
+        //==========================================================================
+        //      Lock to ensure only one plug-in saves at a time
+        //==========================================================================
+        static SpinLock mutex;
     };
 
     ScopedPointer <AnalysisThread> analysisThread;

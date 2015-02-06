@@ -20,6 +20,8 @@ SAFEAudioProcessor::AnalysisThread::~AnalysisThread()
 //==========================================================================
 void SAFEAudioProcessor::AnalysisThread::run()
 {
+    GenericScopedLock <SpinLock> lock (mutex);
+
     WarningID warning;
 
     if (sendToServer)
@@ -46,6 +48,11 @@ void SAFEAudioProcessor::AnalysisThread::setParameters (String newDescriptors, S
     metaData = newMetaData;
     sendToServer = newSendToServer;
 }
+
+//==========================================================================
+//      Lock to ensure only one plug-in saves at a time
+//==========================================================================
+SpinLock SAFEAudioProcessor::AnalysisThread::mutex;
 
 //==========================================================================
 //      The Processor Itself
