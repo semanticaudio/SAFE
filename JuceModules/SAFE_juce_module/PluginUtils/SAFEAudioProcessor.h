@@ -33,6 +33,11 @@ private:
         String descriptors;
         SAFEMetaData metaData;
         bool sendToServer;
+
+        //==========================================================================
+        //      Lock to ensure only one plug-in saves at a time
+        //==========================================================================
+        static SpinLock mutex;
     };
 
     ScopedPointer <AnalysisThread> analysisThread;
@@ -178,8 +183,12 @@ private:
     SAFEMetaData metaDataToSave;
     bool sendToServer;
 
+    //==========================================================================
+    //      Semantic Data File Stuff
+    //==========================================================================
     File semanticDataFile;
     ScopedPointer <XmlElement> semanticDataElement;
+    void updateSemanticDataElement();
 
     static const int analysisTime = 5000;
     static const int analysisFrameLength = 4096;

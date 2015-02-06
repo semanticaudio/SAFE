@@ -20,6 +20,8 @@ SAFEAudioProcessor::AnalysisThread::~AnalysisThread()
 //==========================================================================
 void SAFEAudioProcessor::AnalysisThread::run()
 {
+    GenericScopedLock <SpinLock> lock (mutex);
+
     WarningID warning;
 
     /*if (sendToServer)
@@ -46,6 +48,11 @@ void SAFEAudioProcessor::AnalysisThread::setParameters (String newDescriptors, S
     metaData = newMetaData;
     sendToServer = newSendToServer;
 }
+
+//==========================================================================
+//      Lock to ensure only one plug-in saves at a time
+//==========================================================================
+SpinLock SAFEAudioProcessor::AnalysisThread::mutex;
 
 //==========================================================================
 //      The Processor Itself
@@ -281,11 +288,14 @@ void SAFEAudioProcessor::initialiseSemanticDataFile()
     {
         String elementName (JucePlugin_Name + String ("Data"));
         semanticDataElement = new XmlElement (makeXmlString (elementName));
+        semanticDataElement->writeToFile (semanticDataFile, "");
     }
 }
 
 XmlElement* SAFEAudioProcessor::getSemanticDataElement()
 {
+    updateSemanticDataElement();
+
     return semanticDataElement.get();
 }
 
@@ -383,6 +393,8 @@ WarningID SAFEAudioProcessor::saveSemanticData (const String& newDescriptors, co
     descriptors.addTokens (newDescriptors, " ,;", String::empty);
     int numDescriptors = descriptors.size();
 
+    updateSemanticDataElement();
+
     XmlElement* descriptorElement = semanticDataElement->createNewChildElement ("SemanticData");
 
     for (int descriptor = 0; descriptor < numDescriptors; ++descriptor)
@@ -410,6 +422,8 @@ WarningID SAFEAudioProcessor::loadSemanticData (const String& descriptor)
 {
     StringArray descriptorArray;
     descriptorArray.addTokens (descriptor, " ,;", String::empty);
+
+    updateSemanticDataElement();
 
     if (descriptorArray.size() > 0)
     {
@@ -935,6 +949,15 @@ void SAFEAudioProcessor::updatePlayHead()
     {
         playHead.resetToDefault();
     }
+}
+
+//==========================================================================
+//      Semantic Data File Stuff
+//==========================================================================
+void SAFEAudioProcessor::updateSemanticDataElement()
+{
+    XmlDocument semanticDataDocument (semanticDataFile);
+    semanticDataElement = semanticDataDocument.getDocumentElement();
 }
 
 //==========================================================================

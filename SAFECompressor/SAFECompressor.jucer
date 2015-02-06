@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="oRCLkB" name="SAFECompressor" projectType="audioplug" version="1.31"
+<JUCERPROJECT id="oRCLkB" name="SAFECompressor" projectType="audioplug" version="1.32"
               bundleIdentifier="com.SAFEProject.SAFECompressor" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="0" buildAU="1" buildRTAS="0" buildAAX="0"
               pluginName="SAFECompressor" pluginDesc="SAFECompressor" pluginManufacturer="SAFE"
@@ -9,7 +9,7 @@
               pluginWantsMidiIn="0" pluginProducesMidiOut="0" pluginSilenceInIsSilenceOut="0"
               pluginEditorRequiresKeys="0" pluginAUExportPrefix="SAFECompressorAU"
               pluginRTASCategory="" aaxIdentifier="com.yourcompany.SAFECompressor"
-              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="3.1.0"
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="3.1.1"
               companyName="SAFE">
   <MAINGROUP id="OmA8Hs" name="SAFECompressor">
     <GROUP id="{589377E0-1FBF-A04E-E271-42CED120A1B2}" name="Source">

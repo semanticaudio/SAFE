@@ -33,11 +33,13 @@
  using namespace juce;
 #endif
 
+#if ! JUCE_DONT_DECLARE_PROJECTINFO
 namespace ProjectInfo
 {
     const char* const  projectName    = "SAFECompressor";
-    const char* const  versionString  = "1.31";
-    const int          versionNumber  = 0x11f00;
+    const char* const  versionString  = "1.32";
+    const int          versionNumber  = 0x12000;
 }
+#endif
 
 #endif   // __APPHEADERFILE_ORCLKB__
