@@ -173,8 +173,12 @@ private:
     SAFEMetaData metaDataToSave;
     bool sendToServer;
 
+    //==========================================================================
+    //      Semantic Data File Stuff
+    //==========================================================================
     File semanticDataFile;
     ScopedPointer <XmlElement> semanticDataElement;
+    void updateSemanticDataElement();
 
     static const int analysisTime = 5000;
     static const int analysisFrameLength = 4096;
