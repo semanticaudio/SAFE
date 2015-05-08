@@ -1,6 +1,11 @@
 #ifndef __SAFESLIDER__
 #define __SAFESLIDER__
 
+/**
+ * An extension of the JUCE slider for the SAFE UI.
+ *
+ * */
+
 class SAFESlider : public Component,
                    public Slider::Listener
 {
