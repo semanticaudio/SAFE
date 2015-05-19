@@ -95,7 +95,10 @@ public:
 
     /** Provide an array of values which will be used as the y values when plotting the graph. 
      *
-     *  @param newOutputValues  an array of values to plot on the graph - each element should be the corresponding y value to the x value in the same element of the array returned by getInputValues()
+     *  @param newOutputValues  an array of values to plot on the graph - each
+     *                          element should be the corresponding y value to
+     *                          the x value in the same element of the array
+     *                          returned by getInputValues()
      */
     void setOutputValues (Array <float> newOutputValues);
 
