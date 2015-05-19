@@ -1,5 +1,9 @@
 #ifndef __DYNAMICPROCESSORGRAPH__
 #define __DYNAMICPROCESSORGRAPH__
+
+/**
+ *  A component for displaying the activity of a dynamics processor.
+ */
 class DynamicProcessorGraph : public FunctionGraph,
                               public LevelMeterTimer
 {
@@ -7,20 +11,35 @@ public:
     //==========================================================================
     //      Constructor and Destructor
     //==========================================================================
+    /** Create a new dynamic processor graph. */
     DynamicProcessorGraph();
+
+    /** Destructor */
     ~DynamicProcessorGraph();
 
     //==========================================================================
     //      Paint
     //==========================================================================
+    /** Draw the component. */
     void paint (Graphics&);
+
+    /** Draw the component's border. */
     void paintOverChildren (Graphics&);
+
+    /** Function called when the size of the graph is changed. */
     void resized();
 
     //==========================================================================
     //      Metering
     //==========================================================================
+    /** Set the position of the dot on the graph.
+     *
+     *  @param inputLevel   the input level to display
+     *  @param outputLevel  the output level to display
+     */
     void setMeterLevels (float inputLevel, float outputLevel);
+
+    /** Callback function which is called when the meter updates. */
     void meterLevelChanged();
 
 private:

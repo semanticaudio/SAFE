@@ -2,7 +2,7 @@
 #define __SAFESLIDER__
 
 /**
- * An extension of the JUCE slider for the SAFE UI.
+ *  An extension of the JUCE slider for the SAFE UI.
  *
  */
 class SAFESlider : public Component,
