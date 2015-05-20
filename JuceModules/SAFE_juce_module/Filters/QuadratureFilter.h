@@ -15,6 +15,10 @@
  *  the same magnitude spectrum as the input but phase spectra
  *  which differ by \f$ \frac{\pi}{2} \f$ radians for a large portion 
  *  of the frequency range.
+ *
+ *  Similar to Max/MSP's [hilbert~]
+ *  (https://docs.cycling74.com/max5/refpages/msp-ref/hilbert~.html)
+ *  object.
  */
 class QuadratureFilter
 {
