@@ -3,7 +3,6 @@
 
 /**
  *  An extension of the JUCE Button for the SAFE UI.
- *
  */
 class SAFEButton : public Button
 {
