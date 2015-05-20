@@ -291,7 +291,7 @@ EXTENSION_MAPPING      =
 # case of backward compatibilities issues.
 # The default value is: YES.
 
-MARKDOWN_SUPPORT       = NO
+MARKDOWN_SUPPORT       = YES
 
 # When enabled doxygen tries to link words that correspond to documented
 # classes, or namespaces to their corresponding documentation. Such a link can
@@ -1425,7 +1425,7 @@ FORMULA_TRANSPARENT    = YES
 # The default value is: NO.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-USE_MATHJAX            = NO
+USE_MATHJAX            = YES
 
 # When MathJax is enabled you can set the default output format to be used for
 # the MathJax output. See the MathJax site (see:
