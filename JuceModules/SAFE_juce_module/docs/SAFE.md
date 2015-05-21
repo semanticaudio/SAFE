@@ -3,14 +3,15 @@ SAFE
 
 ![Moose!](moose.png)
 
-The SAFE JUCE module.
+## Creating a SAFE Plug-In
+The heart and soul of every SAFE plug-in is the SAFEAudioProcessor class.
 
 ## The Team
 ### Sean
 
 @htmlonly
 <div style="text-align: left">
-	<img style="height: 250px; width: auto" src="sean.jpg"/>
+	<img style="width: 400px; height: auto" src="sean.jpg"/>
 </div>
 @endhtmlonly
 
@@ -18,7 +19,15 @@ The SAFE JUCE module.
 
 @htmlonly
 <div style="text-align: left">
-	<img style="height: 250px; width: auto" src="ryan.jpg"/>
+	<img style="width: 400px; height: auto" src="ryan.jpg"/>
+</div>
+@endhtmlonly
+
+### Brecht
+
+@htmlonly
+<div style="text-align: left">
+	<img style="width: 400px; height: auto" src="brecht.jpg"/>
 </div>
 @endhtmlonly
 
