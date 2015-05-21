@@ -1,3 +1,4 @@
-html*
-!html/*.png
-!html/*.jpg
+html/*
+!html/moose.png
+!html/sean.jpg
+!html/ryan.jpg
