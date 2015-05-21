@@ -7,6 +7,7 @@ The SAFE JUCE module.
 
 ## The Team
 ### Sean
+
 @htmlonly
 <div style="text-align: left">
 	<img style="height: 250px; width: auto" src="sean.jpg"/>
@@ -14,6 +15,7 @@ The SAFE JUCE module.
 @endhtmlonly
 
 ### Ryan
+
 @htmlonly
 <div style="text-align: left">
 	<img style="height: 250px; width: auto" src="ryan.jpg"/>
