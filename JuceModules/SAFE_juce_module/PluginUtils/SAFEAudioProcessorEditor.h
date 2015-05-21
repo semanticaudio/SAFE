@@ -52,7 +52,7 @@ public:
 
     /** A function called to update the parameter values in the user interface.
      *
-     *  Parameter dials should update themselves automatically when parameter values are
+     *  Parameter sliders should update themselves automatically when parameter values are
      *  change through other means.
      *
      *  If your editor should react in any other way to updates in parameter
@@ -87,7 +87,13 @@ protected:
     SAFEButton fileAccessButton; /**< The button for changing between local and 
                                       global saving. */
     SAFEButton infoButton; /**< The button for displaying the usage instructions. */
-    OwnedArray <SAFESlider> sliders; /**< An array containing the parameter dials. */
+    OwnedArray <SAFESlider> sliders; /**< An array containing the parameter sliders.
+                                      *   
+                                      *   These sliders are automatically linked to
+                                      *   the corresponding parameter in the processor.
+                                      *   Your job is to position them where ever you
+                                      *   see fit in your UI.
+                                      */
 
     //==========================================================================
     //      Set Position of Extra Screens
