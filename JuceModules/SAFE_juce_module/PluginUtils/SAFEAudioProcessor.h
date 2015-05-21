@@ -321,26 +321,26 @@ protected:
      *  your plug-in's constructor. Calling it at any other time could be pretty 
      *  dangerous because plug-ins shouldn't change their number of parameters willy nilly.
      *
-     *  @param nameInit               the name of the parameter
-     *  @param valueRef               a reference to a variable which will hold this
-     *                                parameters value - give your plug-in a member variable
-     *                                which will hold the value of this parameter and pass 
-     *                                in here, that way you can access the value of the 
-     *                                parameter without having to faff about calling function
-     *  @param initialValue           the default value for this parameter
-     *  @param minValueInit           the minimum value for this parameter
-     *  @param maxValueInit           the maximum value for this parameter
-     *  @param unitsInit              a string to display after this parameters value
-     *  @param skewFactorInit         the skew factor for this parameter - see
-     *                                the documentation of skew factor in the JUCE 
-     *                                slider class
-     *  @param convertDBToGainValue   if true the parameters value will be treated as though
-     *                                it were a gain in decibels and valueRef will be 
-     *                                converted to a gain which can be applied to a signal
-     *  @param interpolationTimeInit  the time (in milliseconds) it takes for a parameter 
-     *                                to change to a new value which was set
-     *  @param UIScaleFactorInit      a factor to scale the parameter value by when
-     *                                it is displayed in a user interface
+     *  @param name                  the name of the parameter
+     *  @param valueRef              a reference to a variable which will hold this
+     *                               parameters value - give your plug-in a member variable
+     *                               which will hold the value of this parameter and pass 
+     *                               in here, that way you can access the value of the 
+     *                               parameter without having to faff about calling function
+     *  @param initialValue          the default value for this parameter
+     *  @param minValue              the minimum value for this parameter
+     *  @param maxValue              the maximum value for this parameter
+     *  @param units                 a string to display after this parameters value
+     *  @param skewFactor            the skew factor for this parameter - see
+     *                               the documentation of skew factor in the JUCE 
+     *                               slider class
+     *  @param convertDBToGainValue  if true the parameters value will be treated as though
+     *                               it were a gain in decibels and valueRef will be 
+     *                               converted to a gain which can be applied to a signal
+     *  @param interpolationTime     the time (in milliseconds) it takes for a parameter 
+     *                               to change to a new value which was set
+     *  @param UIScaleFactor         a factor to scale the parameter value by when
+     *                               it is displayed in a user interface
      */
     void addParameter (String name, float& valueRef, float initialValue = 1, float minValue = 0, float maxValue = 1, String units = String::empty, float skewFactor = 1, bool convertDBToGainValue = false, double interpolationTime = 100, float UIScaleFactor = 1);
 

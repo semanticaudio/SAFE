@@ -367,7 +367,7 @@ public:
     /** Called when one of the filter controls is moved
      *  
      *  @param control          the filter control moved
-     *  @param nofityListeners  if true the listeners will be notified of the change
+     *  @param notifyListeners  if true the listeners will be notified of the change
      */
     void filterControlChanged (FilterControl* control, bool notifyListeners);
 

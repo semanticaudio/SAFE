@@ -1,7 +1,24 @@
 SAFE
 ====
 
-Semantic Audio Feature Extraction Plug-ins 
+![Moose!](moose.png)
+
+The SAFE JUCE module.
+
+## The Team
+### Sean
+@htmlonly
+<div style="text-align: left">
+	<img style="height: 250px; width: auto" src="sean.jpg"/>
+</div>
+@endhtmlonly
+
+### Ryan
+@htmlonly
+<div style="text-align: left">
+	<img style="height: 250px; width: auto" src="ryan.jpg"/>
+</div>
+@endhtmlonly
 
 ## Dependencies
 

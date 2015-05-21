@@ -37,11 +37,11 @@ public:
     //==========================================================================
     /** Update the list of descriptors.
      *
-     *  @param fromServer          if true the descriptor list will be populated
-     *                             by the descriptors on the server otherwise the
-     *                             local descriptor file will be used
-     *  @localSemanticDataElement  a pointer to the XMLElement from the local descriptor 
-     *                             file
+     *  @param fromServer                if true the descriptor list will be populated
+     *                                   by the descriptors on the server otherwise the
+     *                                   local descriptor file will be used
+     *  @param localSemanticDataElement  a pointer to the XMLElement from the local descriptor 
+     *                                   file
      */
     void updateDescriptors (bool fromServer, const XmlElement* localSemanticDataElement);
 

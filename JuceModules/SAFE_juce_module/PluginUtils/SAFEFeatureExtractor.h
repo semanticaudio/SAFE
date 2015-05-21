@@ -19,7 +19,7 @@ public:
     /** Initialise the feature extractor.
      *  
      *  @param numAnalysisFramesInit     The number of analysis frames.
-     *  @param analysisFramesLengthInit  The number of samples in each analysis frame.
+     *  @param analysisFrameLengthInit  The number of samples in each analysis frame.
      *  @param sampleRate                The sample rate of the audio to analyse.
      */
     void initialise (int numAnalysisFramesInit, int analysisFrameLengthInit, double sampleRate);

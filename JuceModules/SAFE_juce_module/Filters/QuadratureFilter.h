@@ -43,7 +43,7 @@ public:
     //=============================================================================
     /** Process a buffer of audio samples.
      *
-     *  @param intput      a pointer to the array of samples to process
+     *  @param input      a pointer to the array of samples to process
      *  @param realOutput  a pointer to an array which will contain
      *                     the real part of the ouput
      *  @param imagOutput  a pointer to an array which will contain
