@@ -1,13 +1,23 @@
 SAFE
 ====
 
-![Moose!](moose.png)
+![What a handsome Moose!](moose.png)
 
 ## Creating a SAFE Plug-In
-The heart and soul of every SAFE plug-in is the SAFEAudioProcessor class.
+To create a new SAFE plug-in one starts by inheriting from SAFEAudioProcessor. This class
+deals with analysing audio and communicating with the SAFE server and a variety of
+other bits and bobs. For very simple plug-ins all you need to do is add some parameters using
+SAFEAudioProcessor::addParameter() and provide some audio processing in 
+SAFEAudioProcessor::pluginProcessing() and you're away.
+
+A quick editor can also be created by inheriting the SAFEAudioProcessorEditor class.
+Using this class sliders are automatically generated for each of the plug-ins parameters
+(SAFEAudioProcessorEditor::sliders). These can be placed wherever you deem appropriate on you
+editor. Some buttons and a text editor are also generated to be placed on the editor. See the 
+protected members on the SAFEAudioProcessorEditor page for more information.
 
 ## The Team
-### Sean
+### Sean (Baked Goods Supervisor)
 
 @htmlonly
 <div style="text-align: left">
@@ -15,7 +25,7 @@ The heart and soul of every SAFE plug-in is the SAFEAudioProcessor class.
 </div>
 @endhtmlonly
 
-### Ryan
+### Ryan (Chief Moose Herder)
 
 @htmlonly
 <div style="text-align: left">
@@ -23,7 +33,7 @@ The heart and soul of every SAFE plug-in is the SAFEAudioProcessor class.
 </div>
 @endhtmlonly
 
-### Brecht
+### Brecht (Keeper of the Phat Beats)
 
 @htmlonly
 <div style="text-align: left">
@@ -31,24 +41,10 @@ The heart and soul of every SAFE plug-in is the SAFEAudioProcessor class.
 </div>
 @endhtmlonly
 
-## Dependencies
-
-To build VSTs you will need the SDK, avaliable here.
-http://www.steinberg.net/en/company/developer.html
-
-To build AUs you will need the SDK, avaliable here.
-https://developer.apple.com/library/mac/samplecode/CoreAudioUtilityClasses/Introduction/Intro.html
-
 ## Acknowledgments 
 
 This project would be nothing if it weren't for JUCE.
 https://github.com/julianstorer/JUCE
 
-The reverb plug-in uses Martin Eastwood's fantastic MVerb.
-https://github.com/martineastwood/mverb
-
 All the audio feature extraction is done using LibXtract.
 https://github.com/jamiebullock/LibXtract
-
-The JUCE LV2 wrapper is part of DISTRHO.
-https://github.com/DISTRHO/DISTRHO
