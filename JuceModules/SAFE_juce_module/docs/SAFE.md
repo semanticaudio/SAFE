@@ -1,7 +1,32 @@
 SAFE
 ====
 
-![What a handsome Moose!](moose.png)
+@htmlonly
+<script type="text/javascript">
+function toggleMoose()
+{
+	if (typeof toggleMoose.current == 'undefined')
+	{
+		toggleMoose.current = 0;
+	}
+
+	if (toggleMoose.current)
+	{
+		document.getElementById("moose").src="moose.png";
+		toggleMoose.current = 0;
+	}
+	else
+	{
+		document.getElementById("moose").src="moose_horn.png";
+		toggleMoose.current = 1;
+	}
+}
+</script>
+
+<div style="text-align: center">
+	<img id="moose" src="moose.png" onclick="toggleMoose()"/>
+</div>
+@endhtmlonly
 
 ## Creating a SAFE Plug-In
 To create a new SAFE plug-in one starts by inheriting from SAFEAudioProcessor. This class
@@ -20,25 +45,40 @@ protected members on the SAFEAudioProcessorEditor page for more information.
 ### Sean (Baked Goods Supervisor)
 
 @htmlonly
-<div style="text-align: left">
-	<img style="width: 400px; height: auto" src="sean.jpg"/>
-</div>
+<img style="width: 400px; height: auto" src="sean.jpg"/>
 @endhtmlonly
 
 ### Ryan (Chief Moose Herder)
 
 @htmlonly
-<div style="text-align: left">
-	<img style="width: 400px; height: auto" src="ryan.jpg"/>
-</div>
+<script type="text/javascript">
+function toggleRyan()
+{
+	if (typeof toggleRyan.current == 'undefined')
+	{
+		toggleRyan.current = 0;
+	}
+
+	if (toggleRyan.current)
+	{
+		document.getElementById("ryan").src="ryan.jpg";
+		toggleRyan.current = 0;
+	}
+	else
+	{
+		document.getElementById("ryan").src="alpaca.jpg";
+		toggleRyan.current = 1;
+	}
+}
+</script>
+
+<img id="ryan" style="width: 400px; height: auto" src="ryan.jpg" onclick="toggleRyan()"/>
 @endhtmlonly
 
 ### Brecht (Keeper of the Phat Beats)
 
 @htmlonly
-<div style="text-align: left">
-	<img style="width: 400px; height: auto" src="brecht.jpg"/>
-</div>
+<img style="width: 400px; height: auto" src="brecht.jpg"/>
 @endhtmlonly
 
 ## Acknowledgments 
