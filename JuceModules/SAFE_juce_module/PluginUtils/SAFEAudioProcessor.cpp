@@ -37,6 +37,8 @@ void SAFEAudioProcessor::AnalysisThread::run()
     {
         processor->sendWarningToEditor (warning);
     }
+
+    processor->readyToSave = true;
 }
 
 //==========================================================================
@@ -797,22 +799,30 @@ bool SAFEAudioProcessor::isPlaying()
     return playHead.isPlaying;
 }
 
-void SAFEAudioProcessor::startRecording (const String& descriptors, const SAFEMetaData& metaData, bool newSendToServer)
+bool SAFEAudioProcessor::startRecording (const String& descriptors, const SAFEMetaData& metaData, bool newSendToServer)
 {
-    currentUnprocessedAnalysisFrame = 0;
-    currentProcessedAnalysisFrame = 0;
-    unprocessedTap = 0;
-    processedTap = 0;
+    if (readyToSave)
+    {
+        currentUnprocessedAnalysisFrame = 0;
+        currentProcessedAnalysisFrame = 0;
+        unprocessedTap = 0;
+        processedTap = 0;
 
-    descriptorsToSave = descriptors;
-    metaDataToSave = metaData;
-    sendToServer = newSendToServer;
-    cacheCurrentParameters();
+        descriptorsToSave = descriptors;
+        metaDataToSave = metaData;
+        sendToServer = newSendToServer;
+        cacheCurrentParameters();
 
-    recording = true;
-    readyToSave = false;
+        recording = true;
+        readyToSave = false;
 
-    startTimer (50);
+        startTimer (50);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 bool SAFEAudioProcessor::isRecording()
@@ -1002,7 +1012,6 @@ void SAFEAudioProcessor::timerCallback()
 void SAFEAudioProcessor::resetRecording()
 {
     recording = false;
-    readyToSave = true;
     stopTimer();
 }
 

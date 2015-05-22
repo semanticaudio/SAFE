@@ -195,49 +195,15 @@ public:
     //==========================================================================
     //      Semantic Data Parsing
     //==========================================================================
-    /** Set up a local file for the descriptors to be saved to.
-     *
-     *  This should get put in the user's Documents directory in a new
-     *  directory called SAFEPluginData.
-     */
-    void initialiseSemanticDataFile();
-
     /** Returns a pointer to the XmlElement from the file the plug-in saves its descriptors
      *  to. */
     XmlElement* getSemanticDataElement();
-
-    /** Populate an XmlElement with the latest set of audio feature data.
-     *
-     *  @param element   a pointer to the XmlElement to populate
-     *  @param metaData  the user's meta data to save alongside the feature data
-     */
-    WarningID populateXmlElementWithSemanticData (XmlElement* element, const SAFEMetaData& metaData);
-
-    /** Save semantic data locally.
-     *  
-     *  @param newDescriptors  the descriptors to save
-     *  @param metaData        the users meta data to save
-     *
-     *  You should never really have a reason to call this function. Maybe I'll make it
-     *  private one day.
-     */
-    WarningID saveSemanticData (const String& newDescriptors, const SAFEMetaData& metaData);
 
     /** Load a descriptor from a local file.
      *
      *  @param descriptor  the descriptor to load.
      */
     WarningID loadSemanticData (const String& descriptor);
-
-    /** Save semantic data to the server.
-     *  
-     *  @param newDescriptors  the descriptors to save
-     *  @param metaData        the users meta data to save
-     *
-     *  You should never really have a reason to call this function. Maybe I'll make it
-     *  private one day.
-     */
-    WarningID sendDataToServer (const String& newDescriptors, const SAFEMetaData& metaData);
 
     /** Load a descriptor from the server
      *
@@ -248,21 +214,8 @@ public:
     //==========================================================================
     //      Analysis Thread
     //==========================================================================
-    /** Starts the thread which analysis the audio.
-     *
-     *  You should never really have a reason to call this function. Maybe I'll make it
-     *  private one day.
-     */
-    WarningID startAnalysisThread();
-
     /** Returns true if the plug-in is currently analysing some audio. */
     bool isThreadRunning();
-
-    /** Display a warning message on the currently active editor.
-     *
-     *  @param warning  the warning to display
-     */
-    void sendWarningToEditor (WarningID warning);
     
     //==========================================================================
     //      Process Block
@@ -298,12 +251,14 @@ public:
     bool isPlaying();
 
     /** Starts recording audio for analysis.
+     *
+     *  Returns true if the plug-in started recording. If this returns false it means the 
+     *  plug-in was already recording audio from a previous call to this function.
      *  
-     *  You should not call this function. It is called by the editor when the record
-     *  button is pressed. Things will probably be bad if this is called when it should not
-     *  be.
+     *  You should not need to call this function. It is called by the editor when the record
+     *  button is pressed.
      */
-    void startRecording (const String& descriptors, const SAFEMetaData& metaData, bool newSendToServer);
+    bool startRecording (const String& descriptors, const SAFEMetaData& metaData, bool newSendToServer);
 
     /** Returns true if the plug-in is currently recording audio. */
     bool isRecording();
@@ -351,37 +306,6 @@ protected:
     void addDBParameter (String name, float& valueRef, float initialValue = 1, float minValue = 0, float maxValue = 1, String units = String::empty, float skewFactor = 1, double interpolationTimeInit = 100, float UIScaleFactor = 1);
 
     //==========================================================================
-    //      Buffer Playing Audio For Analysis
-    //==========================================================================
-    /** Records samples into the unprocessed recording buffer.
-     *
-     *  @param buffer  the samples to record
-     *
-     *  This is called in processBlock(), there should never really be a good reason for 
-     *  you to call it yourself. Perhaps it should be private.
-     */
-    void recordUnprocessedSamples (AudioSampleBuffer& buffer);
-
-    /** Records samples into the processed recording buffer.
-     *
-     *  @param buffer  the samples to record
-     *
-     *  This is called in processBlock(), there should never really be a good reason for 
-     *  you to call it yourself. Perhaps it should be private.
-     */
-    void recordProcessedSamples (AudioSampleBuffer& buffer);
-
-    //==========================================================================
-    //      Analyse Buffered Audio
-    //==========================================================================
-    /** Analyses the samples in the recording buffers.
-     *
-     *  This should already be called when it is needed. You should never really need to call
-     *  it yourself. Perhaps it should be private.
-     */
-    WarningID analyseRecordedSamples();
-
-    //==========================================================================
     //      Play Head Stuff
     //==========================================================================
     AudioPlayHead::CurrentPositionInfo playHead; /**< The audio play head. */
@@ -398,6 +322,12 @@ protected:
     //==========================================================================
     int numInputs; /**< The number of audio inputs. */
     int numOutputs; /**< The number of audio outputs. */
+
+    /** Display a warning message on the currently active editor.
+     *
+     *  @param warning  the warning to display
+     */
+    void sendWarningToEditor (WarningID warning);
 
 private:
     bool localRecording;
@@ -441,6 +371,68 @@ private:
     bool haveParametersChanged();
     void timerCallback();
     void resetRecording();
+
+    //==========================================================================
+    //      Internal Semantic Data Parsing
+    //==========================================================================
+
+    /** Set up a local file for the descriptors to be saved to.
+     *
+     *  This should get put in the user's Documents directory in a new
+     *  directory called SAFEPluginData.
+     */
+    void initialiseSemanticDataFile();
+
+    /** Populate an XmlElement with the latest set of audio feature data.
+     *
+     *  @param element   a pointer to the XmlElement to populate
+     *  @param metaData  the user's meta data to save alongside the feature data
+     */
+    WarningID populateXmlElementWithSemanticData (XmlElement* element, const SAFEMetaData& metaData);
+
+    /** Save semantic data locally.
+     *  
+     *  @param newDescriptors  the descriptors to save
+     *  @param metaData        the users meta data to save
+     */
+    WarningID saveSemanticData (const String& newDescriptors, const SAFEMetaData& metaData);
+
+    /** Save semantic data to the server.
+     *  
+     *  @param newDescriptors  the descriptors to save
+     *  @param metaData        the users meta data to save
+     */
+    WarningID sendDataToServer (const String& newDescriptors, const SAFEMetaData& metaData);
+
+    /** Starts the thread which analysis the audio. */
+    WarningID startAnalysisThread();
+
+    //==========================================================================
+    //      Buffer Playing Audio For Analysis
+    //==========================================================================
+    /** Records samples into the unprocessed recording buffer.
+     *
+     *  @param buffer  the samples to record
+     *
+     *  This is called in processBlock(), there should never really be a good reason for 
+     *  you to call it yourself. Perhaps it should be private.
+     */
+    void recordUnprocessedSamples (AudioSampleBuffer& buffer);
+
+    /** Records samples into the processed recording buffer.
+     *
+     *  @param buffer  the samples to record
+     *
+     *  This is called in processBlock(), there should never really be a good reason for 
+     *  you to call it yourself. Perhaps it should be private.
+     */
+    void recordProcessedSamples (AudioSampleBuffer& buffer);
+
+    //==========================================================================
+    //      Analyse Buffered Audio
+    //==========================================================================
+    /** Analyses the samples in the recording buffers. */
+    WarningID analyseRecordedSamples();
 
     //==========================================================================
     //      Make String ok for use in XML
