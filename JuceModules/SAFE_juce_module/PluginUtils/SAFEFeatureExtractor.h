@@ -1,8 +1,123 @@
-#ifndef __SAFEFEATUREEXTRACTOR__
-#define __SAFEFEATUREEXTRACTOR__
+#ifndef SAFE_FEATURE_EXTRACTOR_H_INCLUDED
+#define SAFE_FEATURE_EXTRACTOR_H_INCLUDED
 
-/**
- *  A class for extracting features from audio using libXtract.
+enum LibXtractFeature
+{
+    // All of them
+    XtractAll,
+
+    // Temporal Features
+    XtractTemporalFeatures,
+    XtractTemporalMean,
+    XtractTemporalVariance,
+    XtractTemporalStandardDeviation,
+    XtractRMSAplitude,
+    XtractZeroCrossingRate,
+    
+    // Spectral Features
+    XtractSpectralFeatures,
+    XtractSpectralCentriod,
+    XtractSpectralVariance,
+    XtractSpectralStandardDeviation,
+    XtractSpectralSkewness,
+    XtractSpectralKurtosis,
+    XtractJensenIrregularity,
+    XtractKrimphoffIrregularity,
+    XtractFundamentalFrequency,
+    XtractSpectralSmoothness,
+    XtractSpectralRollOff,
+    XtractSpectralFlatness,
+    XtractTonality,
+    XtractCrestFactor,
+    XtractSpectralSlope,
+
+    // Peak Spectral Features
+    XtractPeakSpectralFeatures,
+    XtractPeakSpectralCentriod,
+    XtractPeakSpectralVariance,
+    XtractPeakSpectralStandardDeviation,
+    XtractPeakSpectralSkewness,
+    XtractPeakSpectralKurtosis,
+    XtractPeakJensenIrregularity,
+    XtractPeakKrimphoffIrregularity,
+    XtractPeakTristimulus1,
+    XtractPeakTristimulus2,
+    XtractPeakTristimulus3,
+
+    // Harmonic Spectral Features
+    XtractHarmonicSpectralFeatures,
+    XtractInharmonicity,
+    XtractHarmonicSpectralCentriod,
+    XtractHarmonicSpectralVariance,
+    XtractHarmonicSpectralStandardDeviation,
+    XtractHarmonicSpectralSkewness,
+    XtractHarmonicSpectralKurtosis,
+    XtractHarmonicJensenIrregularity,
+    XtractHarmonicKrimphoffIrregularity,
+    XtractHarmonicTristimulus1,
+    XtractHarmonicTristimulus2,
+    XtractHarmonicTristimulus3,
+    XtractNoisiness,
+    XtractHarmonicParityRatio,
+
+    // Bark Coefficients
+    XtractBarkCoefficients,
+    XtractBarkCoefficient1,
+    XtractBarkCoefficient2,
+    XtractBarkCoefficient3,
+    XtractBarkCoefficient4,
+    XtractBarkCoefficient5,
+    XtractBarkCoefficient6,
+    XtractBarkCoefficient7,
+    XtractBarkCoefficient8,
+    XtractBarkCoefficient9,
+    XtractBarkCoefficient10,
+    XtractBarkCoefficient11,
+    XtractBarkCoefficient12,
+    XtractBarkCoefficient13,
+    XtractBarkCoefficient14,
+    XtractBarkCoefficient15,
+    XtractBarkCoefficient16,
+    XtractBarkCoefficient17,
+    XtractBarkCoefficient18,
+    XtractBarkCoefficient19,
+    XtractBarkCoefficient20,
+    XtractBarkCoefficient21,
+    XtractBarkCoefficient22,
+    XtractBarkCoefficient23,
+    XtractBarkCoefficient24,
+    XtractBarkCoefficient25,
+
+    // MFCCs
+    XtractMFCCs,
+    XtractMFCC1,
+    XtractMFCC2,
+    XtractMFCC3,
+    XtractMFCC4,
+    XtractMFCC5,
+    XtractMFCC6,
+    XtractMFCC7,
+    XtractMFCC8,
+    XtractMFCC9,
+    XtractMFCC10,
+    XtractMFCC11,
+    XtractMFCC12,
+    XtractMFCC13
+};
+
+struct AudioFeature
+{
+    String Name;
+    int timeStamp;
+    int channelNumber;
+    Array <double> values;
+    bool hasDuration;
+    int duration;
+
+};
+
+/** 
+ *  A class for extracting features from a block of audio.
  */
 class SAFEFeatureExtractor
 {
@@ -16,193 +131,27 @@ public:
     /** Destructor */
     ~SAFEFeatureExtractor();
 
-    /** Initialise the feature extractor.
-     *  
-     *  @param numAnalysisFramesInit     The number of analysis frames.
-     *  @param analysisFrameLengthInit  The number of samples in each analysis frame.
-     *  @param sampleRate                The sample rate of the audio to analyse.
-     */
-    void initialise (int numAnalysisFramesInit, int analysisFrameLengthInit, double sampleRate);
-
-    /** Analyse a frame of audio.
+    //==========================================================================
+    //      Setup
+    //==========================================================================
+    /** Initialise the FFT and vamp plug-ins
      *
-     *  @param sampleData  a pointer to an array containing the audio samples to analyse
-     *  @param numSamples  the number of samples to analyse - this should be the same as
-     *                     the value for analysisFrameLengthInit passed to initialise()
-     *  @param frameNum    the frame number of the current frame - this should
-     *                     be between 0 and the value for numAnalysisFrameInit passed
-     *                     to initialise() - 1
+     *  @param numChannelsInit  the number of input channels
+     *  @param frameOrderInit   the size of the analysis frames - this is given as an exponent
+     *                          of two, the frame length in samples will be 2 ^ frameOrder
+     *  @param stepSizeInit     the step size between analysis frames in samples - if this is
+     *                          greater than the frame length it will be set to the 
+     *                          frame length
      */
-    void getAllFeatures (double* sampleData, int numSamples, int frameNum);
+    void initialise (int numChannelsInit, int frameOrderInit, int stepSizeInit);
 
-    /** Add all the audio features from a set of frames to an XMLElement
-     *
-     *  @param parentElement  a pointer to the XMLElement to add the audio features to
-     */
-    void addToXml (XmlElement* parentElement);
-
-    /** Get an array filled with the audio features for a particular frame.
-     *  
-     *  @param frameNum  the frame number to get the features of - this should
-     *                   be between 0 and the value for numAnalysisFrameInit passed
-     *                   to initialise() - 1
-     *
-     *  The features are as follows:
-     *  - Temporal Mean
-     *  - Temporal Variance
-     *  - Temporal Standard Deviation
-     *  - RMS Amplitude
-     *  - Zero Crossing Rate
-     *  - Spectral Centriod
-     *  - Spectral Variance
-     *  - Spectral Standard Deviation
-     *  - Spectral Skewness
-     *  - Spectral Kurtosis
-     *  - Jensen Irregularity
-     *  - Krimphoff Irregularity
-     *  - Fundamental Frequency
-     *  - Spectral Smoothness
-     *  - Spectral Roll Off
-     *  - Spectral Flatness
-     *  - Tonality
-     *  - Crest Factor
-     *  - Spectral Slope
-     *  - Peak Spectral Centroid
-     *  - Peak Spectral Variance
-     *  - Peak Spectral Standard Deviation
-     *  - Peak Spectral Skewness
-     *  - Peak Spectral Kurtosis
-     *  - Peak Spectral Jensen Irregularity
-     *  - Peak Spectral Krimphoff Irregularity
-     *  - Peak Tristimulus 1
-     *  - Peak Tristimulus 2
-     *  - Peak Tristimulus 3
-     *  - Inharmonicity
-     *  - Harmonic Spectral Centroid
-     *  - Harmonic Spectral Variance
-     *  - Harmonic Spectral Standard Deviation
-     *  - Harmonic Spectral Skewness
-     *  - Harmonic Spectral Kurtosis
-     *  - Harmonic Spectral Jensen Irregularity
-     *  - Harmonic Spectral Krimphoff Irregularity
-     *  - Harmonic Tristimulus 1
-     *  - Harmonic Tristimulus 2
-     *  - Harmonic Tristimulus 3
-     *  - Noisiness
-     *  - Parity Ratio (ratio of odd and even harmonics in the signal)
-     *  - Bark Coefficient 1
-     *  - Bark Coefficient 2
-     *  - Bark Coefficient 3
-     *  - Bark Coefficient 4
-     *  - Bark Coefficient 5
-     *  - Bark Coefficient 6
-     *  - Bark Coefficient 7
-     *  - Bark Coefficient 8
-     *  - Bark Coefficient 9
-     *  - Bark Coefficient 10
-     *  - Bark Coefficient 11
-     *  - Bark Coefficient 12
-     *  - Bark Coefficient 13
-     *  - Bark Coefficient 14
-     *  - Bark Coefficient 15
-     *  - Bark Coefficient 16
-     *  - Bark Coefficient 17
-     *  - Bark Coefficient 18
-     *  - Bark Coefficient 19
-     *  - Bark Coefficient 20
-     *  - Bark Coefficient 21
-     *  - Bark Coefficient 22
-     *  - Bark Coefficient 23
-     *  - Bark Coefficient 24
-     *  - Bark Coefficient 25
-     *  - MFCC 1
-     *  - MFCC 2
-     *  - MFCC 3
-     *  - MFCC 4
-     *  - MFCC 5
-     *  - MFCC 6
-     *  - MFCC 7
-     *  - MFCC 8
-     *  - MFCC 9
-     *  - MFCC 10
-     *  - MFCC 11
-     *  - MFCC 12
-     *  - MFCC 13
-     */
-    Array <double> getFeatureArray (int frameNum) const;
-
-    /** Get an MD5 checksum of the audio features. */
-    MemoryBlock getMD5Checksum() const;
-
-    /** Returns true if every audio feature in every frame of
-     *  two feature extractors is the same. */
-    bool operator == (const SAFEFeatureExtractor& testObject);
 
 private:
-    HeapBlock <double> means;
-    HeapBlock <double> variances;
-    HeapBlock <double> standardDeviations;
-    HeapBlock <double> rmsAmplitudes;
-    HeapBlock <double> zeroCrossingRates;
-
-    HeapBlock <double> spectrum;
-    HeapBlock <double> spectralCentroids;
-    HeapBlock <double> spectralVariances;
-    HeapBlock <double> spectralStandardDeviations;
-    HeapBlock <double> spectralSkewnesses;
-    HeapBlock <double> spectralKurtosises;
-    HeapBlock <double> irregularityJs;
-    HeapBlock <double> irregularityKs;
-    HeapBlock <double> fundamentals;
-    HeapBlock <double> smoothnesses;
-    HeapBlock <double> rolloffs;
-    HeapBlock <double> flatnesses;
-    HeapBlock <double> tonalities;
-    HeapBlock <double> crests;
-    HeapBlock <double> spectralSlopes;
-
-    HeapBlock <double> peakSpectrum;
-    HeapBlock <double> peakSpectralCentroids;
-    HeapBlock <double> peakSpectralVariances;
-    HeapBlock <double> peakSpectralStandardDeviations;
-    HeapBlock <double> peakSpectralSkewnesses;
-    HeapBlock <double> peakSpectralKurtosises;
-    HeapBlock <double> peakIrregularityJs;
-    HeapBlock <double> peakIrregularityKs;
-    HeapBlock <double> peakTristimulus1s;
-    HeapBlock <double> peakTristimulus2s;
-    HeapBlock <double> peakTristimulus3s;
-    HeapBlock <double> inharmonicities;
-
-    HeapBlock <double> harmonicSpectrum;
-    HeapBlock <double> harmonicSpectralCentroids;
-    HeapBlock <double> harmonicSpectralVariances;
-    HeapBlock <double> harmonicSpectralStandardDeviations;
-    HeapBlock <double> harmonicSpectralSkewnesses;
-    HeapBlock <double> harmonicSpectralKurtosises;
-    HeapBlock <double> harmonicIrregularityJs;
-    HeapBlock <double> harmonicIrregularityKs;
-    HeapBlock <double> harmonicTristimulus1s;
-    HeapBlock <double> harmonicTristimulus2s;
-    HeapBlock <double> harmonicTristimulus3s;
-    HeapBlock <double> noisinesses;
-    HeapBlock <double> parityRatios;
-
-    OwnedArray <Array <double> > barkCoefficients;
-
-    OwnedArray <Array <double> > mfccs;
-
-    int numAnalysisFrames;
-    int analysisFrameLength;
-    double fs;
-
     bool initialised;
+    int numChannels, frameSize, stepSize;
 
-    SharedResourcePointer <LibXtractHolder> libXtract;
-
-    bool checkEqualityOrNan (double a, double b);
-
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SAFEFeatureExtractor);
+    std::map <int, FFT> fftCache;
+    const FFT *fft;
 };
 
-#endif //__SAFEFEATUREEXTRACTOR__
+#endif // SAFE_FEATURE_EXTRACTOR_H_INCLUDED
