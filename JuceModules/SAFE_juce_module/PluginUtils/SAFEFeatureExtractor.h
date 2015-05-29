@@ -7,7 +7,7 @@ enum LibXtractFeature
     XtractTemporalMean = 0,
     XtractTemporalVariance,
     XtractTemporalStandardDeviation,
-    XtractRMSAplitude,
+    XtractRMSAmplitude,
     XtractZeroCrossingRate,
     
     // Spectral Features
@@ -54,15 +54,15 @@ enum LibXtractFeature
     XtractHarmonicParityRatio,
 
     // Number of Features
-    NumLibXtractFeatures
-};
+    NumLibXtractScalarFeatures,
 
-enum LibXtractFeatureGroup
-{
-    XtractTemporalFeatures,
-    XtractSpectralFeatures,
+    // vector features
     XtractBarkCoefficients,
     XtractMFCCs,
+
+    // Feature Groups
+    XtractTemporalFeatures,
+    XtractSpectralFeatures,
     XtractPeakSpectralFeatures,
     XtractHarmonicSpectralFeatures,
     XtractAll
@@ -112,7 +112,6 @@ public:
     //      Add Features
     //==========================================================================
     void addLibXtractFeature (LibXtractFeature feature);
-    void addLibXtractFeatureGroup (LibXtractFeatureGroup featureGroup);
 
 private:
     bool initialised;
@@ -121,12 +120,18 @@ private:
 
     std::map <int, ScopedPointer <FFT> > fftCache;
     const FFT *fft;
+    bool spectrumNeeded;
+    AudioSampleBuffer spectra;
+
+    void calculateSpectra (const AudioSampleBuffer &frame);
     
-    // lib xtract stuff
+    //==========================================================================
+    //      libxtract stuff
+    //==========================================================================
     bool libXtractSpectrumNeeded, libXtractPeakSpectrumNeeded, libXtractHarmonicSpectrumNeeded;
-    bool calculateLibXtractFeature [NumLibXtractFeatures];
-    bool libXtractFeatureCalculated [NumLibXtractFeatures];
-    Array <Array <double> > libXtractFeatureValues [NumLibXtractFeatures];
+    bool calculateLibXtractScalarFeature [NumLibExtractScalardFeatures];
+    bool saveLibXtractScalarFeature [NumLibExtractScalardFeatures];
+    Array <Array <double> > libXtractScalarFeatureValues [NumLibXtractScalarFeatures];
 
     static int numLibXtractBarkBands = 25;
     HeapBlock <double> libXtractBarkBandLimits;
@@ -139,6 +144,13 @@ private:
     bool calculateLibXtractMFCCs;
     Array <Array <double> > libXtractMFCCs;
     void deleteLibXtractMelFilters();
+
+    Array <Array <double> > libXtractSpectra, libXtractPeakSpectra, libXtractHarmonicSpectra;
+
+    HeapBlock <double> libXtractChannelData;
+
+    void calculateLibXtractSpectra();
+    void calculateLibXtractFeatures (const AudioSampleBuffer &frame);
 };
 
 #endif // SAFE_FEATURE_EXTRACTOR_H_INCLUDED
