@@ -3,19 +3,15 @@
 
 enum LibXtractFeature
 {
-    // All of them
-    XtractAll,
-
     // Temporal Features
-    XtractTemporalFeatures,
-    XtractTemporalMean,
+    XtractTemporalMean = 0,
     XtractTemporalVariance,
     XtractTemporalStandardDeviation,
     XtractRMSAplitude,
     XtractZeroCrossingRate,
     
     // Spectral Features
-    XtractSpectralFeatures,
+    XtractFundamentalFrequency,
     XtractSpectralCentriod,
     XtractSpectralVariance,
     XtractSpectralStandardDeviation,
@@ -23,7 +19,6 @@ enum LibXtractFeature
     XtractSpectralKurtosis,
     XtractJensenIrregularity,
     XtractKrimphoffIrregularity,
-    XtractFundamentalFrequency,
     XtractSpectralSmoothness,
     XtractSpectralRollOff,
     XtractSpectralFlatness,
@@ -32,7 +27,6 @@ enum LibXtractFeature
     XtractSpectralSlope,
 
     // Peak Spectral Features
-    XtractPeakSpectralFeatures,
     XtractPeakSpectralCentriod,
     XtractPeakSpectralVariance,
     XtractPeakSpectralStandardDeviation,
@@ -45,7 +39,6 @@ enum LibXtractFeature
     XtractPeakTristimulus3,
 
     // Harmonic Spectral Features
-    XtractHarmonicSpectralFeatures,
     XtractInharmonicity,
     XtractHarmonicSpectralCentriod,
     XtractHarmonicSpectralVariance,
@@ -60,49 +53,19 @@ enum LibXtractFeature
     XtractNoisiness,
     XtractHarmonicParityRatio,
 
-    // Bark Coefficients
-    XtractBarkCoefficients,
-    XtractBarkCoefficient1,
-    XtractBarkCoefficient2,
-    XtractBarkCoefficient3,
-    XtractBarkCoefficient4,
-    XtractBarkCoefficient5,
-    XtractBarkCoefficient6,
-    XtractBarkCoefficient7,
-    XtractBarkCoefficient8,
-    XtractBarkCoefficient9,
-    XtractBarkCoefficient10,
-    XtractBarkCoefficient11,
-    XtractBarkCoefficient12,
-    XtractBarkCoefficient13,
-    XtractBarkCoefficient14,
-    XtractBarkCoefficient15,
-    XtractBarkCoefficient16,
-    XtractBarkCoefficient17,
-    XtractBarkCoefficient18,
-    XtractBarkCoefficient19,
-    XtractBarkCoefficient20,
-    XtractBarkCoefficient21,
-    XtractBarkCoefficient22,
-    XtractBarkCoefficient23,
-    XtractBarkCoefficient24,
-    XtractBarkCoefficient25,
+    // Number of Features
+    NumLibXtractFeatures
+};
 
-    // MFCCs
+enum LibXtractFeatureGroup
+{
+    XtractTemporalFeatures,
+    XtractSpectralFeatures,
+    XtractBarkCoefficients,
     XtractMFCCs,
-    XtractMFCC1,
-    XtractMFCC2,
-    XtractMFCC3,
-    XtractMFCC4,
-    XtractMFCC5,
-    XtractMFCC6,
-    XtractMFCC7,
-    XtractMFCC8,
-    XtractMFCC9,
-    XtractMFCC10,
-    XtractMFCC11,
-    XtractMFCC12,
-    XtractMFCC13
+    XtractPeakSpectralFeatures,
+    XtractHarmonicSpectralFeatures,
+    XtractAll
 };
 
 struct AudioFeature
@@ -113,7 +76,6 @@ struct AudioFeature
     Array <double> values;
     bool hasDuration;
     int duration;
-
 };
 
 /** 
@@ -134,7 +96,7 @@ public:
     //==========================================================================
     //      Setup
     //==========================================================================
-    /** Initialise the FFT and vamp plug-ins
+    /** Initialise the feature extractor.
      *
      *  @param numChannelsInit  the number of input channels
      *  @param frameOrderInit   the size of the analysis frames - this is given as an exponent
@@ -142,16 +104,41 @@ public:
      *  @param stepSizeInit     the step size between analysis frames in samples - if this is
      *                          greater than the frame length it will be set to the 
      *                          frame length
+     *  @param sampleRate       the sample rate of the audio to be analysed
      */
-    void initialise (int numChannelsInit, int frameOrderInit, int stepSizeInit);
+    void initialise (int numChannelsInit, int frameOrderInit, int stepSizeInit, double sampleRate);
 
+    //==========================================================================
+    //      Add Features
+    //==========================================================================
+    void addLibXtractFeature (LibXtractFeature feature);
+    void addLibXtractFeatureGroup (LibXtractFeatureGroup featureGroup);
 
 private:
     bool initialised;
     int numChannels, frameSize, stepSize;
+    double fs;
 
-    std::map <int, FFT> fftCache;
+    std::map <int, ScopedPointer <FFT> > fftCache;
     const FFT *fft;
+    
+    // lib xtract stuff
+    bool libXtractSpectrumNeeded, libXtractPeakSpectrumNeeded, libXtractHarmonicSpectrumNeeded;
+    bool calculateLibXtractFeature [NumLibXtractFeatures];
+    bool libXtractFeatureCalculated [NumLibXtractFeatures];
+    Array <Array <double> > libXtractFeatureValues [NumLibXtractFeatures];
+
+    static int numLibXtractBarkBands = 25;
+    HeapBlock <double> libXtractBarkBandLimits;
+    bool calculateLibXtractBarkCoefficients;
+    Array <Array <double> > libXtractBarkCoefficients;
+
+    static int numLibXtractMelFilters = 13;
+    xtract_mel_filter libXtractMelFilters;
+    bool libXtractMelFiltersInitialised;
+    bool calculateLibXtractMFCCs;
+    Array <Array <double> > libXtractMFCCs;
+    void deleteLibXtractMelFilters();
 };
 
 #endif // SAFE_FEATURE_EXTRACTOR_H_INCLUDED
