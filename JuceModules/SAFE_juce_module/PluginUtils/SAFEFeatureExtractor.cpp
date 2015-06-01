@@ -136,6 +136,11 @@ void SAFEFeatureExtractor::initialise (int numChannelsInit, int frameSizeInit, i
             }
 
             vampOutputs.add (newPlugin->getOutputDescriptors());
+
+            if (newPlugin->getInputDomain() == Vamp::Plugin::FrequencyDomain)
+            {
+                spectrumNeeded = true;
+            }
         }
     }
 
@@ -939,10 +944,18 @@ void SAFEFeatureExtractor::calculateVampPluginFeatures (const AudioSampleBuffer 
     for (int i = 0; i < vampPlugins.size(); ++i)
     {
         VampPlugin *currentPlugin = vampPlugins [i];
-        
-        const float * const *audioData = frame.getArrayOfReadPointers();
+        VampFeatureSet features;
 
-        VampFeatureSet features = currentPlugin->process (audioData, VampTime::fromMilliseconds (timeStamp));
+        if (currentPlugin->getInputDomain() == Vamp::Plugin::TimeDomain)
+        {
+			const float * const *audioData = frame.getArrayOfReadPointers();
+            features = currentPlugin->process (audioData, VampTime::fromMilliseconds (timeStamp));
+        }
+        else
+        {
+			const float * const *spectralData = spectra.getArrayOfReadPointers();
+            features = currentPlugin->process (spectralData, VampTime::fromMilliseconds (timeStamp));
+        }
 
         VampOutputList &output = vampOutputs.getReference (i);
         addVampPluginFeaturesToList (output, features);
