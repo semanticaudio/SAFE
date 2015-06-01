@@ -92,6 +92,7 @@ void SAFEFeatureExtractor::initialise (int numChannelsInit, int frameSizeInit, i
     xtract_init_mfcc (frameSize / 2, fs / 2, XTRACT_EQUAL_GAIN, 20, 20000,
                       libXtractMelFilters.n_filters, libXtractMelFilters.filters);
     libXtractMelFiltersInitialised = true;
+	libXtractMFCCs.resize (numChannels);
 
     //allocate some memory for the libxtract spectra to live in
     libXtractSpectra.resize (numChannels);
@@ -836,10 +837,10 @@ void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &
         {
             double *mfccs = libXtractMFCCs.getReference (channel).getRawDataPointer();
 
-            xtract_bark_coefficients (spectrum,
-                                      frameSize / 2,
-                                      &libXtractMelFilters,
-                                      mfccs);
+            xtract_mfcc (spectrum,
+                         frameSize / 2,
+                         &libXtractMelFilters,
+                         mfccs);
         }
     }
 }

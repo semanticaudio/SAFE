@@ -324,6 +324,15 @@ protected:
     void addDBParameter (String name, float& valueRef, float initialValue = 1, float minValue = 0, float maxValue = 1, String units = String::empty, float skewFactor = 1, double interpolationTimeInit = 100, float UIScaleFactor = 1);
 
     //==========================================================================
+    //      Add Features to Extract
+    //==========================================================================
+    /** Add libxtract features to extract from the audio.
+     * 
+     *  @param feature  the feature to extract
+     */
+    void addLibXtractFeature (LibXtract::Feature feature);
+
+    //==========================================================================
     //      Play Head Stuff
     //==========================================================================
     AudioPlayHead::CurrentPositionInfo playHead; /**< The audio play head. */

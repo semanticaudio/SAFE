@@ -823,6 +823,15 @@ void SAFEAudioProcessor::addDBParameter (String name, float& valueRef, float ini
 }
 
 //==========================================================================
+//      Add Features to Extract
+//==========================================================================
+void SAFEAudioProcessor::addLibXtractFeature (LibXtract::Feature feature)
+{
+    unprocessedFeatureExtractor.addLibXtractFeature (feature);
+    processedFeatureExtractor.addLibXtractFeature (feature);
+}
+
+//==========================================================================
 //      Buffer Playing Audio For Analysis
 //==========================================================================
 void SAFEAudioProcessor::recordUnprocessedSamples (AudioSampleBuffer& buffer)
