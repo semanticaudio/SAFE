@@ -49,7 +49,7 @@ public:
     //==========================================================================
     //      Analyse Audio
     //==========================================================================
-    void analyseAudio (AudioSampleBuffer buffer);
+    void analyseAudio (AudioSampleBuffer &buffer);
     void addFeaturesToXmlElement (XmlElement *element);
 
 private:
@@ -72,14 +72,14 @@ private:
     bool libXtractSpectrumNeeded, libXtractPeakSpectrumNeeded, libXtractHarmonicSpectrumNeeded;
     bool calculateLibXtractScalarFeature [LibXtract::NumScalarFeatures];
     bool saveLibXtractScalarFeature [LibXtract::NumScalarFeatures];
-    Array <Array <double> > libXtractScalarFeatureValues [LibXtract::NumScalarFeatures];
+    Array <Array <double> > libXtractScalarFeatureValues;
 
-    static int numLibXtractBarkBands = 25;
-    HeapBlock <double> libXtractBarkBandLimits;
+    static const int numLibXtractBarkBands = 25;
+    HeapBlock <int> libXtractBarkBandLimits;
     bool calculateLibXtractBarkCoefficients;
     Array <Array <double> > libXtractBarkCoefficients;
 
-    static int numLibXtractMelFilters = 13;
+    static const int numLibXtractMelFilters = 13;
     xtract_mel_filter libXtractMelFilters;
     bool libXtractMelFiltersInitialised;
     bool calculateLibXtractMFCCs;
@@ -92,7 +92,7 @@ private:
 
     void calculateLibXtractSpectra();
     void calculateLibXtractFeatures (const AudioSampleBuffer &frame);
-    void addLibXtractFeaturesToList (Array <AudioFeature> &featureList);
+    void addLibXtractFeaturesToList (Array <AudioFeature> &featureList, int timeStamp);
 };
 
 #endif // SAFE_FEATURE_EXTRACTOR_H_INCLUDED

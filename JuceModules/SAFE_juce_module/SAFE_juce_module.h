@@ -8,6 +8,7 @@
 #include "xtract/libxtract.h"
 
 #include <complex>
+#include <map>
 
 #if JUCE_LINUX
     #include <curl/curl.h>
@@ -41,6 +42,7 @@ namespace juce
     #include "PluginUtils/CurlHolder.h"
 #endif
 
+#include "PluginUtils/LibXtractFeatures.h"
 #include "PluginUtils/SAFEFeatureExtractor.h"
 #include "PluginUtils/SAFEParameter.h"
 #include "PluginUtils/SAFEAudioProcessor.h"

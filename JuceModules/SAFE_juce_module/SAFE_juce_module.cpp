@@ -35,6 +35,7 @@ namespace juce
 #include "UIComponents/FilterGraph.cpp"
 
 #include "PluginUtils/LibXtractHolder.cpp"
+#include "PluginUtils/LibXtractFeatures.cpp"
 #include "PluginUtils/SAFEFeatureExtractor.cpp"
 #include "PluginUtils/SAFEParameter.cpp"
 #include "PluginUtils/SAFEAudioProcessor.cpp"

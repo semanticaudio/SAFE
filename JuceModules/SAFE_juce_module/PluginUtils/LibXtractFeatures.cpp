@@ -20,7 +20,7 @@ String LibXtract::getFeatureName (Feature feature)
         case FundamentalFrequency:
             return "LibXtract Fundamental Frequency";
 
-        case SpectralCentriod:
+        case SpectralCentroid:
             return "LibXtract Spectral Centroid";
 
         case SpectralVariance:
@@ -59,7 +59,7 @@ String LibXtract::getFeatureName (Feature feature)
         case SpectralSlope:
             return "LibXtract Spectral Slope";
 
-        case PeakSpectralCentriod:
+        case PeakSpectralCentroid:
             return "LibXtract Peak Spectral Centroid";
 
         case PeakSpectralVariance:
@@ -92,7 +92,7 @@ String LibXtract::getFeatureName (Feature feature)
         case Inharmonicity:
             return "LibXtract Inharmonicity";
 
-        case HarmonicSpectralCentriod:
+        case HarmonicSpectralCentroid:
             return "LibXtract Harmonic Spectral Centroid";
 
         case HarmonicSpectralVariance:

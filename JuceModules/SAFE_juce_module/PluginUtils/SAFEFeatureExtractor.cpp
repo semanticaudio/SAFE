@@ -17,11 +17,10 @@ SAFEFeatureExtractor::SAFEFeatureExtractor()
       calculateLibXtractMFCCs (false)
 {
     // initialise libxtract arrays
-    for (int i = 0; i < NumLibXtractScalarFeatures; ++i)
+    for (int i = 0; i < LibXtract::NumScalarFeatures; ++i)
     {
         calculateLibXtractScalarFeature [i] = false;
         saveLibXtractScalarFeature [i] = false;
-        libXtractScalarFeatureValues [i] = 0.0;
     }
 
     // allocate bark band limits and mel filters
@@ -48,7 +47,7 @@ void SAFEFeatureExtractor::initialise (int numChannelsInit, int frameSizeInit, i
     // calculate the frame size
     frameSize = frameSizeInit;
 
-    frameOrder = floor (log (frameSize) / log (2));
+    int frameOrder = floor (log (frameSize) / log (2));
 
     // frame size must be a power of two
     jassert (pow (2, frameOrder) == frameSize);
@@ -104,14 +103,14 @@ void SAFEFeatureExtractor::initialise (int numChannelsInit, int frameSizeInit, i
     {
         libXtractScalarFeatureValues.getReference (i).resize (LibXtract::NumScalarFeatures);
         libXtractBarkCoefficients.getReference (i).resize (numLibXtractBarkBands);
-        libXtractMFCCs.getReference (i).resize (numLibXtractMFCCs);
+        libXtractMFCCs.getReference (i).resize (numLibXtractMelFilters);
 
         libXtractSpectra.getReference (i).resize (frameSize);
         libXtractPeakSpectra.getReference (i).resize (frameSize);
         libXtractHarmonicSpectra.getReference (i).resize (frameSize);
     }
 
-    libXtractChannelData.allocate (frameSize);
+    libXtractChannelData.allocate (frameSize, true);
 
     initialised = true;
 }
@@ -156,15 +155,15 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
                 break;
 
             // spectral features
-            case LibXtract::SpetralSkewness:
-            case LibXtract::SpetralKurtosis:
+            case LibXtract::SpectralSkewness:
+            case LibXtract::SpectralKurtosis:
                 calculateLibXtractScalarFeature [LibXtract::SpectralStandardDeviation] = true;
 
-            case LibXtract::SpetralStandardDeviation:
+            case LibXtract::SpectralStandardDeviation:
                 calculateLibXtractScalarFeature [LibXtract::SpectralVariance] = true;
 
-            case LibXtract::SpetralVariance:
-                calculateLibXtractScalarFeature [LibXtract::SpectralCentriod] = true;
+            case LibXtract::SpectralVariance:
+                calculateLibXtractScalarFeature [LibXtract::SpectralCentroid] = true;
                 break;
 
             case LibXtract::Tonality:
@@ -172,27 +171,27 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
                 break;
 
             // peak spectral features
-            case LibXtract::PeakSpetralSkewness:
-            case LibXtract::PeakSpetralKurtosis:
+            case LibXtract::PeakSpectralSkewness:
+            case LibXtract::PeakSpectralKurtosis:
                 calculateLibXtractScalarFeature [LibXtract::PeakSpectralStandardDeviation] = true;
 
-            case LibXtract::PeakSpetralStandardDeviation:
+            case LibXtract::PeakSpectralStandardDeviation:
                 calculateLibXtractScalarFeature [LibXtract::PeakSpectralVariance] = true;
 
-            case LibXtract::PeakSpetralVariance:
-                calculateLibXtractScalarFeature [LibXtract::PeakSpectralCentriod] = true;
+            case LibXtract::PeakSpectralVariance:
+                calculateLibXtractScalarFeature [LibXtract::PeakSpectralCentroid] = true;
                 break;
 
             // harmonic spectral features
-            case LibXtract::HarmonicSpetralSkewness:
-            case LibXtract::HarmonicSpetralKurtosis:
+            case LibXtract::HarmonicSpectralSkewness:
+            case LibXtract::HarmonicSpectralKurtosis:
                 calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralStandardDeviation] = true;
 
-            case LibXtract::HarmonicSpetralStandardDeviation:
+            case LibXtract::HarmonicSpectralStandardDeviation:
                 calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralVariance] = true;
 
-            case LibXtract::HarmonicSpetralVariance:
-                calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralCentriod] = true;
+            case LibXtract::HarmonicSpectralVariance:
+                calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralCentroid] = true;
                 break;
 
             default:
@@ -266,7 +265,7 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
                 libXtractHarmonicSpectrumNeeded = true;
                 break;
 
-            case LibXtract::All
+			case LibXtract::AllFeatures:
                 
                 for (int i = 0; i < LibXtract::NumScalarFeatures; ++i)
                 {
@@ -292,7 +291,7 @@ void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer)
 {
     // the number of channels passed in must be the number the extractor was
     // initialised for
-    jassert (buffer.getNumChannels == numChannels);
+    jassert (buffer.getNumChannels() == numChannels);
 
     int numSamples = buffer.getNumSamples();
 
@@ -325,7 +324,7 @@ void SAFEFeatureExtractor::addFeaturesToXmlElement (XmlElement *element)
     for (int i = numFeatures - 1; i >= 0; --i)
     {
         const AudioFeature &currentFeature = featureList.getReference (i);
-        int numValues = currentFeature.size();
+        int numValues = currentFeature.values.size();
 
         for (int i = numValues - 1; i >= 0; --i)
         {
@@ -357,7 +356,7 @@ void SAFEFeatureExtractor::calculateSpectra (const AudioSampleBuffer &frame)
     }
 
     // scale spectra
-    float signleBinGain = 1.0f / frameSize;
+    float singleBinGain = 1.0f / frameSize;
     float duplicateBinGain = 2.0f * singleBinGain;
     spectra.applyGain (0, 1, singleBinGain);
     spectra.applyGain (1, frameSize - 2, duplicateBinGain);
@@ -373,7 +372,7 @@ void SAFEFeatureExtractor::deleteLibXtractMelFilters()
             delete[] libXtractMelFilters.filters [i];
         }
 
-        libXtractMelFilteresInitialised = false;
+        libXtractMelFiltersInitialised = false;
     }
 }
 
@@ -396,7 +395,7 @@ void SAFEFeatureExtractor::calculateLibXtractSpectra()
         {
             double realPart = spectrumChannel [2 * i];
             double imagPart = spectrumChannel [2 * i + 1];
-            double magnitude = pow (pow (realPart, 2.0), pow (imagPart, 2.0), 0.5);
+            double magnitude = pow (pow (realPart, 2.0) + pow (imagPart, 2.0), 0.5);
 
             libXtractSpectrumChannel [i - 1] = magnitude;
             libXtractSpectrumChannel [i - 1 + numBins] = i * binWidth;
@@ -635,7 +634,7 @@ void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &
         }
 
         argumentArray [0] = scalarFeatureValues [LibXtract::PeakSpectralCentroid];
-        argumentArray [1] = scalarFeatureValues [LibXtract::PeakSpectralStandardDeviation]};
+        argumentArray [1] = scalarFeatureValues [LibXtract::PeakSpectralStandardDeviation];
 
         if (calculateLibXtractScalarFeature [LibXtract::PeakSpectralSkewness])
         {
@@ -739,7 +738,7 @@ void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &
         }
 
         argumentArray [0] = scalarFeatureValues [LibXtract::HarmonicSpectralCentroid];
-        argumentArray [1] = scalarFeatureValues [LibXtract::HarmonicSpectralStandardDeviation]};
+        argumentArray [1] = scalarFeatureValues [LibXtract::HarmonicSpectralStandardDeviation];
 
         if (calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralSkewness])
         {
@@ -807,7 +806,7 @@ void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &
             xtract_nonzero_count (peakSpectrum,
                                   frameSize / 2,
                                   NULL,
-                                  arguemtnArray + 1);
+                                  argumentArray + 1);
 
             xtract_noisiness (NULL, 
                               0, 
@@ -854,7 +853,7 @@ void SAFEFeatureExtractor::addLibXtractFeaturesToList (Array <AudioFeature> &fea
             if (saveLibXtractScalarFeature [i])
             {
                 AudioFeature tempFeature;
-                tempFeature.name = LibXtract::getFeatureName (i);
+                tempFeature.name = LibXtract::getFeatureName (static_cast <LibXtract::Feature> (i));
                 tempFeature.timeStamp = timeStamp;
                 tempFeature.channelNumber = channel;
                 tempFeature.values.add (libXtractScalarFeatureValues.getReference (channel) [i]);
@@ -867,6 +866,8 @@ void SAFEFeatureExtractor::addLibXtractFeaturesToList (Array <AudioFeature> &fea
 
         if (calculateLibXtractBarkCoefficients)
         {
+			AudioFeature tempFeature;
+
             tempFeature.name = LibXtract::getFeatureName (LibXtract::BarkCoefficients);
             tempFeature.timeStamp = timeStamp;
             tempFeature.channelNumber = channel;
@@ -879,6 +880,8 @@ void SAFEFeatureExtractor::addLibXtractFeaturesToList (Array <AudioFeature> &fea
 
         if (calculateLibXtractMFCCs)
         {
+			AudioFeature tempFeature;
+
             tempFeature.name = LibXtract::getFeatureName (LibXtract::MFCCs);
             tempFeature.timeStamp = timeStamp;
             tempFeature.channelNumber = channel;

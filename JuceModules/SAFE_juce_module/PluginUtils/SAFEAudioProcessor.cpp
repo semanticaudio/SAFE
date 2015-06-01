@@ -561,6 +561,8 @@ WarningID SAFEAudioProcessor::getServerData (const String& descriptor)
     //{
     //    return DescriptorNotOnServer;
     //}
+
+	return NoWarning;
 }
 
 //==========================================================================
@@ -615,8 +617,8 @@ void SAFEAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     numSamplesToRecord = numAnalysisFrames * getAnalysisFrameSize();
 
     // set up analysis buffers
-    unprocessedFeatureBuffer.setSize (numInputs, numSamplesToRecord);
-    processedFeatureBuffer.setSize (numOutputs, numSamplesToRecord);
+    unprocessedBuffer.setSize (numInputs, numSamplesToRecord);
+    processedBuffer.setSize (numOutputs, numSamplesToRecord);
 
     unprocessedFeatureExtractor.initialise (numInputs, getAnalysisFrameSize(), getAnalysisStepSize(), sampleRate);
     processedFeatureExtractor.initialise (numOutputs, getAnalysisFrameSize(), getAnalysisStepSize(), sampleRate);

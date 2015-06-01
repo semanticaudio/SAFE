@@ -15,7 +15,7 @@ public:
         
         // Spectral Features
         FundamentalFrequency,
-        SpectralCentriod,
+        SpectralCentroid,
         SpectralVariance,
         SpectralStandardDeviation,
         SpectralSkewness,
@@ -30,7 +30,7 @@ public:
         SpectralSlope,
 
         // Peak Spectral Features
-        PeakSpectralCentriod,
+        PeakSpectralCentroid,
         PeakSpectralVariance,
         PeakSpectralStandardDeviation,
         PeakSpectralSkewness,
@@ -43,7 +43,7 @@ public:
 
         // Harmonic Spectral Features
         Inharmonicity,
-        HarmonicSpectralCentriod,
+        HarmonicSpectralCentroid,
         HarmonicSpectralVariance,
         HarmonicSpectralStandardDeviation,
         HarmonicSpectralSkewness,
