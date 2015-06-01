@@ -97,7 +97,7 @@ void SAFEFeatureExtractor::initialise (int numChannelsInit, int frameOrderInit, 
     // allocate memory for multi channel buffers
     for (int i = 0; i < numChannels; ++i)
     {
-        libXtractScalarFeatureValues.getReference (i).resize (NumLibXtractScalarFeatures);
+        libXtractScalarFeatureValues.getReference (i).resize (LibXtract::NumScalarFeatures);
         libXtractBarkCoefficients.getReference (i).resize (numLibXtractBarkBands);
         libXtractMFCCs.getReference (i).resize (numLibXtractMFCCs);
 
@@ -111,30 +111,30 @@ void SAFEFeatureExtractor::initialise (int numChannelsInit, int frameOrderInit, 
     initialised = true;
 }
 
-void SAFEFeatureExtractor::addLibXtractFeature (LibXtractFeature feature)
+void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
 {
-    if (feature < NumLibXtractScalarFeatures)
+    if (feature < LibXtract::NumScalarFeatures)
     {
         calculateLibXtractScalarFeature [feature] = true;
         saveLibXtractScalarFeature [feature] = true;
 
-        if (feature >= XtractSpectralCentroid)
+        if (feature >= LibXtract::SpectralCentroid)
         {
             spectrumNeeded = true;
             libXtractSpectrumNeeded = true;
         }
 
-        if (feature >= XtractPeakSpectralCentroid)
+        if (feature >= LibXtract::PeakSpectralCentroid)
         {
             libXtractPeakSpectrumNeeded = true;
         }
 
-        if (feature >= XtractPeakTristimulus1)
+        if (feature >= LibXtract::PeakTristimulus1)
         {
-            calculateLibXtractScalarFeature [XtractFundamentalFrequency] = true;
+            calculateLibXtractScalarFeature [LibXtract::FundamentalFrequency] = true;
         }
 
-        if (feature >= XtractHarmonicSpectralCentroid)
+        if (feature >= LibXtract::HarmonicSpectralCentroid)
         {
             libXtractHarmonicSpectrumNeeded = true;
         }
@@ -143,51 +143,51 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtractFeature feature)
         switch (feature)
         {
             // temporal features
-            case XtractTemporalStandardDeviation:
-                calculateLibXtractScalarFeature [XtractTemporalVariance] = true;
+            case LibXtract::TemporalStandardDeviation:
+                calculateLibXtractScalarFeature [LibXtract::TemporalVariance] = true;
 
-            case XtractTemporalVariance:
-                calculateLibXtractScalarFeature [XtractTemporalMean] = true;
+            case LibXtract::TemporalVariance:
+                calculateLibXtractScalarFeature [LibXtract::TemporalMean] = true;
                 break;
 
             // spectral features
-            case XtractSpetralSkewness:
-            case XtractSpetralKurtosis:
-                calculateLibXtractScalarFeature [XtractSpectralStandardDeviation] = true;
+            case LibXtract::SpetralSkewness:
+            case LibXtract::SpetralKurtosis:
+                calculateLibXtractScalarFeature [LibXtract::SpectralStandardDeviation] = true;
 
-            case XtractSpetralStandardDeviation:
-                calculateLibXtractScalarFeature [XtractSpectralVariance] = true;
+            case LibXtract::SpetralStandardDeviation:
+                calculateLibXtractScalarFeature [LibXtract::SpectralVariance] = true;
 
-            case XtractSpetralVariance:
-                calculateLibXtractScalarFeature [XtractSpectralCentriod] = true;
+            case LibXtract::SpetralVariance:
+                calculateLibXtractScalarFeature [LibXtract::SpectralCentriod] = true;
                 break;
 
-            case XtractTonality:
-                calculateLibXtractScalarFeature [XtractSpectralFlatness] = true;
+            case LibXtract::Tonality:
+                calculateLibXtractScalarFeature [LibXtract::SpectralFlatness] = true;
                 break;
 
             // peak spectral features
-            case XtractPeakSpetralSkewness:
-            case XtractPeakSpetralKurtosis:
-                calculateLibXtractScalarFeature [XtractPeakSpectralStandardDeviation] = true;
+            case LibXtract::PeakSpetralSkewness:
+            case LibXtract::PeakSpetralKurtosis:
+                calculateLibXtractScalarFeature [LibXtract::PeakSpectralStandardDeviation] = true;
 
-            case XtractPeakSpetralStandardDeviation:
-                calculateLibXtractScalarFeature [XtractPeakSpectralVariance] = true;
+            case LibXtract::PeakSpetralStandardDeviation:
+                calculateLibXtractScalarFeature [LibXtract::PeakSpectralVariance] = true;
 
-            case XtractPeakSpetralVariance:
-                calculateLibXtractScalarFeature [XtractPeakSpectralCentriod] = true;
+            case LibXtract::PeakSpetralVariance:
+                calculateLibXtractScalarFeature [LibXtract::PeakSpectralCentriod] = true;
                 break;
 
             // harmonic spectral features
-            case XtractHarmonicSpetralSkewness:
-            case XtractHarmonicSpetralKurtosis:
-                calculateLibXtractScalarFeature [XtractHarmonicSpectralStandardDeviation] = true;
+            case LibXtract::HarmonicSpetralSkewness:
+            case LibXtract::HarmonicSpetralKurtosis:
+                calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralStandardDeviation] = true;
 
-            case XtractHarmonicSpetralStandardDeviation:
-                calculateLibXtractScalarFeature [XtractHarmonicSpectralVariance] = true;
+            case LibXtract::HarmonicSpetralStandardDeviation:
+                calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralVariance] = true;
 
-            case XtractHarmonicSpetralVariance:
-                calculateLibXtractScalarFeature [XtractHarmonicSpectralCentriod] = true;
+            case LibXtract::HarmonicSpetralVariance:
+                calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralCentriod] = true;
                 break;
 
             default:
@@ -198,21 +198,21 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtractFeature feature)
     {
         switch (feature)
         {
-            case XtractBarkCoefficients:
+            case LibXtract::BarkCoefficients:
                 spectrumNeeded = true;
                 libXtractSpectrumNeeded = true;
                 calculateLibXtractBarkCoefficients = true;
                 break;
 
-            case XtractMFCCs:
+            case LibXtract::MFCCs:
                 spectrumNeeded = true;
                 libXtractSpectrumNeeded = true;
                 calculateLibXtractMFCCs = true;
                 break;
 
-            case XtractTemporalFeatures:
+            case LibXtract::TemporalFeatures:
 
-                for (int i = XtractTemporalMean; i <= XtractZeroCrossingRate; ++i)
+                for (int i = LibXtract::TemporalMean; i <= LibXtract::ZeroCrossingRate; ++i)
                 {
                     calculateLibXtractScalarFeature [i] = true;
                     saveLibXtractScalarFeature [i] = true;
@@ -220,9 +220,9 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtractFeature feature)
 
                 break;
 
-            case XtractSpectralFeatures:
+            case LibXtract::SpectralFeatures:
 
-                for (int i = XtractFundamentalFrequency; i <= XtractSpectralSlope; ++i)
+                for (int i = LibXtract::FundamentalFrequency; i <= LibXtract::SpectralSlope; ++i)
                 {
                     calculateLibXtractScalarFeature [i] = true;
                     saveLibXtractScalarFeature [i] = true;
@@ -232,38 +232,38 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtractFeature feature)
                 libXtractSpectrumNeeded = true;
                 break;
 
-            case XtractPeakSpectralFeatures:
+            case LibXtract::PeakSpectralFeatures:
 
-                for (int i = XtractPeakSpectralCentroid; i <= XtractPeakTristimulus3; ++i)
+                for (int i = LibXtract::PeakSpectralCentroid; i <= LibXtract::PeakTristimulus3; ++i)
                 {
                     calculateLibXtractScalarFeature [i] = true;
                     saveLibXtractScalarFeature [i] = true;
                 }
 
-                calculateLibXtractScalarFeature [XtractFundamentalFrequency] = true;
+                calculateLibXtractScalarFeature [LibXtract::FundamentalFrequency] = true;
                 spectrumNeeded = true;
                 libXtractSpectrumNeeded = true;
                 libXtractPeakSpectrumNeeded = true;
                 break;
 
-            case XtractHarmonicSpectralFeatures:
+            case LibXtract::HarmonicSpectralFeatures:
 
-                for (int i = XtractInharmonicity; i <= XtractHarmonicParityRatio; ++i)
+                for (int i = LibXtract::Inharmonicity; i <= LibXtract::HarmonicParityRatio; ++i)
                 {
                     calculateLibXtractScalarFeature [i] = true;
                     saveLibXtractScalarFeature [i] = true;
                 }
 
-                calculateLibXtractScalarFeature [XtractFundamentalFrequency] = true;
+                calculateLibXtractScalarFeature [LibXtract::FundamentalFrequency] = true;
                 spectrumNeeded = true;
                 libXtractSpectrumNeeded = true;
                 libXtractPeakSpectrumNeeded = true;
                 libXtractHarmonicSpectrumNeeded = true;
                 break;
 
-            case XtractAll
+            case LibXtract::All
                 
-                for (int i = 0; i < NumLibXtractScalarFeatures; ++i)
+                for (int i = 0; i < LibXtract::NumScalarFeatures; ++i)
                 {
                     calculateLibXtractScalarFeature [i] = true;
                     saveLibXtractScalarFeature [i] = true;
@@ -280,6 +280,34 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtractFeature feature)
             default:
                 break;
         }
+    }
+}
+
+void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer, Array <AudioFeature> &featureList)
+{
+    // the number of channels passed in must be the number the extractor was
+    // initialised for
+    jassert (buffer.getNumChannels == numChannels);
+
+    int numSamples = buffer.getNumSamples;
+
+    // can't do any analysis without enough samples
+    if (numSamples < frameSize)
+    {
+        return;
+    }
+
+    int lastFrameStart = numSamples - frameSize;
+
+    float **audioData = buffer.getArrayOfWritePointers();
+
+    for (int frameStart = 0; frameStart <= lastFrameStart; frameStart += stepSize)
+    {
+        AudioSampleBuffer frameBuffer (audioData, numChannels, frameStart, frameSize);
+
+        calculateSpectra (frameBuffer);
+        calculateLibXtractFeatures (frameBuffer);
+        addLibXtractFeaturesToList (featureList, frameStart);
     }
 }
 
@@ -346,6 +374,8 @@ void SAFEFeatureExtractor::calculateLibXtractSpectra()
 
 void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &frame)
 {
+    calculateLibXtractSpectra();
+
     for (int channel = 0; channel < numChannels; ++channel)
     {
         const float *channelData = frame.getReadPointer (channel);
@@ -360,157 +390,157 @@ void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &
         }
 
         // temporal features
-        if (calculateLibXtractScalarFeature [XtractTemporalMean])
+        if (calculateLibXtractScalarFeature [LibXtract::TemporalMean])
         {
             xtract_mean (libXtractChannelData, 
                          frameSize, 
                          NULL, 
-                         scalarFeatureValues + XtractTemporalMean);
+                         scalarFeatureValues + LibXtract::TemporalMean);
         }
 
-        if (calculateLibXtractScalarFeature [XtractTemporalVariance])
+        if (calculateLibXtractScalarFeature [LibXtract::TemporalVariance])
         {
             xtract_variance (libXtractChannelData, 
                              frameSize, 
-                             scalarFeatureValues + XtractTemporalMean, 
-                             scalarFeatureValues + XtractTemporalVariance);
+                             scalarFeatureValues + LibXtract::TemporalMean, 
+                             scalarFeatureValues + LibXtract::TemporalVariance);
         }
 
-        if (calculateLibXtractScalarFeature [XtractTemporalStandardDeviation])
+        if (calculateLibXtractScalarFeature [LibXtract::TemporalStandardDeviation])
         {
             xtract_standard_deviation (libXtractChannelData, 
                                        frameSize, 
-                                       scalarFeatureValues + XtractTemporalVariance, 
-                                       scalarFeatureValues + XtractTemporalStandardDeviation);
+                                       scalarFeatureValues + LibXtract::TemporalVariance, 
+                                       scalarFeatureValues + LibXtract::TemporalStandardDeviation);
         }
 
-        if (calculateLibXtractScalarFeature [XtractRMSAmplitude])
+        if (calculateLibXtractScalarFeature [LibXtract::RMSAmplitude])
         {
             xtract_rms_amplitude (libXtractChannelData, 
                                   frameSize, 
                                   NULL, 
-                                  scalarFeatureValues + XtractRMSAmplitude);
+                                  scalarFeatureValues + LibXtract::RMSAmplitude);
         }
 
-        if (calculateLibXtractScalarFeature [XtractZeroCrossingRate])
+        if (calculateLibXtractScalarFeature [LibXtract::ZeroCrossingRate])
         {
             xtract_zcr (libXtractChannelData, 
                         frameSize, 
                         NULL, 
-                        scalarFeatureValues + XtractZeroCrossingRate);
+                        scalarFeatureValues + LibXtract::ZeroCrossingRate);
         }
         
         // spectral features
-        if (calculateLibXtractScalarFeature [XtractFundamentalFrequency])
+        if (calculateLibXtractScalarFeature [LibXtract::FundamentalFrequency])
         {
             xtract_failsafe_f0 (libXtractChannelData, 
                                 frameSize, 
                                 &fs, 
-                                scalarFeatureValues + XtractFundamentalFrequency);
+                                scalarFeatureValues + LibXtract::FundamentalFrequency);
         }
 
-        if (calculateLibXtractScalarFeature [XtractSpectralCentroid])
+        if (calculateLibXtractScalarFeature [LibXtract::SpectralCentroid])
         {
             xtract_spectral_centroid (spectrum, 
                                       frameSize, 
                                       NULL, 
-                                      scalarFeatureValues + XtractSpectralCentroid);
+                                      scalarFeatureValues + LibXtract::SpectralCentroid);
         }
 
-        if (calculateLibXtractScalarFeature [XtractSpectralVariance])
+        if (calculateLibXtractScalarFeature [LibXtract::SpectralVariance])
         {
             xtract_spectral_variance (spectrum, 
                                       frameSize, 
-                                      scalarFeatureValues + XtractSpectralCentroid, 
-                                      scalarFeatureValues + XtractSpectralVariance);
+                                      scalarFeatureValues + LibXtract::SpectralCentroid, 
+                                      scalarFeatureValues + LibXtract::SpectralVariance);
         }
 
-        if (calculateLibXtractScalarFeature [XtractSpectralStandardDeviation])
+        if (calculateLibXtractScalarFeature [LibXtract::SpectralStandardDeviation])
         {
             xtract_spectral_standard_deviation (spectrum, 
                                                 frameSize, 
-                                                scalarFeatureValues + XtractSpectralVariance, 
-                                                scalarFeatureValues + XtractSpectralStandardDeviation);
+                                                scalarFeatureValues + LibXtract::SpectralVariance, 
+                                                scalarFeatureValues + LibXtract::SpectralStandardDeviation);
         }
 
-        double argumentArray [2] = {scalarFeatureValues [XtractSpectralCentroid],
-                                    scalarFeatureValues [XtractSpectralStandardDeviation]};
+        double argumentArray [2] = {scalarFeatureValues [LibXtract::SpectralCentroid],
+                                    scalarFeatureValues [LibXtract::SpectralStandardDeviation]};
 
-        if (calculateLibXtractScalarFeature [XtractSpectralSkewness])
+        if (calculateLibXtractScalarFeature [LibXtract::SpectralSkewness])
         {
             xtract_spectral_skewness (spectrum, 
                                       frameSize, 
                                       argumentArray, 
-                                      scalarFeatureValues + XtractSpectralSkewness);
+                                      scalarFeatureValues + LibXtract::SpectralSkewness);
         }
 
-        if (calculateLibXtractScalarFeature [XtractSpectralKurtosis])
+        if (calculateLibXtractScalarFeature [LibXtract::SpectralKurtosis])
         {
             xtract_spectral_kurtosis (spectrum, 
                                       frameSize, 
                                       argumentArray, 
-                                      scalarFeatureValues + XtractSpectralKurtosis);
+                                      scalarFeatureValues + LibXtract::SpectralKurtosis);
         }
 
-        if (calculateLibXtractScalarFeature [XtractJensenIrregularity])
+        if (calculateLibXtractScalarFeature [LibXtract::JensenIrregularity])
         {
             xtract_irregularity_j (spectrum, 
                                    frameSize / 2, 
                                    NULL, 
-                                   scalarFeatureValues + XtractJensenIrregularity);
+                                   scalarFeatureValues + LibXtract::JensenIrregularity);
         }
 
-        if (calculateLibXtractScalarFeature [XtractKrimphoffIrregularity])
+        if (calculateLibXtractScalarFeature [LibXtract::KrimphoffIrregularity])
         {
             xtract_irregularity_k (spectrum, 
                                    frameSize / 2, 
                                    NULL, 
-                                   scalarFeatureValues + XtractKrimphoffIrregularity);
+                                   scalarFeatureValues + LibXtract::KrimphoffIrregularity);
         }
 
-        if (calculateLibXtractScalarFeature [XtractSpectralSmoothness])
+        if (calculateLibXtractScalarFeature [LibXtract::SpectralSmoothness])
         {
             xtract_smoothness (spectrum, 
                                frameSize / 2, 
                                NULL, 
-                               scalarFeatureValues + XtractSpectralSmoothness);
+                               scalarFeatureValues + LibXtract::SpectralSmoothness);
         }
 
         argumentArray [0] = fs / frameSize;
         argumentArray [1] = 45;
 
-        if (calculateLibXtractScalarFeature [XtractSpectralRollOff])
+        if (calculateLibXtractScalarFeature [LibXtract::SpectralRollOff])
         {
             xtract_rolloff (spectrum, 
                             frameSize / 2, 
                             argumentArray, 
-                            scalarFeatureValues + XtractSpectralRollOff);
+                            scalarFeatureValues + LibXtract::SpectralRollOff);
         }
 
-        if (calculateLibXtractScalarFeature [XtractSpectralFlatness])
+        if (calculateLibXtractScalarFeature [LibXtract::SpectralFlatness])
         {
             xtract_flatness (spectrum, 
                              frameSize / 2, 
                              NULL, 
-                             scalarFeatureValues + XtractSpectralFlatness);
+                             scalarFeatureValues + LibXtract::SpectralFlatness);
         }
 
-        if (calculateLibXtractScalarFeature [XtractTonality])
+        if (calculateLibXtractScalarFeature [LibXtract::Tonality])
         {
             double logFlatness;
 
             xtract_flatness_db (NULL,
                                 0,
-                                scalarFeatureValues + XtractSpectralFlatness,
+                                scalarFeatureValues + LibXtract::SpectralFlatness,
                                 &logFlatness);
 
             xtract_tonality (NULL, 
                              0, 
                              &logFlatness, 
-                             scalarFeatureValues + XtractTonality);
+                             scalarFeatureValues + LibXtract::Tonality);
         }
 
-        if (calculateLibXtractScalarFeature [XtractCrestFactor])
+        if (calculateLibXtractScalarFeature [LibXtract::CrestFactor])
         {
             xtract_highest_value (spectrum,
                                   frameSize / 2,
@@ -525,15 +555,15 @@ void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &
             xtract_crest (NULL, 
                           0, 
                           argumentArray, 
-                          scalarFeatureValues + XtractCrestFactor);
+                          scalarFeatureValues + LibXtract::CrestFactor);
         }
 
-        if (calculateLibXtractScalarFeature [XtractSpectralSlope])
+        if (calculateLibXtractScalarFeature [LibXtract::SpectralSlope])
         {
             xtract_spectral_slope (spectrum, 
                                    frameSize, 
                                    NULL, 
-                                   scalarFeatureValues + XtractSpectralSlope);
+                                   scalarFeatureValues + LibXtract::SpectralSlope);
         }
 
         // peak spectral features
@@ -548,102 +578,102 @@ void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &
                                   peakSpectrum);
         }
 
-        if (calculateLibXtractScalarFeature [XtractPeakSpectralCentroid])
+        if (calculateLibXtractScalarFeature [LibXtract::PeakSpectralCentroid])
         {
             xtract_spectral_centroid (peakSpectrum, 
                                       frameSize, 
                                       NULL, 
-                                      scalarFeatureValues + XtractPeakSpectralCentroid);
+                                      scalarFeatureValues + LibXtract::PeakSpectralCentroid);
         }
 
-        if (calculateLibXtractScalarFeature [XtractPeakSpectralVariance])
+        if (calculateLibXtractScalarFeature [LibXtract::PeakSpectralVariance])
         {
             xtract_spectral_variance (peakSpectrum, 
                                       frameSize, 
-                                      scalarFeatureValues + XtractPeakSpectralCentroid, 
-                                      scalarFeatureValues + XtractPeakSpectralVariance);
+                                      scalarFeatureValues + LibXtract::PeakSpectralCentroid, 
+                                      scalarFeatureValues + LibXtract::PeakSpectralVariance);
         }
 
-        if (calculateLibXtractScalarFeature [XtractPeakSpectralStandardDeviation])
+        if (calculateLibXtractScalarFeature [LibXtract::PeakSpectralStandardDeviation])
         {
             xtract_spectral_standard_deviation (peakSpectrum, 
                                                 frameSize, 
-                                                scalarFeatureValues + XtractPeakSpectralVariance, 
-                                                scalarFeatureValues + XtractPeakSpectralStandardDeviation);
+                                                scalarFeatureValues + LibXtract::PeakSpectralVariance, 
+                                                scalarFeatureValues + LibXtract::PeakSpectralStandardDeviation);
         }
 
-        argumentArray [0] = scalarFeatureValues [XtractPeakSpectralCentroid];
-        argumentArray [1] = scalarFeatureValues [XtractPeakSpectralStandardDeviation]};
+        argumentArray [0] = scalarFeatureValues [LibXtract::PeakSpectralCentroid];
+        argumentArray [1] = scalarFeatureValues [LibXtract::PeakSpectralStandardDeviation]};
 
-        if (calculateLibXtractScalarFeature [XtractPeakSpectralSkewness])
+        if (calculateLibXtractScalarFeature [LibXtract::PeakSpectralSkewness])
         {
             xtract_spectral_skewness (peakSpectrum, 
                                       frameSize, 
                                       argumentArray, 
-                                      scalarFeatureValues + XtractPeakSpectralSkewness);
+                                      scalarFeatureValues + LibXtract::PeakSpectralSkewness);
         }
 
-        if (calculateLibXtractScalarFeature [XtractPeakSpectralKurtosis])
+        if (calculateLibXtractScalarFeature [LibXtract::PeakSpectralKurtosis])
         {
             xtract_spectral_kurtosis (peakSpectrum, 
                                       frameSize, 
                                       argumentArray, 
-                                      scalarFeatureValues + XtractPeakSpectralKurtosis);
+                                      scalarFeatureValues + LibXtract::PeakSpectralKurtosis);
         }
 
-        if (calculateLibXtractScalarFeature [XtractPeakJensenIrregularity])
+        if (calculateLibXtractScalarFeature [LibXtract::PeakJensenIrregularity])
         {
             xtract_irregularity_j (peakSpectrum, 
                                    frameSize / 2, 
                                    NULL, 
-                                   scalarFeatureValues + XtractPeakJensenIrregularity);
+                                   scalarFeatureValues + LibXtract::PeakJensenIrregularity);
         }
 
-        if (calculateLibXtractScalarFeature [XtractPeakKrimphoffIrregularity])
+        if (calculateLibXtractScalarFeature [LibXtract::PeakKrimphoffIrregularity])
         {
             xtract_irregularity_k (peakSpectrum, 
                                    frameSize / 2, 
                                    NULL, 
-                                   scalarFeatureValues + XtractPeakKrimphoffIrregularity);
+                                   scalarFeatureValues + LibXtract::PeakKrimphoffIrregularity);
         }
 
-        if (calculateLibXtractScalarFeature [XtractPeakTristimulus1])
+        if (calculateLibXtractScalarFeature [LibXtract::PeakTristimulus1])
         {
             xtract_tristimulus_1 (peakSpectrum, 
                                   frameSize, 
-                                  scalarFeatureValues + XtractFundamentalFrequency, 
-                                  scalarFeatureValues + XtractPeakTristimulus1);
+                                  scalarFeatureValues + LibXtract::FundamentalFrequency, 
+                                  scalarFeatureValues + LibXtract::PeakTristimulus1);
         }
 
-        if (calculateLibXtractScalarFeature [XtractPeakTristimulus2])
+        if (calculateLibXtractScalarFeature [LibXtract::PeakTristimulus2])
         {
             xtract_tristimulus_2 (peakSpectrum, 
                                   frameSize, 
-                                  scalarFeatureValues + XtractFundamentalFrequency, 
-                                  scalarFeatureValues + XtractPeakTristimulus2);
+                                  scalarFeatureValues + LibXtract::FundamentalFrequency, 
+                                  scalarFeatureValues + LibXtract::PeakTristimulus2);
         }
 
-        if (calculateLibXtractScalarFeature [XtractPeakTristimulus3])
+        if (calculateLibXtractScalarFeature [LibXtract::PeakTristimulus3])
         {
             xtract_tristimulus_3 (peakSpectrum, 
                                   frameSize, 
-                                  scalarFeatureValues + XtractFundamentalFrequency, 
-                                  scalarFeatureValues + XtractPeakTristimulus3);
+                                  scalarFeatureValues + LibXtract::FundamentalFrequency, 
+                                  scalarFeatureValues + LibXtract::PeakTristimulus3);
         }
 
         // harmonic spectral features
         
-        if (calculateLibXtractScalarFeature [XtractInharmonicity])
+        if (calculateLibXtractScalarFeature [LibXtract::Inharmonicity])
         {
             xtract_spectral_inharmonicity (peakSpectrum, 
                                            frameSize, 
-                                           scalarFeatureValues + XtractFundamentalFrequency, 
-                                           scalarFeatureValues + XtractInharmonicity);
+                                           scalarFeatureValues + LibXtract::FundamentalFrequency, 
+                                           scalarFeatureValues + LibXtract::Inharmonicity);
         }
 
         if (libXtractHarmonicSpectrumNeeded)
         {
-            argumentArray [0] = scalarFeatureValues [XtractFundamentalFrequency];
+            argumentArray [0] = scalarFeatureValues [LibXtract::FundamentalFrequency];
             argumentArray [1] = 0.2;
 
             xtract_harmonic_spectrum (peakSpectrum,
@@ -652,90 +682,90 @@ void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &
                                       harmonicSpectrum);
         }
 
-        if (calculateLibXtractScalarFeature [XtractHarmonicSpectralCentroid])
+        if (calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralCentroid])
         {
             xtract_spectral_centroid (harmonicSpectrum, 
                                       frameSize, 
                                       NULL, 
-                                      scalarFeatureValues + XtractHarmonicSpectralCentroid);
+                                      scalarFeatureValues + LibXtract::HarmonicSpectralCentroid);
         }
 
-        if (calculateLibXtractScalarFeature [XtractHarmonicSpectralVariance])
+        if (calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralVariance])
         {
             xtract_spectral_variance (harmonicSpectrum, 
                                       frameSize, 
-                                      scalarFeatureValues + XtractHarmonicSpectralCentroid, 
-                                      scalarFeatureValues + XtractHarmonicSpectralVariance);
+                                      scalarFeatureValues + LibXtract::HarmonicSpectralCentroid, 
+                                      scalarFeatureValues + LibXtract::HarmonicSpectralVariance);
         }
 
-        if (calculateLibXtractScalarFeature [XtractHarmonicSpectralStandardDeviation])
+        if (calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralStandardDeviation])
         {
             xtract_spectral_standard_deviation (harmonicSpectrum, 
                                                 frameSize, 
-                                                scalarFeatureValues + XtractHarmonicSpectralVariance, 
-                                                scalarFeatureValues + XtractHarmonicSpectralStandardDeviation);
+                                                scalarFeatureValues + LibXtract::HarmonicSpectralVariance, 
+                                                scalarFeatureValues + LibXtract::HarmonicSpectralStandardDeviation);
         }
 
-        argumentArray [0] = scalarFeatureValues [XtractHarmonicSpectralCentroid];
-        argumentArray [1] = scalarFeatureValues [XtractHarmonicSpectralStandardDeviation]};
+        argumentArray [0] = scalarFeatureValues [LibXtract::HarmonicSpectralCentroid];
+        argumentArray [1] = scalarFeatureValues [LibXtract::HarmonicSpectralStandardDeviation]};
 
-        if (calculateLibXtractScalarFeature [XtractHarmonicSpectralSkewness])
+        if (calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralSkewness])
         {
             xtract_spectral_skewness (harmonicSpectrum, 
                                       frameSize, 
                                       argumentArray, 
-                                      scalarFeatureValues + XtractHarmonicSpectralSkewness);
+                                      scalarFeatureValues + LibXtract::HarmonicSpectralSkewness);
         }
 
-        if (calculateLibXtractScalarFeature [XtractHarmonicSpectralKurtosis])
+        if (calculateLibXtractScalarFeature [LibXtract::HarmonicSpectralKurtosis])
         {
             xtract_spectral_kurtosis (harmonicSpectrum, 
                                       frameSize, 
                                       argumentArray, 
-                                      scalarFeatureValues + XtractHarmonicSpectralKurtosis);
+                                      scalarFeatureValues + LibXtract::HarmonicSpectralKurtosis);
         }
 
-        if (calculateLibXtractScalarFeature [XtractHarmonicJensenIrregularity])
+        if (calculateLibXtractScalarFeature [LibXtract::HarmonicJensenIrregularity])
         {
             xtract_irregularity_j (harmonicSpectrum, 
                                    frameSize / 2, 
                                    NULL, 
-                                   scalarFeatureValues + XtractHarmonicJensenIrregularity);
+                                   scalarFeatureValues + LibXtract::HarmonicJensenIrregularity);
         }
 
-        if (calculateLibXtractScalarFeature [XtractHarmonicKrimphoffIrregularity])
+        if (calculateLibXtractScalarFeature [LibXtract::HarmonicKrimphoffIrregularity])
         {
             xtract_irregularity_k (harmonicSpectrum, 
                                    frameSize / 2, 
                                    NULL, 
-                                   scalarFeatureValues + XtractHarmonicKrimphoffIrregularity);
+                                   scalarFeatureValues + LibXtract::HarmonicKrimphoffIrregularity);
         }
 
-        if (calculateLibXtractScalarFeature [XtractHarmonicTristimulus1])
+        if (calculateLibXtractScalarFeature [LibXtract::HarmonicTristimulus1])
         {
             xtract_tristimulus_1 (harmonicSpectrum, 
                                   frameSize, 
-                                  scalarFeatureValues + XtractFundamentalFrequency, 
-                                  scalarFeatureValues + XtractHarmonicTristimulus1);
+                                  scalarFeatureValues + LibXtract::FundamentalFrequency, 
+                                  scalarFeatureValues + LibXtract::HarmonicTristimulus1);
         }
 
-        if (calculateLibXtractScalarFeature [XtractHarmonicTristimulus2])
+        if (calculateLibXtractScalarFeature [LibXtract::HarmonicTristimulus2])
         {
             xtract_tristimulus_2 (harmonicSpectrum, 
                                   frameSize, 
-                                  scalarFeatureValues + XtractFundamentalFrequency, 
-                                  scalarFeatureValues + XtractHarmonicTristimulus2);
+                                  scalarFeatureValues + LibXtract::FundamentalFrequency, 
+                                  scalarFeatureValues + LibXtract::HarmonicTristimulus2);
         }
 
-        if (calculateLibXtractScalarFeature [XtractHarmonicTristimulus3])
+        if (calculateLibXtractScalarFeature [LibXtract::HarmonicTristimulus3])
         {
             xtract_tristimulus_3 (harmonicSpectrum, 
                                   frameSize, 
-                                  scalarFeatureValues + XtractFundamentalFrequency, 
-                                  scalarFeatureValues + XtractHarmonicTristimulus3);
+                                  scalarFeatureValues + LibXtract::FundamentalFrequency, 
+                                  scalarFeatureValues + LibXtract::HarmonicTristimulus3);
         }
 
-        if (calculateLibXtractScalarFeature [XtractNoisiness])
+        if (calculateLibXtractScalarFeature [LibXtract::Noisiness])
         {
             xtract_nonzero_count (harmonicSpectrum,
                                   frameSize / 2,
@@ -750,15 +780,15 @@ void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &
             xtract_noisiness (NULL, 
                               0, 
                               argumentArray, 
-                              scalarFeatureValues + XtractNoisiness);
+                              scalarFeatureValues + LibXtract::Noisiness);
         }
 
-        if (calculateLibXtractScalarFeature [XtractHarmonicParityRatio])
+        if (calculateLibXtractScalarFeature [LibXtract::HarmonicParityRatio])
         {
             xtract_odd_even_ratio (harmonicSpectrum, 
                                    frameSize, 
-                                   scalarFeatureValues + XtractFundamentalFrequency, 
-                                   scalarFeatureValues + XtractHarmonicParityRatio);
+                                   scalarFeatureValues + LibXtract::FundamentalFrequency, 
+                                   scalarFeatureValues + LibXtract::HarmonicParityRatio);
         }
 
         if (calculateLibXtractBarkCoefficients)
@@ -779,6 +809,52 @@ void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &
                                       frameSize / 2,
                                       &libXtractMelFilters,
                                       mfccs);
+        }
+    }
+}
+
+void SAFEFeatureExtractor::addLibXtractFeaturesToList (Array <AudioFeature> &featureList, int timeStamp)
+{
+    for (int channel = 0; channel < numChannels; ++channel)
+    {
+        for (int i = LibXtract::TemporalMean; i < LibXtract::NumScalarFeatures; ++i)
+        {
+            if (saveLibXtractScalarFeature [i])
+            {
+                AudioFeature tempFeature;
+                tempFeature.name = LibXtract::getFeatureName (i);
+                tempFeature.timeStamp = timeStamp;
+                tempFeature.channelNumber = channel;
+                tempFeature.values.add (libXtractScalarFeatureValues.getReference (channel) [i]);
+                tempFeature.hasDuration = false;
+                tempFeature.duration = 0;
+
+                featureList.add (tempFeature);
+            }
+        }
+
+        if (calculateLibXtractBarkCoefficients)
+        {
+            tempFeature.name = LibXtract::getFeatureName (LibXtract::BarkCoefficients);
+            tempFeature.timeStamp = timeStamp;
+            tempFeature.channelNumber = channel;
+            tempFeature.values = libXtractBarkCoefficients.getReference (channel);
+            tempFeature.hasDuration = false;
+            tempFeature.duration = 0;
+
+            featureList.add (tempFeature);
+        }
+
+        if (calculateLibXtractMFCCs)
+        {
+            tempFeature.name = LibXtract::getFeatureName (LibXtract::MFCCs);
+            tempFeature.timeStamp = timeStamp;
+            tempFeature.channelNumber = channel;
+            tempFeature.values = libXtractMFCCs.getReference (channel);
+            tempFeature.hasDuration = false;
+            tempFeature.duration = 0;
+
+            featureList.add (tempFeature);
         }
     }
 }

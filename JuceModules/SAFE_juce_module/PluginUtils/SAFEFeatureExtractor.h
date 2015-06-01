@@ -1,76 +1,9 @@
 #ifndef SAFE_FEATURE_EXTRACTOR_H_INCLUDED
 #define SAFE_FEATURE_EXTRACTOR_H_INCLUDED
 
-enum LibXtractFeature
-{
-    // Temporal Features
-    XtractTemporalMean = 0,
-    XtractTemporalVariance,
-    XtractTemporalStandardDeviation,
-    XtractRMSAmplitude,
-    XtractZeroCrossingRate,
-    
-    // Spectral Features
-    XtractFundamentalFrequency,
-    XtractSpectralCentriod,
-    XtractSpectralVariance,
-    XtractSpectralStandardDeviation,
-    XtractSpectralSkewness,
-    XtractSpectralKurtosis,
-    XtractJensenIrregularity,
-    XtractKrimphoffIrregularity,
-    XtractSpectralSmoothness,
-    XtractSpectralRollOff,
-    XtractSpectralFlatness,
-    XtractTonality,
-    XtractCrestFactor,
-    XtractSpectralSlope,
-
-    // Peak Spectral Features
-    XtractPeakSpectralCentriod,
-    XtractPeakSpectralVariance,
-    XtractPeakSpectralStandardDeviation,
-    XtractPeakSpectralSkewness,
-    XtractPeakSpectralKurtosis,
-    XtractPeakJensenIrregularity,
-    XtractPeakKrimphoffIrregularity,
-    XtractPeakTristimulus1,
-    XtractPeakTristimulus2,
-    XtractPeakTristimulus3,
-
-    // Harmonic Spectral Features
-    XtractInharmonicity,
-    XtractHarmonicSpectralCentriod,
-    XtractHarmonicSpectralVariance,
-    XtractHarmonicSpectralStandardDeviation,
-    XtractHarmonicSpectralSkewness,
-    XtractHarmonicSpectralKurtosis,
-    XtractHarmonicJensenIrregularity,
-    XtractHarmonicKrimphoffIrregularity,
-    XtractHarmonicTristimulus1,
-    XtractHarmonicTristimulus2,
-    XtractHarmonicTristimulus3,
-    XtractNoisiness,
-    XtractHarmonicParityRatio,
-
-    // Number of Features
-    NumLibXtractScalarFeatures,
-
-    // vector features
-    XtractBarkCoefficients,
-    XtractMFCCs,
-
-    // Feature Groups
-    XtractTemporalFeatures,
-    XtractSpectralFeatures,
-    XtractPeakSpectralFeatures,
-    XtractHarmonicSpectralFeatures,
-    XtractAll
-};
-
 struct AudioFeature
 {
-    String Name;
+    String name;
     int timeStamp;
     int channelNumber;
     Array <double> values;
@@ -111,7 +44,12 @@ public:
     //==========================================================================
     //      Add Features
     //==========================================================================
-    void addLibXtractFeature (LibXtractFeature feature);
+    void addLibXtractFeature (LibXtract::Feature feature);
+
+    //==========================================================================
+    //      Analyse Audio
+    //==========================================================================
+    void analyseAudio (AudioSampleBuffer buffer, Array <AudioFeature> &featureList);
 
 private:
     bool initialised;
@@ -129,9 +67,9 @@ private:
     //      libxtract stuff
     //==========================================================================
     bool libXtractSpectrumNeeded, libXtractPeakSpectrumNeeded, libXtractHarmonicSpectrumNeeded;
-    bool calculateLibXtractScalarFeature [NumLibExtractScalardFeatures];
-    bool saveLibXtractScalarFeature [NumLibExtractScalardFeatures];
-    Array <Array <double> > libXtractScalarFeatureValues [NumLibXtractScalarFeatures];
+    bool calculateLibXtractScalarFeature [LibXtract::NumScalarFeatures];
+    bool saveLibXtractScalarFeature [LibXtract::NumScalarFeatures];
+    Array <Array <double> > libXtractScalarFeatureValues [LibXtract::NumScalarFeatures];
 
     static int numLibXtractBarkBands = 25;
     HeapBlock <double> libXtractBarkBandLimits;
@@ -151,6 +89,7 @@ private:
 
     void calculateLibXtractSpectra();
     void calculateLibXtractFeatures (const AudioSampleBuffer &frame);
+    void addLibXtractFeaturesToList (Array <AudioFeature> &featureList);
 };
 
 #endif // SAFE_FEATURE_EXTRACTOR_H_INCLUDED
