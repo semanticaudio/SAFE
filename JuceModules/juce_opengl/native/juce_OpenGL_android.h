@@ -49,6 +49,10 @@ public:
             contextList.add (this);
         }
 
+        Rectangle<int> bounds = component.getTopLevelComponent()
+            ->getLocalArea (&component, component.getLocalBounds());
+        bounds *= component.getDesktopScaleFactor();
+
         updateWindowPosition (component.getTopLevelComponent()
                                 ->getLocalArea (&component, component.getLocalBounds()));
     }
@@ -60,7 +64,7 @@ public:
             contextList.removeFirstMatchingValue (this);
         }
 
-        android.activity.callVoidMethod (JuceAppActivity.deleteView, glView.get());
+        android.activity.callVoidMethod (JuceAppActivity.deleteOpenGLView, glView.get());
         glView.clear();
     }
 
@@ -161,6 +165,7 @@ bool OpenGLHelpers::isContextActive()
 
 JUCE_JNI_CALLBACK (GL_VIEW_CLASS_NAME, contextCreated, void, (JNIEnv* env, jobject view))
 {
+    threadLocalJNIEnvHolder.removeCurrentThreadFromCache();
     threadLocalJNIEnvHolder.getOrAttach();
 
     if (OpenGLContext::NativeContext* const context = OpenGLContext::NativeContext::findContextFor (env, view))

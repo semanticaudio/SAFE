@@ -309,10 +309,14 @@ WarningID SAFEAudioProcessor::populateXmlElementWithSemanticData (XmlElement* el
     }
 
     // save the channel configuration
-    XmlElement* configElement = element->createNewChildElement ("ChannelConfiguration");
+    XmlElement* configElement = element->createNewChildElement ("PlugInConfiguration");
 
     configElement->setAttribute ("Inputs", numInputs);
     configElement->setAttribute ("Outputs", numOutputs);
+    configElement->setAttribute ("SampleRate", fs);
+    configElement->setAttribute ("FrameSize", getAnalysisFrameSize());
+    configElement->setAttribute ("StepSize", getAnalysisStepSize());
+    configElement->setAttribute ("AnalysisTime", getAnalysisTime());
 
     // save the parameter settings
     XmlElement* parametersElement = element->createNewChildElement ("ParameterSettings");
@@ -326,46 +330,13 @@ WarningID SAFEAudioProcessor::populateXmlElementWithSemanticData (XmlElement* el
         parametersElement->setAttribute (xmlParameterName, currentParameterValue);
     }
 
-    // allocate some memory for checksum data
-    MemoryBlock channelChecksums;
-
     // save the unprocessed audio features
     XmlElement* unprocessedFeaturesElement = element->createNewChildElement ("UnprocessedAudioFeatures");
-    
-    for (int inputChannel = 0; inputChannel < numInputs; ++inputChannel)
-    {
-        String channelName = String ("Channel") + String (inputChannel);
-
-        XmlElement* unprocessedChannelElement = unprocessedFeaturesElement->getChildByName (channelName);
-
-        if (! unprocessedChannelElement)
-        {
-            unprocessedChannelElement = unprocessedFeaturesElement->createNewChildElement (channelName);
-        }
-
-        unprocessedFeatureExtractors [inputChannel]->addToXml (unprocessedChannelElement);
-
-        channelChecksums.append (unprocessedFeatureExtractors [inputChannel]->getMD5Checksum().getData(), 16);
-    }
+    unprocessedFeatureExtractor.addFeaturesToXmlElement (unprocessedFeaturesElement);
 
     // save the processed audio features
     XmlElement* processedFeaturesElement = element->createNewChildElement ("ProcessedAudioFeatures");
-
-    for (int outputChannel = 0; outputChannel < numOutputs; ++outputChannel)
-    {
-        String channelName = String ("Channel") + String (outputChannel);
-
-        XmlElement* processedChannelElement = processedFeaturesElement->getChildByName (channelName);
-
-        if (! processedChannelElement)
-        {
-            processedChannelElement = processedFeaturesElement->createNewChildElement (channelName);
-        }
-
-        processedFeatureExtractors [outputChannel]->addToXml (processedChannelElement);
-
-        channelChecksums.append (processedFeatureExtractors [outputChannel]->getMD5Checksum().getData(), 16);
-    }
+    processedFeatureExtractor.addFeaturesToXmlElement (processedFeaturesElement);
 
     // save the meta data
     XmlElement* metaDataElement = element->createNewChildElement ("MetaData");
@@ -376,11 +347,6 @@ WarningID SAFEAudioProcessor::populateXmlElementWithSemanticData (XmlElement* el
     metaDataElement->setAttribute ("Experience", metaData.experience);
     metaDataElement->setAttribute ("Age", metaData.age);
     metaDataElement->setAttribute ("Language", metaData.language);
-
-    // save a checksum of the audio features
-    XmlElement* checksumElement = element->createNewChildElement ("Checksum");
-    MD5 featureChecksum (channelChecksums);
-    checksumElement->setAttribute ("Checksum", featureChecksum.toHexString());
 
     return warning;
 }
@@ -419,47 +385,49 @@ WarningID SAFEAudioProcessor::saveSemanticData (const String& newDescriptors, co
 
 WarningID SAFEAudioProcessor::loadSemanticData (const String& descriptor)
 {
-    StringArray descriptorArray;
-    descriptorArray.addTokens (descriptor, " ,;", String::empty);
+    //StringArray descriptorArray;
+    //descriptorArray.addTokens (descriptor, " ,;", String::empty);
 
-    updateSemanticDataElement();
+    //updateSemanticDataElement();
 
-    if (descriptorArray.size() > 0)
-    {
-        String firstDescriptor = descriptorArray [0];
+    //if (descriptorArray.size() > 0)
+    //{
+    //    String firstDescriptor = descriptorArray [0];
 
-        if (firstDescriptor.containsNonWhitespaceChars())
-        {
-            // go through XML elements and look for the first one with the descriptor we want
-            forEachXmlChildElement (*semanticDataElement, descriptorElement)
-            {
-                int numAttributes = descriptorElement->getNumAttributes();
+    //    if (firstDescriptor.containsNonWhitespaceChars())
+    //    {
+    //        // go through XML elements and look for the first one with the descriptor we want
+    //        forEachXmlChildElement (*semanticDataElement, descriptorElement)
+    //        {
+    //            int numAttributes = descriptorElement->getNumAttributes();
 
-                for (int attribute = 0; attribute < numAttributes; ++ attribute)
-                {
-                    String attributeValue = descriptorElement->getAttributeValue (attribute);
+    //            for (int attribute = 0; attribute < numAttributes; ++ attribute)
+    //            {
+    //                String attributeValue = descriptorElement->getAttributeValue (attribute);
 
-                    if (attributeValue == firstDescriptor)
-                    {
-                        XmlElement* parametersElement = descriptorElement->getChildByName ("ParameterSettings");
+    //                if (attributeValue == firstDescriptor)
+    //                {
+    //                    XmlElement* parametersElement = descriptorElement->getChildByName ("ParameterSettings");
 
-                        for (int parameterNum = 0; parameterNum < parameters.size(); ++parameterNum)
-                        {
-                            SAFEParameter* currentParameter = parameters [parameterNum];
-                            String xmlParameterName = makeXmlString (currentParameter->getName());
-                            float newParameterValue = (float) parametersElement->getDoubleAttribute (xmlParameterName);
-                            
-                            setScaledParameterNotifyingHost (parameterNum, newParameterValue);
-                        }
+    //                    for (int parameterNum = 0; parameterNum < parameters.size(); ++parameterNum)
+    //                    {
+    //                        SAFEParameter* currentParameter = parameters [parameterNum];
+    //                        String xmlParameterName = makeXmlString (currentParameter->getName());
+    //                        float newParameterValue = (float) parametersElement->getDoubleAttribute (xmlParameterName);
+    //                        
+    //                        setScaledParameterNotifyingHost (parameterNum, newParameterValue);
+    //                    }
 
-                        return NoWarning;
-                    }
-                }
-            }
-        }
-    }
+    //                    return NoWarning;
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 
-    return DescriptorNotInFile;
+    //return DescriptorNotInFile;
+
+    return NoWarning;
 }
 
 WarningID SAFEAudioProcessor::sendDataToServer (const String& newDescriptors, const SAFEMetaData& metaData)
@@ -540,59 +508,59 @@ WarningID SAFEAudioProcessor::sendDataToServer (const String& newDescriptors, co
 
 WarningID SAFEAudioProcessor::getServerData (const String& descriptor)
 {
-    // get descriptors
-    StringArray descriptorArray;
-    descriptorArray.addTokens (descriptor, " ,;", String::empty);
-    descriptorArray.removeEmptyStrings();
+    //// get descriptors
+    //StringArray descriptorArray;
+    //descriptorArray.addTokens (descriptor, " ,;", String::empty);
+    //descriptorArray.removeEmptyStrings();
 
-    if (descriptorArray.size() > 0)
-    {
-        // we just take the first descriptor in the box
-        // This will be changed to a more comprehensive model soon...
-        String firstDescriptor = descriptorArray [0];
-        
-        // send call to script with user descriptor...
-        String userDataTableName = JucePlugin_Name + String ("UserData");
-        URL downloadParamData ("http://193.60.133.151/SAFE/download.php");
-        downloadParamData = downloadParamData.withParameter(String("TableName"),   userDataTableName);
-        downloadParamData = downloadParamData.withParameter(String("Descriptors"), firstDescriptor);
-        
-        // just returns an ordered list of strings for the params...
-        String dbOutput = downloadParamData.readEntireTextStream();
-        
-        //return the param values from the download.php script.
-        StringArray outputStringArray, fieldNames, paramValues;
-        outputStringArray.addTokens(dbOutput, ",");
-        outputStringArray.removeEmptyStrings();
-        
-        if (outputStringArray.size()>0) // if the term exists
-        {
-            // seperate the strings into fields and paramValues.
-            for (int i=0; i<outputStringArray.size()-1; i+=2)
-            {
-                fieldNames.add(outputStringArray[i].removeCharacters(", "));
-                paramValues.add(outputStringArray[i+1].removeCharacters(", "));
-            }
-            
-            for (int parameterNum = 0; parameterNum < parameters.size(); ++parameterNum)
-            {
-                String tempFieldName = String ("Param_") + makeXmlString (parameters [parameterNum]->getName());
-                int index = fieldNames.indexOf (tempFieldName);
+    //if (descriptorArray.size() > 0)
+    //{
+    //    // we just take the first descriptor in the box
+    //    // This will be changed to a more comprehensive model soon...
+    //    String firstDescriptor = descriptorArray [0];
+    //    
+    //    // send call to script with user descriptor...
+    //    String userDataTableName = JucePlugin_Name + String ("UserData");
+    //    URL downloadParamData ("http://193.60.133.151/SAFE/download.php");
+    //    downloadParamData = downloadParamData.withParameter(String("TableName"),   userDataTableName);
+    //    downloadParamData = downloadParamData.withParameter(String("Descriptors"), firstDescriptor);
+    //    
+    //    // just returns an ordered list of strings for the params...
+    //    String dbOutput = downloadParamData.readEntireTextStream();
+    //    
+    //    //return the param values from the download.php script.
+    //    StringArray outputStringArray, fieldNames, paramValues;
+    //    outputStringArray.addTokens(dbOutput, ",");
+    //    outputStringArray.removeEmptyStrings();
+    //    
+    //    if (outputStringArray.size()>0) // if the term exists
+    //    {
+    //        // seperate the strings into fields and paramValues.
+    //        for (int i=0; i<outputStringArray.size()-1; i+=2)
+    //        {
+    //            fieldNames.add(outputStringArray[i].removeCharacters(", "));
+    //            paramValues.add(outputStringArray[i+1].removeCharacters(", "));
+    //        }
+    //        
+    //        for (int parameterNum = 0; parameterNum < parameters.size(); ++parameterNum)
+    //        {
+    //            String tempFieldName = String ("Param_") + makeXmlString (parameters [parameterNum]->getName());
+    //            int index = fieldNames.indexOf (tempFieldName);
 
-                float newParameterValue = String (paramValues[index]).getFloatValue();
-                setScaledParameterNotifyingHost (parameterNum, newParameterValue);
-            }
-            return NoWarning;
-        }
-        else
-        {
-            return DescriptorNotOnServer;
-        }
-    }
-    else
-    {
-        return DescriptorNotOnServer;
-    }
+    //            float newParameterValue = String (paramValues[index]).getFloatValue();
+    //            setScaledParameterNotifyingHost (parameterNum, newParameterValue);
+    //        }
+    //        return NoWarning;
+    //    }
+    //    else
+    //    {
+    //        return DescriptorNotOnServer;
+    //    }
+    //}
+    //else
+    //{
+    //    return DescriptorNotOnServer;
+    //}
 }
 
 //==========================================================================
@@ -639,36 +607,19 @@ void SAFEAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     // get the channel configuration
     numInputs = getNumInputChannels();
     numOutputs = getNumOutputChannels();
+    fs = sampleRate;
 
     // work out how many frames we will get in the analysis time 
-    int samplesInRecording = (int) floor (sampleRate * analysisTime / 1000);
-    numAnalysisFrames = (int) floor ((float) (samplesInRecording / analysisFrameLength));
-    numSamplesToRecord = numAnalysisFrames * analysisFrameLength;
+    int samplesInRecording = (int) floor (sampleRate * getAnalysisTime() / 1000);
+    numAnalysisFrames = (int) floor ((float) (samplesInRecording / getAnalysisFrameSize()));
+    numSamplesToRecord = numAnalysisFrames * getAnalysisFrameSize();
 
     // set up analysis buffers
-    unprocessedBuffer.clear();
-    unprocessedFeatureExtractors.clear();
+    unprocessedFeatureBuffer.setSize (numInputs, numSamplesToRecord);
+    processedFeatureBuffer.setSize (numOutputs, numSamplesToRecord);
 
-    for (int inputChannel = 0; inputChannel < numInputs; ++inputChannel)
-    {
-        unprocessedBuffer.add (new Array <double>);
-        unprocessedBuffer [inputChannel]->resize (numSamplesToRecord);
-
-        unprocessedFeatureExtractors.add (new SAFEFeatureExtractor);
-        unprocessedFeatureExtractors [inputChannel]->initialise (numAnalysisFrames, analysisFrameLength, sampleRate);
-    }
-
-    processedBuffer.clear();
-    processedFeatureExtractors.clear();
-
-    for (int outputChannel = 0; outputChannel < numOutputs; ++outputChannel)
-    {
-        processedBuffer.add (new Array <double>);
-        processedBuffer [outputChannel]->resize (numSamplesToRecord);
-
-        processedFeatureExtractors.add (new SAFEFeatureExtractor);
-        processedFeatureExtractors [outputChannel]->initialise (numAnalysisFrames, analysisFrameLength, sampleRate);
-    }
+    unprocessedFeatureExtractor.initialise (numInputs, getAnalysisFrameSize(), getAnalysisStepSize(), sampleRate);
+    processedFeatureExtractor.initialise (numOutputs, getAnalysisFrameSize(), getAnalysisStepSize(), sampleRate);
 
     for (int i = 0; i < parameters.size(); ++i)
     {
@@ -807,6 +758,8 @@ bool SAFEAudioProcessor::startRecording (const String& descriptors, const SAFEMe
         currentProcessedAnalysisFrame = 0;
         unprocessedTap = 0;
         processedTap = 0;
+        unprocessedSamplesToRecord = numSamplesToRecord;
+        processedSamplesToRecord = numSamplesToRecord;
 
         descriptorsToSave = descriptors;
         metaDataToSave = metaData;
@@ -835,6 +788,21 @@ bool SAFEAudioProcessor::isReadyToSave()
     return readyToSave;
 }
 
+int SAFEAudioProcessor::getAnalysisFrameSize()
+{
+    return 4096;
+}
+
+int SAFEAudioProcessor::getAnalysisStepSize()
+{
+    return 4096;
+}
+
+int SAFEAudioProcessor::getAnalysisTime()
+{
+    return 5000;
+}
+
 //==========================================================================
 //      Methods to Create New Parameters
 //==========================================================================
@@ -861,20 +829,18 @@ void SAFEAudioProcessor::recordUnprocessedSamples (AudioSampleBuffer& buffer)
     {
         int numSamples = buffer.getNumSamples();
 
-        for (int i = 0; i < numSamples; ++i)
+        if (unprocessedSamplesToRecord < numSamples)
         {
-            for (int inputChannel = 0; inputChannel < numInputs; ++inputChannel)
-            {
-                unprocessedBuffer [inputChannel]->set (unprocessedTap, buffer.getSample (inputChannel, i));
-            }
-
-            ++unprocessedTap;
-
-            if (unprocessedTap >= numSamplesToRecord)
-            {
-                break;
-            }
+            numSamples = unprocessedSamplesToRecord;
         }
+
+        for (int channel = 0; channel < numOutputs; ++channel)
+        {
+            unprocessedBuffer.copyFrom (channel, unprocessedTap, buffer, channel, 0, numSamples);
+        }
+
+        unprocessedTap += numSamples;
+        unprocessedSamplesToRecord -= numSamples;
     }
 }
 
@@ -884,20 +850,22 @@ void SAFEAudioProcessor::recordProcessedSamples (AudioSampleBuffer& buffer)
     {
         int numSamples = buffer.getNumSamples();
 
-        for (int i = 0; i < numSamples; ++i)
+        if (processedSamplesToRecord < numSamples)
         {
-            for (int outputChannel = 0; outputChannel < numOutputs; ++outputChannel)
-            {
-                processedBuffer [outputChannel]->set (processedTap, buffer.getSample (outputChannel, i));
-            }
+            numSamples = processedSamplesToRecord;
+        }
 
-            ++processedTap;
+        for (int channel = 0; channel < numOutputs; ++channel)
+        {
+            processedBuffer.copyFrom (channel, processedTap, buffer, channel, 0, numSamples);
+        }
 
-            if (processedTap >= numSamplesToRecord)
-            {
-                startAnalysisThread();
-                break;
-            }
+        processedTap += numSamples;
+        processedSamplesToRecord -= numSamples;
+
+        if (processedSamplesToRecord == 0)
+        {
+            startAnalysisThread();
         }
     }
 }
@@ -907,38 +875,10 @@ void SAFEAudioProcessor::recordProcessedSamples (AudioSampleBuffer& buffer)
 //==========================================================================
 WarningID SAFEAudioProcessor::analyseRecordedSamples()
 {
-    for (int frameNum = 0; frameNum < numAnalysisFrames; ++frameNum)
-    {
-        for (int inputChannel = 0; inputChannel < numInputs; ++inputChannel)
-        {
-            double* unprocessedSamples = unprocessedBuffer [inputChannel]->getRawDataPointer() + analysisFrameLength * frameNum;
+    unprocessedFeatureExtractor.analyseAudio (unprocessedBuffer);
+    processedFeatureExtractor.analyseAudio (processedBuffer);
 
-            unprocessedFeatureExtractors [inputChannel]->getAllFeatures (unprocessedSamples, analysisFrameLength, frameNum);
-        }
-
-        for (int outputChannel = 0; outputChannel < numOutputs; ++outputChannel)
-        {
-            double* processedSamples = processedBuffer [outputChannel]->getRawDataPointer() + analysisFrameLength * frameNum;
-
-            processedFeatureExtractors [outputChannel]->getAllFeatures (processedSamples, analysisFrameLength, frameNum);
-        }
-    }
-
-    bool signalUnprocessed = true;
-
-    for (int channel = 0; channel < numInputs; ++channel)
-    {   
-        signalUnprocessed = signalUnprocessed && * (unprocessedFeatureExtractors [channel]) == * (processedFeatureExtractors [channel]);
-    }
-
-    if (signalUnprocessed)
-    {
-        return AudioNotProcessed;
-    }
-    else
-    {
-        return NoWarning;
-    }
+    return NoWarning;
 }
 
 //==========================================================================

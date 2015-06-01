@@ -154,7 +154,7 @@ public:
 
         This will search the list of registered commands for one with the given command
         ID number, and return its associated info. If no matching command is found, this
-        will return 0.
+        will return nullptr.
     */
     const ApplicationCommandInfo* getCommandForID (CommandID commandID) const noexcept;
 
@@ -308,6 +308,7 @@ private:
     void sendListenerInvokeCallback (const ApplicationCommandTarget::InvocationInfo&);
     void handleAsyncUpdate() override;
     void globalFocusChanged (Component*) override;
+    ApplicationCommandInfo* getMutableCommandForID (CommandID) const noexcept;
 
    #if JUCE_CATCH_DEPRECATED_CODE_MISUSE
     // This is just here to cause a compile error in old code that hasn't been changed to use the new

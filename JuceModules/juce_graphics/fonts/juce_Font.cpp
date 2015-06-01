@@ -30,12 +30,16 @@ namespace FontValues
     }
 
     const float defaultFontHeight = 14.0f;
+    float minimumHorizontalScale = 0.7f;
     String fallbackFont;
     String fallbackFontStyle;
 }
 
 typedef Typeface::Ptr (*GetTypefaceForFont) (const Font&);
 GetTypefaceForFont juce_getTypefaceForFont = nullptr;
+
+float Font::getDefaultMinimumHorizontalScaleFactor() noexcept   { return FontValues::minimumHorizontalScale; }
+void Font::setDefaultMinimumHorizontalScaleFactor (float newValue) noexcept  { FontValues::minimumHorizontalScale = newValue; }
 
 //==============================================================================
 class TypefaceCache  : private DeletedAtShutdown
@@ -51,7 +55,7 @@ public:
         clearSingletonInstance();
     }
 
-    juce_DeclareSingleton (TypefaceCache, false);
+    juce_DeclareSingleton (TypefaceCache, false)
 
     void setSize (const int numToCache)
     {

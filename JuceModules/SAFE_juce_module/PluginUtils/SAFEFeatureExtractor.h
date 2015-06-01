@@ -39,7 +39,7 @@ public:
      *                          frame length
      *  @param sampleRate       the sample rate of the audio to be analysed
      */
-    void initialise (int numChannelsInit, int frameOrderInit, int stepSizeInit, double sampleRate);
+    void initialise (int numChannelsInit, int frameSizeInit, int stepSizeInit, double sampleRate);
 
     //==========================================================================
     //      Add Features
@@ -49,7 +49,8 @@ public:
     //==========================================================================
     //      Analyse Audio
     //==========================================================================
-    void analyseAudio (AudioSampleBuffer buffer, Array <AudioFeature> &featureList);
+    void analyseAudio (AudioSampleBuffer buffer);
+    void addFeaturesToXmlElement (XmlElement *element);
 
 private:
     bool initialised;
@@ -60,6 +61,8 @@ private:
     const FFT *fft;
     bool spectrumNeeded;
     AudioSampleBuffer spectra;
+
+    Array <AudioFeature> featureList;
 
     void calculateSpectra (const AudioSampleBuffer &frame);
     

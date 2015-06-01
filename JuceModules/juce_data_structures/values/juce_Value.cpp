@@ -72,12 +72,12 @@ public:
     {
     }
 
-    var getValue() const
+    var getValue() const override
     {
         return value;
     }
 
-    void setValue (const var& newValue)
+    void setValue (const var& newValue) override
     {
         if (! newValue.equalsWithSameType (value))
         {
@@ -109,12 +109,6 @@ Value::Value (const var& initialValue)  : value (new SimpleValueSource (initialV
 
 Value::Value (const Value& other)  : value (other.value)
 {
-}
-
-Value& Value::operator= (const Value& other)
-{
-    value = other.value;
-    return *this;
 }
 
 #if JUCE_COMPILER_SUPPORTS_MOVE_SEMANTICS

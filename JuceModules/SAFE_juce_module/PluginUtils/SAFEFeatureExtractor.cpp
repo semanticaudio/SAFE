@@ -40,18 +40,23 @@ SAFEFeatureExtractor::~SAFEFeatureExtractor()
 //==========================================================================
 //      Setup
 //==========================================================================
-void SAFEFeatureExtractor::initialise (int numChannelsInit, int frameOrderInit, int stepSizeInit, double sampleRate)
+void SAFEFeatureExtractor::initialise (int numChannelsInit, int frameSizeInit, int stepSizeInit, double sampleRate)
 {
     // save the number of channels
     numChannels = numChannelsInit;
 
     // calculate the frame size
-    frameSize = 1 << frameOrderInit;
+    frameSize = frameSizeInit;
+
+    frameOrder = floor (log (frameSize) / log (2));
+
+    // frame size must be a power of two
+    jassert (pow (2, frameOrder) == frameSize);
 
     // get the FFT object creating a new one if needs be
     if (! fftCache.count (frameSize))
     {
-        fftCache.insert (std::pair <int, ScopedPointer <FFT> > (frameSize, new FFT (frameOrderInit, false)));
+        fftCache.insert (std::pair <int, ScopedPointer <FFT> > (frameSize, new FFT (frameOrder, false)));
     }
 
     fft = fftCache [frameSize].get();
@@ -283,19 +288,21 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
     }
 }
 
-void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer, Array <AudioFeature> &featureList)
+void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer)
 {
     // the number of channels passed in must be the number the extractor was
     // initialised for
     jassert (buffer.getNumChannels == numChannels);
 
-    int numSamples = buffer.getNumSamples;
+    int numSamples = buffer.getNumSamples();
 
     // can't do any analysis without enough samples
     if (numSamples < frameSize)
     {
         return;
     }
+
+    featureList.clear();
 
     int lastFrameStart = numSamples - frameSize;
 
@@ -308,6 +315,31 @@ void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer, Array <Audio
         calculateSpectra (frameBuffer);
         calculateLibXtractFeatures (frameBuffer);
         addLibXtractFeaturesToList (featureList, frameStart);
+    }
+}
+
+void SAFEFeatureExtractor::addFeaturesToXmlElement (XmlElement *element)
+{
+    int numFeatures = featureList.size();
+
+    for (int i = numFeatures - 1; i >= 0; --i)
+    {
+        const AudioFeature &currentFeature = featureList.getReference (i);
+        int numValues = currentFeature.size();
+
+        for (int i = numValues - 1; i >= 0; --i)
+        {
+            XmlElement *featureElement = new XmlElement ("AudioFeature");
+            featureElement->setAttribute ("Name", currentFeature.name);
+            featureElement->setAttribute ("Time", currentFeature.timeStamp);
+            featureElement->setAttribute ("Channel", currentFeature.channelNumber);
+            featureElement->setAttribute ("ArrayIndex", i);
+            featureElement->setAttribute ("Value", currentFeature.values [i]);
+            featureElement->setAttribute ("HasDuration", currentFeature.hasDuration);
+            featureElement->setAttribute ("Duration", currentFeature.duration);
+
+            element->prependChildElement (featureElement);
+        }
     }
 }
 

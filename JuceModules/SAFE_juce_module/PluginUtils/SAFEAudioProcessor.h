@@ -266,6 +266,24 @@ public:
     /** Returns true if the plug-in has finished recording and is ready to save. */
     bool isReadyToSave();
 
+    /** Returns the size of the analysis frames in samples. 
+     *
+     *  Override this function to change the frame size.
+     */
+    virtual int getAnalysisFrameSize();
+
+    /** Returns the step size between analysis frames in samples.
+     *
+     *  Override this function to change the step size.
+     */
+    virtual int getAnalysisStepSize();
+
+    /** Returns the time the audio is analysed for in milliseconds.
+     *
+     *  Override this function to change the analysis time.
+     */
+    virtual int getAnalysisTime();
+
 protected:
     //==========================================================================
     //      Methods to Create New Parameters
@@ -320,6 +338,7 @@ protected:
     //==========================================================================
     //      Multiple Channel Stuff
     //==========================================================================
+    double fs;
     int numInputs; /**< The number of audio inputs. */
     int numOutputs; /**< The number of audio outputs. */
 
@@ -346,14 +365,13 @@ private:
     ScopedPointer <XmlElement> semanticDataElement;
     void updateSemanticDataElement();
 
-    static const int analysisTime = 5000;
-    static const int analysisFrameLength = 4096;
     int numAnalysisFrames, currentUnprocessedAnalysisFrame, currentProcessedAnalysisFrame;
     int numSamplesToRecord;
-    OwnedArray <Array <double> > unprocessedBuffer, processedBuffer;
+    AudioSampleBuffer unprocessedBuffer, processedBuffer;
     int unprocessedTap, processedTap;
+    int unprocessedSamplesToRecord, processedSamplesToRecord;
 
-    OwnedArray <SAFEFeatureExtractor> unprocessedFeatureExtractors, processedFeatureExtractors;
+    SAFEFeatureExtractor unprocessedFeatureExtractor, processedFeatureExtractor;
 
     double controlRate;
     int controlBlockSize;

@@ -384,7 +384,7 @@ void LowLevelGraphicsPostScriptRenderer::fillPath (const Path& path, const Affin
     {
         // this doesn't work correctly yet - it could be improved to handle solid gradients, but
         // postscript can't do semi-transparent ones.
-        notPossibleInPostscriptAssert   // you can disable this warning by setting the WARN_ABOUT_NON_POSTSCRIPT_OPERATIONS flag at the top of this file
+        notPossibleInPostscriptAssert;   // you can disable this warning by setting the WARN_ABOUT_NON_POSTSCRIPT_OPERATIONS flag at the top of this file
 
         writeClip();
         out << "gsave ";
@@ -433,11 +433,11 @@ void LowLevelGraphicsPostScriptRenderer::writeImage (const Image& im,
                 {
                     PixelARGB p (*(const PixelARGB*) pixelData);
                     p.unpremultiply();
-                    pixel = Colours::white.overlaidWith (Colour (p.getARGB()));
+                    pixel = Colours::white.overlaidWith (Colour (p));
                 }
                 else if (im.isRGB())
                 {
-                    pixel = Colour (((const PixelRGB*) pixelData)->getARGB());
+                    pixel = Colour (*((const PixelRGB*) pixelData));
                 }
                 else
                 {

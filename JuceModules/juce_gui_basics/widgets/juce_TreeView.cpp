@@ -925,6 +925,14 @@ struct TreeView::InsertPoint
             pos.x = itemPos.getX();
             item = item->getParentItem();
         }
+        else if (TreeViewItem* root = view.getRootItem())
+        {
+            // If they're dragging beyond the bottom of the list, then insert at the end of the root item..
+            item = root;
+            insertIndex = root->getNumSubItems();
+            pos = root->getItemPosition (true).getBottomLeft();
+            pos.x += view.getIndentSize();
+        }
     }
 
     Point<int> pos;
@@ -1773,6 +1781,11 @@ TreeViewItem* TreeViewItem::getNextVisibleItem (const bool recurse) const noexce
     return nullptr;
 }
 
+static String escapeSlashesInTreeViewItemName (const String& s)
+{
+    return s.replaceCharacter ('/', '\\');
+}
+
 String TreeViewItem::getItemIdentifierString() const
 {
     String s;
@@ -1780,12 +1793,12 @@ String TreeViewItem::getItemIdentifierString() const
     if (parentItem != nullptr)
         s = parentItem->getItemIdentifierString();
 
-    return s + "/" + getUniqueName().replaceCharacter ('/', '\\');
+    return s + "/" + escapeSlashesInTreeViewItemName (getUniqueName());
 }
 
 TreeViewItem* TreeViewItem::findItemFromIdentifierString (const String& identifierString)
 {
-    const String thisId ("/" + getUniqueName());
+    const String thisId ("/" + escapeSlashesInTreeViewItemName (getUniqueName()));
 
     if (thisId == identifierString)
         return this;
