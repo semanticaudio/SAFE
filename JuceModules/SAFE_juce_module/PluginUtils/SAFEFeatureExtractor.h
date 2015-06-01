@@ -4,6 +4,12 @@
 typedef Vamp::HostExt::PluginLoader VampPluginLoader;
 typedef Vamp::HostExt::PluginLoader::PluginKey VampPluginKey;
 typedef Vamp::Plugin VampPlugin;
+typedef Vamp::RealTime VampTime;
+typedef Vamp::Plugin::OutputList VampOutputList;
+typedef Vamp::Plugin::OutputDescriptor VampOutputDescriptor;
+typedef Vamp::Plugin::FeatureSet VampFeatureSet;
+typedef Vamp::Plugin::FeatureList VampFeatureList;
+typedef Vamp::Plugin::Feature VampFeature;
 
 struct AudioFeature
 {
@@ -105,6 +111,11 @@ private:
     VampPluginLoader *vampPluginLoader;
     Array <VampPluginKey> vampPluginKeys;
     OwnedArray <VampPlugin> vampPlugins;
+    Array <VampOutputList> vampOutputs;
+
+    void calculateVampPluginFeatures (const AudioSampleBuffer &frame, int timeStamp);
+    void getRemainingVampPluginFeatures();
+    void addVampPluginFeaturesToList (VampOutputList &outputs, VampFeatureSet &features);
 };
 
 #endif // SAFE_FEATURE_EXTRACTOR_H_INCLUDED
