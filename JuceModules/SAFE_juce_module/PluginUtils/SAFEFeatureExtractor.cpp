@@ -28,6 +28,9 @@ SAFEFeatureExtractor::SAFEFeatureExtractor()
 
     libXtractMelFilters.n_filters = numLibXtractMelFilters;
     libXtractMelFilters.filters = new double* [numLibXtractMelFilters];
+
+    // get the vamp loader instance
+    vampPluginLoader = VampPluginLoader::getInstance();
 }
 
 SAFEFeatureExtractor::~SAFEFeatureExtractor()
@@ -112,6 +115,22 @@ void SAFEFeatureExtractor::initialise (int numChannelsInit, int frameSizeInit, i
     }
 
     libXtractChannelData.allocate (frameSize, true);
+
+    // initialise vamp plug-ins
+    vampPlugins.clear();
+
+    for (int i = 0; i < vampPluginKeys.size(); ++i)
+    {
+        VampPluginKey pluginKey = vampPluginKeys [i];
+
+        if (VampPlugin *newPlugin = vampPluginLoader->loadPlugin (pluginKey,
+                fs, VampPluginLoader::ADAPT_CHANNEL_COUNT |
+                    VampPluginLoader::ADAPT_BUFFER_SIZE))
+        {
+            vampPlugins.add (newPlugin);
+            newPlugin->initialise (numChannels, stepSize, frameSize);
+        }
+    }
 
     initialised = true;
 }
@@ -286,6 +305,13 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
                 break;
         }
     }
+}
+
+void SAFEFeatureExtractor::addVampPlugin (const String &libraryName, const String &pluginName)
+{
+    VampPluginKey pluginKey = vampPluginLoader->composePluginKey (libraryName.toRawUTF8(),
+                                                                  pluginName.toRawUTF8());
+    vampPluginKeys.add (pluginKey);
 }
 
 void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer)

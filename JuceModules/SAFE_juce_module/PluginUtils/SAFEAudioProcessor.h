@@ -331,6 +331,7 @@ protected:
      *  @param feature  the feature to extract
      */
     void addLibXtractFeature (LibXtract::Feature feature);
+    void addVampPlugin (const String &libraryName, const String &pluginName);
 
     //==========================================================================
     //      Play Head Stuff

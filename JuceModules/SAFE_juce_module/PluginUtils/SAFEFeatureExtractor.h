@@ -1,6 +1,10 @@
 #ifndef SAFE_FEATURE_EXTRACTOR_H_INCLUDED
 #define SAFE_FEATURE_EXTRACTOR_H_INCLUDED
 
+typedef Vamp::HostExt::PluginLoader VampPluginLoader;
+typedef Vamp::HostExt::PluginLoader::PluginKey VampPluginKey;
+typedef Vamp::Plugin VampPlugin;
+
 struct AudioFeature
 {
     String name;
@@ -45,6 +49,7 @@ public:
     //      Add Features
     //==========================================================================
     void addLibXtractFeature (LibXtract::Feature feature);
+    void addVampPlugin (const String &libraryName, const String &pluginName);
 
     //==========================================================================
     //      Analyse Audio
@@ -93,6 +98,13 @@ private:
     void calculateLibXtractSpectra();
     void calculateLibXtractFeatures (const AudioSampleBuffer &frame);
     void addLibXtractFeaturesToList (Array <AudioFeature> &featureList, int timeStamp);
+
+    //==========================================================================
+    //      vamp stuff
+    //==========================================================================
+    VampPluginLoader *vampPluginLoader;
+    Array <VampPluginKey> vampPluginKeys;
+    OwnedArray <VampPlugin> vampPlugins;
 };
 
 #endif // SAFE_FEATURE_EXTRACTOR_H_INCLUDED

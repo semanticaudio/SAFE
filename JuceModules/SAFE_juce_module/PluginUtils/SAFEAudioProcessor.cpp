@@ -831,6 +831,12 @@ void SAFEAudioProcessor::addLibXtractFeature (LibXtract::Feature feature)
     processedFeatureExtractor.addLibXtractFeature (feature);
 }
 
+void SAFEAudioProcessor::addVampPlugin (const String &libraryName, const String &pluginName)
+{
+    unprocessedFeatureExtractor.addVampPlugin (libraryName, pluginName);
+    processedFeatureExtractor.addVampPlugin (libraryName, pluginName);
+}
+
 //==========================================================================
 //      Buffer Playing Audio For Analysis
 //==========================================================================

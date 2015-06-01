@@ -5,6 +5,8 @@
 #include "../juce_audio_processors/juce_audio_processors.h"
 #include "../juce_cryptography/juce_cryptography.h"
 
+#include "vamp-hostsdk/PluginLoader.h"
+
 #include "xtract/libxtract.h"
 
 #include <complex>
