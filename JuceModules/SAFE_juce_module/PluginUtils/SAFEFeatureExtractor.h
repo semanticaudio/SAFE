@@ -49,7 +49,7 @@ public:
      *                          frame length
      *  @param sampleRate       the sample rate of the audio to be analysed
      */
-    void initialise (int numChannelsInit, int frameSizeInit, int stepSizeInit, double sampleRate);
+    void initialise (int numChannelsInit, int defaultFrameSizeInit, int defaultStepSizeInit, double sampleRate);
 
     //==========================================================================
     //      Add Features
@@ -65,21 +65,36 @@ public:
 
 private:
     bool initialised;
-    int numChannels, frameSize, stepSize;
+    int numChannels, defaultFrameSize, defaultStepSize;
     double fs;
 
+    // some fft bits
     std::map <int, ScopedPointer <FFT> > fftCache;
-    const FFT *fft;
-    bool spectrumNeeded;
-    AudioSampleBuffer spectra;
+    std::map <int, AudioSampleBuffer> spectraCache;
+
+    void cacheNewFFT (int size);
 
     Array <AudioFeature> featureList;
 
     void calculateSpectra (const AudioSampleBuffer &frame);
+
+    struct AnalysisConfiguration
+    {
+        int frameSize;
+        int stepSize;
+        bool libXtractConfiguration;
+        Array <int> vampPluginIndicies;
+    };
+
+    OwnedArray <AnalysisConfiguration> analysisConfigurations;
+
+    AnalysisConfiguration* addNewAnalysisConfiguration (int frameSize, int stepSize, bool libXtractConfiguration);
+    void addVampPluginToAnalysisConfigurations (int pluginIndex, int frameSize, int stepSize);
     
     //==========================================================================
     //      libxtract stuff
     //==========================================================================
+    bool usingLibXtract;
     bool libXtractSpectrumNeeded, libXtractPeakSpectrumNeeded, libXtractHarmonicSpectrumNeeded;
     bool calculateLibXtractScalarFeature [LibXtract::NumScalarFeatures];
     bool saveLibXtractScalarFeature [LibXtract::NumScalarFeatures];
@@ -101,6 +116,7 @@ private:
 
     HeapBlock <double> libXtractChannelData;
 
+    void initialiseLibXtract();
     void calculateLibXtractSpectra();
     void calculateLibXtractFeatures (const AudioSampleBuffer &frame);
     void addLibXtractFeaturesToList (Array <AudioFeature> &featureList, int timeStamp);
@@ -113,9 +129,13 @@ private:
     OwnedArray <VampPlugin> vampPlugins;
     Array <VampOutputList> vampOutputs;
 
-    void calculateVampPluginFeatures (const AudioSampleBuffer &frame, int timeStamp);
+    void initialiseVampPlugins();
+    void loadAndInitialiseVampPlugin (const VampPluginKey &key);
+    void calculateVampPluginFeatures (const Array <int> &plugins, const AudioSampleBuffer &frame, int timeStamp);
     void getRemainingVampPluginFeatures();
     void addVampPluginFeaturesToList (VampOutputList &outputs, VampFeatureSet &features);
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SAFEFeatureExtractor);
 };
 
 #endif // SAFE_FEATURE_EXTRACTOR_H_INCLUDED
