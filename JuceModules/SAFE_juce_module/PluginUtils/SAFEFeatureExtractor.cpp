@@ -258,6 +258,8 @@ void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer)
 
     featureList.clear();
 
+    resetVampPlugins();
+
     for (int i = 0; i < analysisConfigurations.size(); ++i)
     {
         AnalysisConfiguration *config = analysisConfigurations [i];
@@ -987,6 +989,14 @@ void SAFEFeatureExtractor::initialiseVampPlugins()
     }
 }
 
+void SAFEFeatureExtractor::resetVampPlugins()
+{
+    for (int i = 0; i < vampPlugins.size(); ++i)
+    {
+        vampPlugins [i]->reset();
+    }
+}
+
 void SAFEFeatureExtractor::loadAndInitialiseVampPlugin(const VampPluginKey &key)
 {
     VampPlugin *newPlugin = vampPluginLoader->loadPlugin (key,
@@ -995,24 +1005,30 @@ void SAFEFeatureExtractor::loadAndInitialiseVampPlugin(const VampPluginKey &key)
 
     if (newPlugin == 0)
     {
-        Logger::outputDebugString ("Failed to load vamp Plugin: " + key);
+        Logger::outputDebugString ("Failed to load vamp plug-in: " + key);
         return;
     }
 
     vampPlugins.add (newPlugin);
 
-    int pluginFrameSize = defaultFrameSize;
-    int pluginStepSize = defaultStepSize;
+    int pluginFrameSize = newPlugin->getPreferredBlockSize();
+    int pluginStepSize = newPlugin->getPreferredStepSize();
 
-    if (! newPlugin->initialise (numChannels, defaultStepSize, defaultFrameSize))
+    if (pluginFrameSize == 0)
     {
-        pluginFrameSize = newPlugin->getPreferredBlockSize();
-        pluginStepSize = newPlugin->getPreferredStepSize();
+        pluginFrameSize = defaultFrameSize;
+    }
 
-        if (! newPlugin->initialise (numChannels, pluginStepSize, pluginFrameSize))
-        {
-            vampPlugins.removeObject (newPlugin);
-        }
+    if (pluginStepSize == 0)
+    {
+        pluginStepSize = defaultStepSize;
+    }
+
+    if (! newPlugin->initialise (numChannels, pluginStepSize, pluginFrameSize))
+    {
+        vampPlugins.removeObject (newPlugin);
+        Logger::outputDebugString ("Failed to initialise vamp plug-in: " + key);
+        return;
     }
 
     addVampPluginToAnalysisConfigurations (vampPlugins.size() - 1, pluginFrameSize, pluginStepSize);

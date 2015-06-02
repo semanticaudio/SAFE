@@ -130,6 +130,7 @@ private:
     Array <VampOutputList> vampOutputs;
 
     void initialiseVampPlugins();
+    void resetVampPlugins();
     void loadAndInitialiseVampPlugin (const VampPluginKey &key);
     void calculateVampPluginFeatures (const Array <int> &plugins, const AudioSampleBuffer &frame, int timeStamp);
     void getRemainingVampPluginFeatures();
