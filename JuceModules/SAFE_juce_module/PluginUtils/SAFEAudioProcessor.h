@@ -284,6 +284,18 @@ public:
      */
     virtual int getAnalysisTime();
 
+    /** Set a windowing function for use in the spectral analysis.
+     *
+     *  During spectral analysis each frame of audio is passed to the windowing 
+     *  function to have a window applied. By default the spectral analysis uses
+     *  a Hann window.
+     *
+     *  @param newWindowingFunction  a pointer to the new windowing function to use -
+     *                               the function should apply a window function of length
+     *                               numSamples to the audioData
+     */
+    void setSpectralAnalysisWindowingFunction (void (*newWindowingFunction) (float* audioData, int numSamples));
+
 protected:
     //==========================================================================
     //      Methods to Create New Parameters

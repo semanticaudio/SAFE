@@ -61,6 +61,7 @@ public:
     //      Analyse Audio
     //==========================================================================
     void analyseAudio (AudioSampleBuffer &buffer);
+    void setWindowingFunction (void (*newWindowingFunction) (float*, int));
     void addFeaturesToXmlElement (XmlElement *element);
 
 private:
@@ -77,6 +78,8 @@ private:
     Array <AudioFeature> featureList;
 
     void calculateSpectra (const AudioSampleBuffer &frame);
+    void (*windowingFunction) (float*, int);
+    static void applyHannWindow (float *data, int numSamples);
 
     struct AnalysisConfiguration
     {
@@ -94,7 +97,6 @@ private:
     //==========================================================================
     //      libxtract stuff
     //==========================================================================
-    bool usingLibXtract;
     bool libXtractSpectrumNeeded, libXtractPeakSpectrumNeeded, libXtractHarmonicSpectrumNeeded;
     bool calculateLibXtractScalarFeature [LibXtract::NumScalarFeatures];
     bool saveLibXtractScalarFeature [LibXtract::NumScalarFeatures];
@@ -134,7 +136,12 @@ private:
     void loadAndInitialiseVampPlugin (const VampPluginKey &key);
     void calculateVampPluginFeatures (const Array <int> &plugins, const AudioSampleBuffer &frame, int timeStamp);
     void getRemainingVampPluginFeatures();
-    void addVampPluginFeaturesToList (VampOutputList &outputs, VampFeatureSet &features);
+    void addVampPluginFeaturesToList (VampOutputList &outputs, VampFeatureSet &features, int timeStamp);
+    bool getVampPluginFeatureTimeAndDuration (AudioFeature &newFeature, 
+                                              const VampOutputDescriptor &output,
+                                              const VampFeature &feature,
+                                              int timeStamp);
+    int nextVampFeatureTimeStamp;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SAFEFeatureExtractor);
 };

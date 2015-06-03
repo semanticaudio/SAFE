@@ -7,13 +7,14 @@ SAFEFeatureExtractor::SAFEFeatureExtractor()
       defaultFrameSize (0),
       defaultStepSize (0),
       fs (0.0),
-      usingLibXtract (false),
+      windowingFunction (applyHannWindow),
       libXtractSpectrumNeeded (false),
       libXtractPeakSpectrumNeeded (false),
       libXtractHarmonicSpectrumNeeded (false),
       calculateLibXtractBarkCoefficients (false),
       libXtractMelFiltersInitialised (false),
-      calculateLibXtractMFCCs (false)
+      calculateLibXtractMFCCs (false),
+      nextVampFeatureTimeStamp (0)
 {
     // initialise libxtract arrays
     for (int i = 0; i < LibXtract::NumScalarFeatures; ++i)
@@ -236,8 +237,6 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
                 break;
         }
     }
-
-    usingLibXtract = true;
 }
 
 void SAFEFeatureExtractor::addVampPlugin (const String &libraryName, const String &pluginName)
@@ -251,7 +250,7 @@ void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer)
 {
     // the number of channels passed in must be the number the extractor was
     // initialised for
-    //jassert (buffer.getNumChannels() == numChannels);
+    jassert (buffer.getNumChannels() == numChannels);
 
     int numSamples = buffer.getNumSamples();
     float **audioData = buffer.getArrayOfWritePointers();
@@ -288,6 +287,11 @@ void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer)
     }
     
     getRemainingVampPluginFeatures();
+}
+
+void SAFEFeatureExtractor::setWindowingFunction (void (*newWindowingFunction) (float*, int))
+{
+    windowingFunction = newWindowingFunction;
 }
 
 void SAFEFeatureExtractor::addFeaturesToXmlElement (XmlElement *element)
@@ -350,17 +354,26 @@ void SAFEFeatureExtractor::calculateSpectra (const AudioSampleBuffer &frame)
     for (int i = 0; i < numChannels; ++i)
     {
         spectra.copyFrom (i, 0, frame, i, 0, numSamples);
+        windowingFunction (spectra.getWritePointer (i), numSamples);
         fft->performRealOnlyForwardTransform (spectra.getWritePointer (i));
     }
 
     // scale spectra
     float singleBinGain = 1.0f / numSamples;
-    float duplicateBinGain = 2.0f * numSamples;
+    float duplicateBinGain = 2.0f * singleBinGain;
     spectra.applyGain (0, 1, singleBinGain);
     spectra.applyGain (1, 1, 0);
     spectra.applyGain (2, numSamples - 2, duplicateBinGain);
     spectra.applyGain (numSamples, 1, singleBinGain);
     spectra.applyGain (numSamples + 1, 1, 0);
+}
+
+void SAFEFeatureExtractor::applyHannWindow (float *data, int numSamples)
+{
+    for (int i = 0; i < numSamples; ++i)
+    {
+        data [i] *= 0.5 * (1 - cos (2 * float_Pi * i / (numSamples - 1)));
+    }
 }
 
 SAFEFeatureExtractor::AnalysisConfiguration* SAFEFeatureExtractor::addNewAnalysisConfiguration(int frameSize, int stepSize, bool libXtractConfiguration)
@@ -1031,6 +1044,10 @@ void SAFEFeatureExtractor::loadAndInitialiseVampPlugin(const VampPluginKey &key)
         return;
     }
 
+    Logger::outputDebugString ("Initialised vamp plug-in: " + key + " with:\n"
+                               "Frame Size: " + String (pluginFrameSize) + "\n"
+                               "Step Size " + String (pluginStepSize));
+
     addVampPluginToAnalysisConfigurations (vampPlugins.size() - 1, pluginFrameSize, pluginStepSize);
     vampOutputs.add (newPlugin->getOutputDescriptors());
 
@@ -1061,7 +1078,7 @@ void SAFEFeatureExtractor::calculateVampPluginFeatures (const Array <int> &plugi
         }
 
         VampOutputList &output = vampOutputs.getReference (i);
-        addVampPluginFeaturesToList (output, features);
+        addVampPluginFeaturesToList (output, features, timeStamp);
     }
 }
 
@@ -1073,37 +1090,117 @@ void SAFEFeatureExtractor::getRemainingVampPluginFeatures()
         VampFeatureSet features = currentPlugin->getRemainingFeatures();
 
         VampOutputList &output = vampOutputs.getReference (i);
-        addVampPluginFeaturesToList (output, features);
+        addVampPluginFeaturesToList (output, features, 0);
     }
 }
 
-void SAFEFeatureExtractor::addVampPluginFeaturesToList (VampOutputList &outputs, VampFeatureSet &features)
+void SAFEFeatureExtractor::addVampPluginFeaturesToList (VampOutputList &outputs, VampFeatureSet &features, int timeStamp)
 {
-    for (int output = 0; output < outputs.size(); ++output)
+    for (int feature = 0; feature < features.size(); ++feature)
     {
-        VampOutputDescriptor &currentOutput = outputs [output];
-        VampFeatureList &currentFeatureList = features [output];
+		VampOutputDescriptor &currentOutput = outputs[feature];
+		VampFeatureList &currentFeatureList = features[feature];
 
         String featureName = currentOutput.name;
 
-        for (int feature = 0; feature < currentFeatureList.size(); ++feature)
+        for (int i = 0; i < currentFeatureList.size(); ++i)
         {
-            VampFeature &currentFeature = currentFeatureList [feature];
+            VampFeature &currentFeature = currentFeatureList [i];
+
+            nextVampFeatureTimeStamp = timeStamp;
 
 			AudioFeature tempFeature;
 
             tempFeature.name = "Vamp " + featureName;
-            tempFeature.timeStamp = currentFeature.timestamp.msec();
             tempFeature.channelNumber = 0;
-            tempFeature.hasDuration = currentFeature.hasDuration;
-            tempFeature.duration = currentFeature.duration.msec();
+
+            bool ignoreFeature = getVampPluginFeatureTimeAndDuration (tempFeature, currentOutput, currentFeature, timeStamp);
 
             for (int value = 0; value < currentFeature.values.size(); ++value)
             {
                 tempFeature.values.add (currentFeature.values [value]);
             }
 
-            featureList.add (tempFeature);
+            if (! ignoreFeature)
+            {
+                featureList.add (tempFeature);
+            }
         }
     }
+}
+
+bool SAFEFeatureExtractor::getVampPluginFeatureTimeAndDuration (AudioFeature &newFeature, 
+                                                                const VampOutputDescriptor &output,
+                                                                const VampFeature &feature,
+                                                                int timeStamp)
+{
+    switch (output.sampleType)
+    {
+        case VampOutputDescriptor::OneSamplePerStep:
+            newFeature.timeStamp = timeStamp;
+            newFeature.hasDuration = false;
+            newFeature.duration = 0;
+            break;
+
+        case VampOutputDescriptor::FixedSampleRate:
+            if (output.sampleRate == 0)
+            {
+                return true;
+            }
+
+            if (feature.hasTimestamp)
+            {
+                newFeature.timeStamp = feature.timestamp.msec();
+            }
+            else
+            {
+                int timeStampIncrement = 1000 / output.sampleRate;
+
+                newFeature.timeStamp = nextVampFeatureTimeStamp;
+                nextVampFeatureTimeStamp += timeStampIncrement;
+            }
+
+            newFeature.hasDuration = true;
+
+            if (feature.hasDuration)
+            {
+                newFeature.duration = feature.duration.msec();
+            }
+            else
+            {
+                newFeature.duration = 0;
+            }
+
+            break;
+
+        case VampOutputDescriptor::VariableSampleRate:
+            if (! feature.hasTimestamp)
+            {
+                return true;
+            }
+
+            newFeature.timeStamp = feature.timestamp.msec();
+
+            newFeature.hasDuration = true;
+
+            if (feature.hasDuration)
+            {
+                newFeature.duration = feature.duration.msec();
+            }
+            else
+            {
+                int minimalDuration = 0;
+
+                if (output.sampleRate != 0)
+                {
+                    minimalDuration = 1000 / output.sampleRate;
+                }
+
+                newFeature.duration = minimalDuration;
+            }
+            
+            break;
+    }
+
+    return false;
 }

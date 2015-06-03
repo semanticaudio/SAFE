@@ -805,6 +805,12 @@ int SAFEAudioProcessor::getAnalysisTime()
     return 5000;
 }
 
+void SAFEAudioProcessor::setSpectralAnalysisWindowingFunction (void (*newWindowingFunction) (float* audioData, int numSamples))
+{
+    unprocessedFeatureExtractor.setWindowingFunction (newWindowingFunction);
+    processedFeatureExtractor.setWindowingFunction (newWindowingFunction);
+}
+
 //==========================================================================
 //      Methods to Create New Parameters
 //==========================================================================
@@ -969,6 +975,7 @@ void SAFEAudioProcessor::timerCallback()
 void SAFEAudioProcessor::resetRecording()
 {
     recording = false;
+    readyToSave = true;
     stopTimer();
 }
 
