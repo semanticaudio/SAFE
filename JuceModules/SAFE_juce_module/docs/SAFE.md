@@ -3,28 +3,64 @@ SAFE
 
 @htmlonly
 <script type="text/javascript">
-function toggleMoose()
-{
-	if (typeof toggleMoose.current == 'undefined')
-	{
-		toggleMoose.current = 0;
-	}
 
-	if (toggleMoose.current)
+function getWidth()
+{
+	if (document.width !== undefined)
 	{
-		document.getElementById("moose").src="moose.png";
-		toggleMoose.current = 0;
+		return document.width;
 	}
 	else
 	{
-		document.getElementById("moose").src="moose_horn.png";
-		toggleMoose.current = 1;
+		return document.body.offsetWidth;
 	}
+}
+
+function getHeight()
+{
+	if (document.height !== undefined)
+	{
+		return document.height;
+	}
+	else
+	{
+		return document.body.offsetHeight;
+	}
+}
+
+function releaseTheMoose()
+{
+	var title = document.getElementById("title");
+	title.src = "titleAlone.png";
+	title.onclick = "";
+
+	var moose = document.createElement("img");
+	moose.src = "mooseAlone.png";
+	moose.style.position = "absolute";
+	moose.style.left = title.offsetLeft + "px";
+	moose.style.top = title.offsetTop + "px";
+	moose.id = "moose";
+	document.body.appendChild(moose);
+
+	var xDirection = 2;
+	var yDirection = 2;
+
+	setInterval (function bounce()
+		{
+			if (moose.x < 0 || moose.x > (getWidth() - moose.width))
+				xDirection *= -1;
+
+			if (moose.y < 0 || moose.y > (getHeight() - moose.height))
+				yDirection *= -1;
+
+			moose.style.left = moose.x + xDirection + "px";
+			moose.style.top = moose.y + yDirection + "px";
+		}, 10);
 }
 </script>
 
 <div style="text-align: center">
-	<img id="moose" src="moose.png" onclick="toggleMoose()"/>
+	<img id="title" src="moose.png" onclick="releaseTheMoose()"/>
 </div>
 @endhtmlonly
 
