@@ -578,8 +578,8 @@ WarningID SAFEAudioProcessor::startAnalysisThread()
     }
     else
     {
-        analysisThread->setParameters (descriptorsToSave, metaDataToSave, sendToServer);
         resetRecording();
+        analysisThread->setParameters (descriptorsToSave, metaDataToSave, sendToServer);
         analysisThread->startThread();
     }
 
@@ -963,19 +963,20 @@ void SAFEAudioProcessor::timerCallback()
     {
         resetRecording();
         sendWarningToEditor (ParameterChange);
+        readyToSave = true;
     }
 
     if (! isPlaying())
     {
         resetRecording();
         sendWarningToEditor (AudioNotPlaying);
+        readyToSave = true;
     }
 }
 
 void SAFEAudioProcessor::resetRecording()
 {
     recording = false;
-    readyToSave = true;
     stopTimer();
 }
 

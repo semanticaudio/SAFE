@@ -255,7 +255,7 @@ void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer)
     int numSamples = buffer.getNumSamples();
     float **audioData = buffer.getArrayOfWritePointers();
 
-    featureList.clear();
+    featureLists.clear();
 
     resetVampPlugins();
 
@@ -279,7 +279,7 @@ void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer)
             if (config->libXtractConfiguration)
             {
                 calculateLibXtractFeatures (frameBuffer);
-                addLibXtractFeaturesToList (featureList, time);
+                addLibXtractFeaturesToList (time);
             }
 
             calculateVampPluginFeatures (config->vampPluginIndicies, frameBuffer, time);
@@ -296,26 +296,47 @@ void SAFEFeatureExtractor::setWindowingFunction (void (*newWindowingFunction) (f
 
 void SAFEFeatureExtractor::addFeaturesToXmlElement (XmlElement *element)
 {
-    int numFeatures = featureList.size();
-
-    for (int i = numFeatures - 1; i >= 0; --i)
+    for (AudioFeatureSet::reverse_iterator i = featureLists.rbegin(); i != featureLists.rend(); ++i)
     {
-        const AudioFeature &currentFeature = featureList.getReference (i);
-        int numValues = currentFeature.values.size();
+        String featureName = i->first;
 
-        for (int i = numValues - 1; i >= 0; --i)
+        XmlElement *featureElement = new XmlElement ("AudioFeature");
+        featureElement->setAttribute ("Name", featureName);
+
+        AudioFeatureList &featureList = i->second;
+        int numFeatures = featureList.features.size();
+
+        featureElement->setAttribute ("FrameSize", featureList.frameSize);
+        featureElement->setAttribute ("StepSize", featureList.stepSize);
+
+        for (int i = numFeatures - 1; i >= 0; --i)
         {
-            XmlElement *featureElement = new XmlElement ("AudioFeature");
-            featureElement->setAttribute ("Name", currentFeature.name);
-            featureElement->setAttribute ("Time", currentFeature.timeStamp);
-            featureElement->setAttribute ("Channel", currentFeature.channelNumber);
-            featureElement->setAttribute ("ArrayIndex", i);
-            featureElement->setAttribute ("Value", currentFeature.values [i]);
-            featureElement->setAttribute ("HasDuration", currentFeature.hasDuration);
-            featureElement->setAttribute ("Duration", currentFeature.duration);
+            AudioFeature &currentFeature = featureList.features.getReference (i);
 
-            element->prependChildElement (featureElement);
+            XmlElement *valueElement = new XmlElement ("Value");
+            valueElement->setAttribute ("TimeStamp", currentFeature.timeStamp);
+            valueElement->setAttribute ("Duration", currentFeature.duration);
+            valueElement->setAttribute ("Channel", currentFeature.channelNumber);
+
+            String valueString;
+            int numValues = currentFeature.values.size();
+
+            for (int d = 0; d < numValues - 1; ++d)
+            {
+                valueString += String (currentFeature.values [d]) + ", ";
+            }
+
+            if (numValues)
+            {
+                valueString += String (currentFeature.values.getLast());
+            }
+
+            valueElement->setAttribute ("Values", valueString);
+
+            featureElement->prependChildElement (valueElement);
         }
+
+        element->prependChildElement (featureElement);
     }
 }
 
@@ -411,6 +432,19 @@ void SAFEFeatureExtractor::addVampPluginToAnalysisConfigurations (int pluginInde
 
     configToAlter->vampPluginIndicies.add (pluginIndex);
 
+}
+
+const SAFEFeatureExtractor::AnalysisConfiguration* SAFEFeatureExtractor::getVampPluginAnalysisConfiguration (int pluginIndex)
+{
+    for (int i = 0; i < analysisConfigurations.size(); ++i)
+    {
+        const AnalysisConfiguration *config = analysisConfigurations [i];
+
+        if (config->vampPluginIndicies.contains (pluginIndex))
+        {
+            return config;
+        }
+    }
 }
 
 void SAFEFeatureExtractor::deleteLibXtractMelFilters()
@@ -941,7 +975,7 @@ void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &
     }
 }
 
-void SAFEFeatureExtractor::addLibXtractFeaturesToList (Array <AudioFeature> &featureList, int timeStamp)
+void SAFEFeatureExtractor::addLibXtractFeaturesToList (int timeStamp)
 {
     for (int channel = 0; channel < numChannels; ++channel)
     {
@@ -949,44 +983,60 @@ void SAFEFeatureExtractor::addLibXtractFeaturesToList (Array <AudioFeature> &fea
         {
             if (saveLibXtractScalarFeature [i])
             {
+                String featureName = LibXtract::getFeatureName (static_cast <LibXtract::Feature> (i));
                 AudioFeature tempFeature;
-                tempFeature.name = LibXtract::getFeatureName (static_cast <LibXtract::Feature> (i));
+
                 tempFeature.timeStamp = timeStamp;
                 tempFeature.channelNumber = channel;
                 tempFeature.values.add (libXtractScalarFeatureValues.getReference (channel) [i]);
-                tempFeature.hasDuration = false;
                 tempFeature.duration = 0;
 
-                featureList.add (tempFeature);
+                if (! featureLists.count (featureName))
+                {
+                    featureLists [featureName].frameSize = defaultFrameSize;
+                    featureLists [featureName].stepSize = defaultStepSize;
+                }
+
+                featureLists [featureName].features.add (tempFeature);
             }
         }
 
         if (calculateLibXtractBarkCoefficients)
         {
+            String featureName = LibXtract::getFeatureName (LibXtract::BarkCoefficients);
 			AudioFeature tempFeature;
 
-            tempFeature.name = LibXtract::getFeatureName (LibXtract::BarkCoefficients);
             tempFeature.timeStamp = timeStamp;
             tempFeature.channelNumber = channel;
             tempFeature.values = libXtractBarkCoefficients.getReference (channel);
-            tempFeature.hasDuration = false;
             tempFeature.duration = 0;
 
-            featureList.add (tempFeature);
+            if (! featureLists.count (featureName))
+            {
+                featureLists [featureName].frameSize = defaultFrameSize;
+                featureLists [featureName].stepSize = defaultStepSize;
+            }
+
+            featureLists [featureName].features.add (tempFeature);
         }
 
         if (calculateLibXtractMFCCs)
         {
+            String featureName = LibXtract::getFeatureName (LibXtract::MFCCs);
 			AudioFeature tempFeature;
 
-            tempFeature.name = LibXtract::getFeatureName (LibXtract::MFCCs);
             tempFeature.timeStamp = timeStamp;
             tempFeature.channelNumber = channel;
             tempFeature.values = libXtractMFCCs.getReference (channel);
-            tempFeature.hasDuration = false;
             tempFeature.duration = 0;
 
-            featureList.add (tempFeature);
+            if (! featureLists.count (featureName))
+            {
+                featureLists [featureName].frameSize = defaultFrameSize;
+                featureLists [featureName].stepSize = defaultStepSize;
+            }
+
+            featureLists [featureName].features.add (tempFeature);
         }
     }
 }
@@ -1078,7 +1128,7 @@ void SAFEFeatureExtractor::calculateVampPluginFeatures (const Array <int> &plugi
         }
 
         VampOutputList &output = vampOutputs.getReference (i);
-        addVampPluginFeaturesToList (output, features, timeStamp);
+        addVampPluginFeaturesToList (output, features, timeStamp, i);
     }
 }
 
@@ -1090,18 +1140,18 @@ void SAFEFeatureExtractor::getRemainingVampPluginFeatures()
         VampFeatureSet features = currentPlugin->getRemainingFeatures();
 
         VampOutputList &output = vampOutputs.getReference (i);
-        addVampPluginFeaturesToList (output, features, 0);
+        addVampPluginFeaturesToList (output, features, 0, i);
     }
 }
 
-void SAFEFeatureExtractor::addVampPluginFeaturesToList (VampOutputList &outputs, VampFeatureSet &features, int timeStamp)
+void SAFEFeatureExtractor::addVampPluginFeaturesToList (VampOutputList &outputs, VampFeatureSet &features, int timeStamp, int pluginIndex)
 {
     for (int feature = 0; feature < features.size(); ++feature)
     {
 		VampOutputDescriptor &currentOutput = outputs[feature];
 		VampFeatureList &currentFeatureList = features[feature];
 
-        String featureName = currentOutput.name;
+        String featureName = "Vamp " + currentOutput.name;
 
         for (int i = 0; i < currentFeatureList.size(); ++i)
         {
@@ -1111,7 +1161,6 @@ void SAFEFeatureExtractor::addVampPluginFeaturesToList (VampOutputList &outputs,
 
 			AudioFeature tempFeature;
 
-            tempFeature.name = "Vamp " + featureName;
             tempFeature.channelNumber = 0;
 
             bool ignoreFeature = getVampPluginFeatureTimeAndDuration (tempFeature, currentOutput, currentFeature, timeStamp);
@@ -1123,7 +1172,15 @@ void SAFEFeatureExtractor::addVampPluginFeaturesToList (VampOutputList &outputs,
 
             if (! ignoreFeature)
             {
-                featureList.add (tempFeature);
+                if (! featureLists.count (featureName))
+                {
+                    const AnalysisConfiguration *config = getVampPluginAnalysisConfiguration (pluginIndex);
+
+                    featureLists [featureName].frameSize = config->frameSize;
+                    featureLists [featureName].stepSize = config->stepSize;
+                }
+
+                featureLists [featureName].features.add (tempFeature);
             }
         }
     }
@@ -1138,7 +1195,6 @@ bool SAFEFeatureExtractor::getVampPluginFeatureTimeAndDuration (AudioFeature &ne
     {
         case VampOutputDescriptor::OneSamplePerStep:
             newFeature.timeStamp = timeStamp;
-            newFeature.hasDuration = false;
             newFeature.duration = 0;
             break;
 
@@ -1160,8 +1216,6 @@ bool SAFEFeatureExtractor::getVampPluginFeatureTimeAndDuration (AudioFeature &ne
                 nextVampFeatureTimeStamp += timeStampIncrement;
             }
 
-            newFeature.hasDuration = true;
-
             if (feature.hasDuration)
             {
                 newFeature.duration = feature.duration.msec();
@@ -1180,8 +1234,6 @@ bool SAFEFeatureExtractor::getVampPluginFeatureTimeAndDuration (AudioFeature &ne
             }
 
             newFeature.timeStamp = feature.timestamp.msec();
-
-            newFeature.hasDuration = true;
 
             if (feature.hasDuration)
             {

@@ -13,13 +13,20 @@ typedef Vamp::Plugin::Feature VampFeature;
 
 struct AudioFeature
 {
-    String name;
     int timeStamp;
     int channelNumber;
     Array <double> values;
-    bool hasDuration;
     int duration;
 };
+
+struct AudioFeatureList
+{
+    int frameSize;
+    int stepSize;
+    Array <AudioFeature> features;
+};
+
+typedef std::map <String, AudioFeatureList> AudioFeatureSet;
 
 /** 
  *  A class for extracting features from a block of audio.
@@ -75,7 +82,7 @@ private:
 
     void cacheNewFFT (int size);
 
-    Array <AudioFeature> featureList;
+    AudioFeatureSet featureLists;
 
     void calculateSpectra (const AudioSampleBuffer &frame);
     void (*windowingFunction) (float*, int);
@@ -93,6 +100,7 @@ private:
 
     AnalysisConfiguration* addNewAnalysisConfiguration (int frameSize, int stepSize, bool libXtractConfiguration);
     void addVampPluginToAnalysisConfigurations (int pluginIndex, int frameSize, int stepSize);
+    const AnalysisConfiguration* getVampPluginAnalysisConfiguration (int pluginIndex);
     
     //==========================================================================
     //      libxtract stuff
@@ -121,7 +129,7 @@ private:
     void initialiseLibXtract();
     void calculateLibXtractSpectra();
     void calculateLibXtractFeatures (const AudioSampleBuffer &frame);
-    void addLibXtractFeaturesToList (Array <AudioFeature> &featureList, int timeStamp);
+    void addLibXtractFeaturesToList (int timeStamp);
 
     //==========================================================================
     //      vamp stuff
@@ -136,7 +144,7 @@ private:
     void loadAndInitialiseVampPlugin (const VampPluginKey &key);
     void calculateVampPluginFeatures (const Array <int> &plugins, const AudioSampleBuffer &frame, int timeStamp);
     void getRemainingVampPluginFeatures();
-    void addVampPluginFeaturesToList (VampOutputList &outputs, VampFeatureSet &features, int timeStamp);
+    void addVampPluginFeaturesToList (VampOutputList &outputs, VampFeatureSet &features, int timeStamp, int pluginIndex);
     bool getVampPluginFeatureTimeAndDuration (AudioFeature &newFeature, 
                                               const VampOutputDescriptor &output,
                                               const VampFeature &feature,
