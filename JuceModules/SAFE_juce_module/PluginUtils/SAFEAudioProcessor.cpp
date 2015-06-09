@@ -319,15 +319,20 @@ WarningID SAFEAudioProcessor::populateXmlElementWithSemanticData (XmlElement* el
 
     // save the parameter settings
     XmlElement* parametersElement = element->createNewChildElement ("ParameterSettings");
+    String parameterString;
 
-    for (int parameterNum = 0; parameterNum < parameters.size(); ++parameterNum)
+    for (int parameterNum = 0; parameterNum < parameters.size() - 1; ++parameterNum)
     {
-        SAFEParameter* currentParameter = parameters [parameterNum];
-        String xmlParameterName = makeXmlString (currentParameter->getName());
         float currentParameterValue = parametersToSave [parameterNum];
-
-        parametersElement->setAttribute (xmlParameterName, currentParameterValue);
+        parameterString += String (currentParameterValue);
     }
+
+    if (parameters.size() > 0)
+    {
+        parameterString += String (parametersToSave.getLast());
+    }
+
+    parametersElement->setAttribute ("Values", parameterString);
 
     // save the unprocessed audio features
     XmlElement* unprocessedFeaturesElement = element->createNewChildElement ("UnprocessedAudioFeatures");
@@ -498,7 +503,7 @@ WarningID SAFEAudioProcessor::sendDataToServer (const String& newDescriptors, co
     ScopedPointer <InputStream> stream (dataUpload.createInputStream (true));
     #endif
 
-    //tempDataFile.deleteFile();
+    tempDataFile.deleteFile();
 
     return warning;
 }
