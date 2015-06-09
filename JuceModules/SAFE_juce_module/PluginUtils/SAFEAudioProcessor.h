@@ -296,6 +296,13 @@ public:
      */
     void setSpectralAnalysisWindowingFunction (void (*newWindowingFunction) (float* audioData, int numSamples));
 
+    /** Returns the plug-in's unique plugin code.
+     *
+     *  This should return the same code set in the introjucer. The string should
+     *  be 4 characters long and contain one uppercase letter.
+     */
+    virtual String getPluginCode() = 0;
+
 protected:
     //==========================================================================
     //      Methods to Create New Parameters

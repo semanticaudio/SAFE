@@ -20,7 +20,6 @@ SAFEFeatureExtractor::SAFEFeatureExtractor()
     for (int i = 0; i < LibXtract::NumScalarFeatures; ++i)
     {
         calculateLibXtractScalarFeature [i] = false;
-        saveLibXtractScalarFeature [i] = false;
     }
 
     // allocate bark band limits and mel filters
@@ -76,10 +75,12 @@ void SAFEFeatureExtractor::initialise (int numChannelsInit, int defaultFrameSize
 
 void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
 {
+    LibXtractFeature *newFeature = libXtractFeatureValues.add (new LibXtractFeature);
+    newFeature->featureNumber = feature;
+
     if (feature < LibXtract::NumScalarFeatures)
     {
         calculateLibXtractScalarFeature [feature] = true;
-        saveLibXtractScalarFeature [feature] = true;
 
         if (feature >= LibXtract::SpectralCentroid)
         {
@@ -175,7 +176,6 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
                 for (int i = LibXtract::TemporalMean; i <= LibXtract::ZeroCrossingRate; ++i)
                 {
                     calculateLibXtractScalarFeature [i] = true;
-                    saveLibXtractScalarFeature [i] = true;
                 }
 
                 break;
@@ -185,7 +185,6 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
                 for (int i = LibXtract::FundamentalFrequency; i <= LibXtract::SpectralSlope; ++i)
                 {
                     calculateLibXtractScalarFeature [i] = true;
-                    saveLibXtractScalarFeature [i] = true;
                 }
 
                 libXtractSpectrumNeeded = true;
@@ -196,7 +195,6 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
                 for (int i = LibXtract::PeakSpectralCentroid; i <= LibXtract::PeakTristimulus3; ++i)
                 {
                     calculateLibXtractScalarFeature [i] = true;
-                    saveLibXtractScalarFeature [i] = true;
                 }
 
                 calculateLibXtractScalarFeature [LibXtract::FundamentalFrequency] = true;
@@ -209,7 +207,6 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
                 for (int i = LibXtract::Inharmonicity; i <= LibXtract::HarmonicParityRatio; ++i)
                 {
                     calculateLibXtractScalarFeature [i] = true;
-                    saveLibXtractScalarFeature [i] = true;
                 }
 
                 calculateLibXtractScalarFeature [LibXtract::FundamentalFrequency] = true;
@@ -223,7 +220,6 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
                 for (int i = 0; i < LibXtract::NumScalarFeatures; ++i)
                 {
                     calculateLibXtractScalarFeature [i] = true;
-                    saveLibXtractScalarFeature [i] = true;
                 }
 
                 calculateLibXtractBarkCoefficients = true;
@@ -254,8 +250,6 @@ void SAFEFeatureExtractor::analyseAudio (AudioSampleBuffer &buffer)
 
     int numSamples = buffer.getNumSamples();
     float **audioData = buffer.getArrayOfWritePointers();
-
-    featureLists.clear();
 
     resetVampPlugins();
 
@@ -296,47 +290,55 @@ void SAFEFeatureExtractor::setWindowingFunction (void (*newWindowingFunction) (f
 
 void SAFEFeatureExtractor::addFeaturesToXmlElement (XmlElement *element)
 {
-    for (AudioFeatureSet::reverse_iterator i = featureLists.rbegin(); i != featureLists.rend(); ++i)
+	for (int i = 0; i < libXtractFeatureValues.size(); ++i)
     {
-        String featureName = i->first;
+        LibXtractFeature *currentFeature = libXtractFeatureValues [i];
+        String featureName = LibXtract::getFeatureName (currentFeature->featureNumber);
 
-        XmlElement *featureElement = new XmlElement ("AudioFeature");
-        featureElement->setAttribute ("Name", featureName);
+        XmlElement *featureElement = element->createNewChildElement ("FeatureSet");
+        featureElement->setAttribute ("FeatureName", featureName);
+        featureElement->setAttribute ("FrameSize", defaultFrameSize);
+        featureElement->setAttribute ("StepSize", defaultStepSize);
 
-        AudioFeatureList &featureList = i->second;
-        int numFeatures = featureList.features.size();
-
-        featureElement->setAttribute ("FrameSize", featureList.frameSize);
-        featureElement->setAttribute ("StepSize", featureList.stepSize);
-
-        for (int i = numFeatures - 1; i >= 0; --i)
+        for (int channel = 0; channel < numChannels; ++channel)
         {
-            AudioFeature &currentFeature = featureList.features.getReference (i);
+            XmlElement *channelElement = featureElement->createNewChildElement ("Channel");
+            channelElement->setAttribute ("Number", channel);
 
-            XmlElement *valueElement = new XmlElement ("Value");
-            valueElement->setAttribute ("TimeStamp", currentFeature.timeStamp);
-            valueElement->setAttribute ("Duration", currentFeature.duration);
-            valueElement->setAttribute ("Channel", currentFeature.channelNumber);
+            int numFeatures = currentFeature->featureValues.getReference (channel).size();
 
-            String valueString;
-            int numValues = currentFeature.values.size();
-
-            for (int d = 0; d < numValues - 1; ++d)
+            for (int feature = numFeatures - 1; feature >= 0; --feature)
             {
-                valueString += String (currentFeature.values [d]) + ", ";
+                addAudioFeatureToXmlElement (channelElement, currentFeature->featureValues.getReference (channel).getReference (feature));
             }
-
-            if (numValues)
-            {
-                valueString += String (currentFeature.values.getLast());
-            }
-
-            valueElement->setAttribute ("Values", valueString);
-
-            featureElement->prependChildElement (valueElement);
         }
+    }
 
-        element->prependChildElement (featureElement);
+    for (int i = 0; i < vampPlugins.size(); ++i)
+    {
+        VampPluginConfiguration *currentPlugin = vampPlugins [i];
+        int numFeatures = currentPlugin->featureValues.size();
+
+        for (int feature = 0; feature < numFeatures; ++feature)
+        {
+            String featureName = currentPlugin->outputs [feature].name;
+
+            XmlElement *featureElement = element->createNewChildElement ("FeatureSet");
+            featureElement->setAttribute ("FeatureName", featureName);
+            featureElement->setAttribute ("FrameSize", currentPlugin->frameSize);
+            featureElement->setAttribute ("StepSize", currentPlugin->stepSize);
+
+            XmlElement *channelElement = featureElement->createNewChildElement ("Channel");
+            channelElement->setAttribute ("Number", "NULL");
+
+            int numValues = currentPlugin->featureValues.getReference (feature).size();
+
+            for (int value = numValues - 1; value >= 0; --value)
+            {
+                addAudioFeatureToXmlElement (channelElement, currentPlugin->featureValues.getReference (feature).getReference (value));
+            }
+
+        }
     }
 }
 
@@ -447,6 +449,30 @@ const SAFEFeatureExtractor::AnalysisConfiguration* SAFEFeatureExtractor::getVamp
     }
 }
 
+void SAFEFeatureExtractor::addAudioFeatureToXmlElement (XmlElement *element, const AudioFeature &feature)
+{
+    XmlElement *featureElement = new XmlElement ("Feature");
+    featureElement->setAttribute ("Time", feature.timeStamp);    
+    featureElement->setAttribute ("Duration", feature.duration);    
+
+    String valueString;
+    int numValues = feature.values.size();
+
+    for (int i = 0; i < numValues - 1; ++i)
+    {
+        valueString += String (feature.values [i]) + ", ";
+    }
+
+    if (numValues > 0)
+    {
+        valueString += String (feature.values.getLast());
+    }
+
+    featureElement->setAttribute ("Values", valueString);
+
+    element->prependChildElement (featureElement);
+}
+
 void SAFEFeatureExtractor::deleteLibXtractMelFilters()
 {
     if (libXtractMelFiltersInitialised)
@@ -504,6 +530,12 @@ void SAFEFeatureExtractor::initialiseLibXtract()
     }
 
     addNewAnalysisConfiguration (defaultFrameSize, defaultStepSize, true);
+
+    // initialise the feature value arrays
+    for (int i = 0; i < libXtractFeatureValues.size(); ++i)
+    {
+        libXtractFeatureValues [i]->featureValues.resize (numChannels);
+    }
 }
 
 void SAFEFeatureExtractor::calculateLibXtractSpectra()
@@ -977,66 +1009,31 @@ void SAFEFeatureExtractor::calculateLibXtractFeatures (const AudioSampleBuffer &
 
 void SAFEFeatureExtractor::addLibXtractFeaturesToList (int timeStamp)
 {
-    for (int channel = 0; channel < numChannels; ++channel)
+    for (int i = 0; i < libXtractFeatureValues.size(); ++i)
     {
-        for (int i = LibXtract::TemporalMean; i < LibXtract::NumScalarFeatures; ++i)
+        for (int channel = 0; channel < numChannels; ++channel)
         {
-            if (saveLibXtractScalarFeature [i])
-            {
-                String featureName = LibXtract::getFeatureName (static_cast <LibXtract::Feature> (i));
-                AudioFeature tempFeature;
-
-                tempFeature.timeStamp = timeStamp;
-                tempFeature.channelNumber = channel;
-                tempFeature.values.add (libXtractScalarFeatureValues.getReference (channel) [i]);
-                tempFeature.duration = 0;
-
-                if (! featureLists.count (featureName))
-                {
-                    featureLists [featureName].frameSize = defaultFrameSize;
-                    featureLists [featureName].stepSize = defaultStepSize;
-                }
-
-                featureLists [featureName].features.add (tempFeature);
-            }
-        }
-
-        if (calculateLibXtractBarkCoefficients)
-        {
-            String featureName = LibXtract::getFeatureName (LibXtract::BarkCoefficients);
-			AudioFeature tempFeature;
-
+            AudioFeature tempFeature;
             tempFeature.timeStamp = timeStamp;
-            tempFeature.channelNumber = channel;
-            tempFeature.values = libXtractBarkCoefficients.getReference (channel);
             tempFeature.duration = 0;
 
-            if (! featureLists.count (featureName))
+            LibXtractFeature *currentFeature = libXtractFeatureValues [i];
+            LibXtract::Feature featureNumber = currentFeature->featureNumber;
+
+            if (featureNumber == LibXtract::BarkCoefficients)
             {
-                featureLists [featureName].frameSize = defaultFrameSize;
-                featureLists [featureName].stepSize = defaultStepSize;
+                tempFeature.values = libXtractBarkCoefficients [channel];
+            }
+            else if (featureNumber == LibXtract::MFCCs)
+            {
+                tempFeature.values = libXtractMFCCs [channel];
+            }
+            else if (featureNumber < LibXtract::NumScalarFeatures)
+            {
+                tempFeature.values.add (libXtractScalarFeatureValues [channel][featureNumber]);
             }
 
-            featureLists [featureName].features.add (tempFeature);
-        }
-
-        if (calculateLibXtractMFCCs)
-        {
-            String featureName = LibXtract::getFeatureName (LibXtract::MFCCs);
-			AudioFeature tempFeature;
-
-            tempFeature.timeStamp = timeStamp;
-            tempFeature.channelNumber = channel;
-            tempFeature.values = libXtractMFCCs.getReference (channel);
-            tempFeature.duration = 0;
-
-            if (! featureLists.count (featureName))
-            {
-                featureLists [featureName].frameSize = defaultFrameSize;
-                featureLists [featureName].stepSize = defaultStepSize;
-            }
-
-            featureLists [featureName].features.add (tempFeature);
+            currentFeature->featureValues.getReference (channel).add (tempFeature);
         }
     }
 }
@@ -1044,7 +1041,6 @@ void SAFEFeatureExtractor::addLibXtractFeaturesToList (int timeStamp)
 void SAFEFeatureExtractor::initialiseVampPlugins()
 {
     vampPlugins.clear();
-    vampOutputs.clear();
 
     for (int i = 0; i < vampPluginKeys.size(); ++i)
     {
@@ -1056,7 +1052,7 @@ void SAFEFeatureExtractor::resetVampPlugins()
 {
     for (int i = 0; i < vampPlugins.size(); ++i)
     {
-        vampPlugins [i]->reset();
+        vampPlugins [i]->plugin->reset();
     }
 }
 
@@ -1072,8 +1068,6 @@ void SAFEFeatureExtractor::loadAndInitialiseVampPlugin(const VampPluginKey &key)
         return;
     }
 
-    vampPlugins.add (newPlugin);
-
     int pluginFrameSize = newPlugin->getPreferredBlockSize();
     int pluginStepSize = newPlugin->getPreferredStepSize();
 
@@ -1087,9 +1081,15 @@ void SAFEFeatureExtractor::loadAndInitialiseVampPlugin(const VampPluginKey &key)
         pluginStepSize = defaultStepSize;
     }
 
+    VampPluginConfiguration *newPluginConfig = new VampPluginConfiguration;
+    newPluginConfig->plugin = newPlugin;
+    newPluginConfig->frameSize = pluginFrameSize;
+    newPluginConfig->stepSize = pluginStepSize;
+    vampPlugins.add (newPluginConfig);
+
     if (! newPlugin->initialise (numChannels, pluginStepSize, pluginFrameSize))
     {
-        vampPlugins.removeObject (newPlugin);
+        vampPlugins.removeObject (newPluginConfig);
         Logger::outputDebugString ("Failed to initialise vamp plug-in: " + key);
         return;
     }
@@ -1099,7 +1099,9 @@ void SAFEFeatureExtractor::loadAndInitialiseVampPlugin(const VampPluginKey &key)
                                "Step Size " + String (pluginStepSize));
 
     addVampPluginToAnalysisConfigurations (vampPlugins.size() - 1, pluginFrameSize, pluginStepSize);
-    vampOutputs.add (newPlugin->getOutputDescriptors());
+
+    newPluginConfig->outputs = newPlugin->getOutputDescriptors();
+    newPluginConfig->featureValues.resize (newPluginConfig->outputs.size());
 
     if (newPlugin->getInputDomain() == VampPlugin::FrequencyDomain)
     {
@@ -1111,7 +1113,7 @@ void SAFEFeatureExtractor::calculateVampPluginFeatures (const Array <int> &plugi
 {
     for (int i = 0; i < plugins.size(); ++i)
     {
-        VampPlugin *currentPlugin = vampPlugins [plugins [i]];
+        VampPlugin *currentPlugin = vampPlugins [plugins [i]]->plugin;
         VampFeatureSet features;
 
         if (currentPlugin->getInputDomain() == VampPlugin::TimeDomain)
@@ -1122,13 +1124,12 @@ void SAFEFeatureExtractor::calculateVampPluginFeatures (const Array <int> &plugi
         else
         {
 			int numSamples = frame.getNumSamples();
-			AudioSampleBuffer &spectra = spectraCache[numSamples];
+			AudioSampleBuffer &spectra = spectraCache [numSamples];
 			const float * const *spectralData = spectra.getArrayOfReadPointers();
             features = currentPlugin->process (spectralData, VampTime::fromMilliseconds (timeStamp));
         }
 
-        VampOutputList &output = vampOutputs.getReference (i);
-        addVampPluginFeaturesToList (output, features, timeStamp, i);
+        addVampPluginFeaturesToList (i, features, timeStamp);
     }
 }
 
@@ -1136,22 +1137,21 @@ void SAFEFeatureExtractor::getRemainingVampPluginFeatures()
 {
     for (int i = 0; i < vampPlugins.size(); ++i)
     {
-        VampPlugin *currentPlugin = vampPlugins [i];
+        VampPlugin *currentPlugin = vampPlugins [i]->plugin;
         VampFeatureSet features = currentPlugin->getRemainingFeatures();
 
-        VampOutputList &output = vampOutputs.getReference (i);
-        addVampPluginFeaturesToList (output, features, 0, i);
+        addVampPluginFeaturesToList (i, features, 0);
     }
 }
 
-void SAFEFeatureExtractor::addVampPluginFeaturesToList (VampOutputList &outputs, VampFeatureSet &features, int timeStamp, int pluginIndex)
+void SAFEFeatureExtractor::addVampPluginFeaturesToList (int pluginIndex, VampFeatureSet &features, int timeStamp)
 {
+    VampPluginConfiguration *currentPlugin = vampPlugins [pluginIndex];
+
     for (int feature = 0; feature < features.size(); ++feature)
     {
-		VampOutputDescriptor &currentOutput = outputs[feature];
+		VampOutputDescriptor &currentOutput = currentPlugin->outputs[feature];
 		VampFeatureList &currentFeatureList = features[feature];
-
-        String featureName = "Vamp " + currentOutput.name;
 
         for (int i = 0; i < currentFeatureList.size(); ++i)
         {
@@ -1160,8 +1160,6 @@ void SAFEFeatureExtractor::addVampPluginFeaturesToList (VampOutputList &outputs,
             nextVampFeatureTimeStamp = timeStamp;
 
 			AudioFeature tempFeature;
-
-            tempFeature.channelNumber = 0;
 
             bool ignoreFeature = getVampPluginFeatureTimeAndDuration (tempFeature, currentOutput, currentFeature, timeStamp);
 
@@ -1172,15 +1170,7 @@ void SAFEFeatureExtractor::addVampPluginFeaturesToList (VampOutputList &outputs,
 
             if (! ignoreFeature)
             {
-                if (! featureLists.count (featureName))
-                {
-                    const AnalysisConfiguration *config = getVampPluginAnalysisConfiguration (pluginIndex);
-
-                    featureLists [featureName].frameSize = config->frameSize;
-                    featureLists [featureName].stepSize = config->stepSize;
-                }
-
-                featureLists [featureName].features.add (tempFeature);
+                currentPlugin->featureValues.getReference (feature).add (tempFeature);
             }
         }
     }

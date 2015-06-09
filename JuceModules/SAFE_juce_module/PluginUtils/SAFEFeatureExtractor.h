@@ -14,19 +14,9 @@ typedef Vamp::Plugin::Feature VampFeature;
 struct AudioFeature
 {
     int timeStamp;
-    int channelNumber;
     Array <double> values;
     int duration;
 };
-
-struct AudioFeatureList
-{
-    int frameSize;
-    int stepSize;
-    Array <AudioFeature> features;
-};
-
-typedef std::map <String, AudioFeatureList> AudioFeatureSet;
 
 /** 
  *  A class for extracting features from a block of audio.
@@ -82,8 +72,6 @@ private:
 
     void cacheNewFFT (int size);
 
-    AudioFeatureSet featureLists;
-
     void calculateSpectra (const AudioSampleBuffer &frame);
     void (*windowingFunction) (float*, int);
     static void applyHannWindow (float *data, int numSamples);
@@ -101,13 +89,14 @@ private:
     AnalysisConfiguration* addNewAnalysisConfiguration (int frameSize, int stepSize, bool libXtractConfiguration);
     void addVampPluginToAnalysisConfigurations (int pluginIndex, int frameSize, int stepSize);
     const AnalysisConfiguration* getVampPluginAnalysisConfiguration (int pluginIndex);
+
+    void addAudioFeatureToXmlElement (XmlElement *element, const AudioFeature &feature);
     
     //==========================================================================
     //      libxtract stuff
     //==========================================================================
     bool libXtractSpectrumNeeded, libXtractPeakSpectrumNeeded, libXtractHarmonicSpectrumNeeded;
     bool calculateLibXtractScalarFeature [LibXtract::NumScalarFeatures];
-    bool saveLibXtractScalarFeature [LibXtract::NumScalarFeatures];
     Array <Array <double> > libXtractScalarFeatureValues;
 
     static const int numLibXtractBarkBands = 25;
@@ -126,6 +115,14 @@ private:
 
     HeapBlock <double> libXtractChannelData;
 
+    struct LibXtractFeature
+    {
+        LibXtract::Feature featureNumber;
+        Array <Array <AudioFeature> > featureValues;
+    };
+
+    OwnedArray <LibXtractFeature> libXtractFeatureValues;
+
     void initialiseLibXtract();
     void calculateLibXtractSpectra();
     void calculateLibXtractFeatures (const AudioSampleBuffer &frame);
@@ -134,17 +131,25 @@ private:
     //==========================================================================
     //      vamp stuff
     //==========================================================================
+    struct VampPluginConfiguration
+    {
+        int frameSize;
+        int stepSize;
+        ScopedPointer <VampPlugin> plugin;
+        VampOutputList outputs;
+        Array <Array <AudioFeature> > featureValues;
+    };
+
     VampPluginLoader *vampPluginLoader;
     Array <VampPluginKey> vampPluginKeys;
-    OwnedArray <VampPlugin> vampPlugins;
-    Array <VampOutputList> vampOutputs;
+    OwnedArray <VampPluginConfiguration> vampPlugins;
 
     void initialiseVampPlugins();
     void resetVampPlugins();
     void loadAndInitialiseVampPlugin (const VampPluginKey &key);
     void calculateVampPluginFeatures (const Array <int> &plugins, const AudioSampleBuffer &frame, int timeStamp);
     void getRemainingVampPluginFeatures();
-    void addVampPluginFeaturesToList (VampOutputList &outputs, VampFeatureSet &features, int timeStamp, int pluginIndex);
+    void addVampPluginFeaturesToList (int pluginIndex, VampFeatureSet &features, int timeStamp);
     bool getVampPluginFeatureTimeAndDuration (AudioFeature &newFeature, 
                                               const VampOutputDescriptor &output,
                                               const VampFeature &feature,

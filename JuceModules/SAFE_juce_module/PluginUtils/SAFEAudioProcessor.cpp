@@ -311,11 +311,10 @@ WarningID SAFEAudioProcessor::populateXmlElementWithSemanticData (XmlElement* el
     // save the channel configuration
     XmlElement* configElement = element->createNewChildElement ("PlugInConfiguration");
 
+    configElement->setAttribute ("PluginCode", getPluginCode());
     configElement->setAttribute ("Inputs", numInputs);
     configElement->setAttribute ("Outputs", numOutputs);
     configElement->setAttribute ("SampleRate", fs);
-    configElement->setAttribute ("FrameSize", getAnalysisFrameSize());
-    configElement->setAttribute ("StepSize", getAnalysisStepSize());
     configElement->setAttribute ("AnalysisTime", getAnalysisTime());
 
     // save the parameter settings
@@ -432,13 +431,11 @@ WarningID SAFEAudioProcessor::loadSemanticData (const String& descriptor)
 
 WarningID SAFEAudioProcessor::sendDataToServer (const String& newDescriptors, const SAFEMetaData& metaData)
 {
-    XmlElement tempDataElement (JucePlugin_Name);
+    XmlElement descriptorElement ("SemanticData");
 
-    XmlElement* descriptorElement = tempDataElement.createNewChildElement ("SemanticData");
+    descriptorElement.setAttribute ("Descriptors", newDescriptors);
 
-    descriptorElement->setAttribute ("Descriptors", newDescriptors);
-
-    WarningID warning = populateXmlElementWithSemanticData (descriptorElement, metaData);
+    WarningID warning = populateXmlElementWithSemanticData (&descriptorElement, metaData);
 
     if (warning != NoWarning)
     {
@@ -451,7 +448,7 @@ WarningID SAFEAudioProcessor::sendDataToServer (const String& newDescriptors, co
 
     File tempDataFile = dataDirectory.getChildFile ("tempData.xml");
 
-    tempDataElement.writeToFile (tempDataFile, "");
+    descriptorElement.writeToFile (tempDataFile, "");
 
     #if JUCE_LINUX
     CURLcode res;
@@ -486,7 +483,7 @@ WarningID SAFEAudioProcessor::sendDataToServer (const String& newDescriptors, co
     headerlist = curl_slist_append(headerlist, buf);
     if(curl) 
     {
-        curl_easy_setopt(curl->curl, CURLOPT_URL, "http://193.60.133.151/SAFE/fileUpload.php");
+        curl_easy_setopt(curl->curl, CURLOPT_URL, "http://193.60.133.151/newsafe/uploadterm.php");
         curl_easy_setopt(curl->curl, CURLOPT_HTTPPOST, formpost);
  
         res = curl_easy_perform(curl->curl);
@@ -495,13 +492,13 @@ WarningID SAFEAudioProcessor::sendDataToServer (const String& newDescriptors, co
         curl_slist_free_all (headerlist);
     }
     #else
-    URL dataUpload ("http://193.60.133.151/SAFE/fileUpload.php");
+    URL dataUpload ("http://193.60.133.151/newsafe/uploadterm.php");
     dataUpload = dataUpload.withFileToUpload ("DataFile", tempDataFile, "text/xml");
 
     ScopedPointer <InputStream> stream (dataUpload.createInputStream (true));
     #endif
 
-    tempDataFile.deleteFile();
+    //tempDataFile.deleteFile();
 
     return warning;
 }
