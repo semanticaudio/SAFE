@@ -321,7 +321,7 @@ void SAFEFeatureExtractor::addFeaturesToXmlElement (XmlElement *element)
 
         for (int feature = 0; feature < numFeatures; ++feature)
         {
-            String featureName = currentPlugin->outputs [feature].name;
+            String featureName = "Vamp " + currentPlugin->outputs [feature].name;
 
             XmlElement *featureElement = element->createNewChildElement ("FeatureSet");
             featureElement->setAttribute ("FeatureName", featureName);

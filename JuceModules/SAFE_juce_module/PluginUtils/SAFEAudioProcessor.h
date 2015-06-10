@@ -377,6 +377,11 @@ protected:
      */
     void sendWarningToEditor (WarningID warning);
 
+    //==========================================================================
+    //      Generate a details XML
+    //==========================================================================
+    void saveDetailsToXml();
+
 private:
     bool localRecording;
 

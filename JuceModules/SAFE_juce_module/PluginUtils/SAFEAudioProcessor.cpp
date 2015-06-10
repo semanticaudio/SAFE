@@ -604,6 +604,37 @@ void SAFEAudioProcessor::sendWarningToEditor (WarningID warning)
 }
 
 //==========================================================================
+//      Generate a details XML
+//==========================================================================
+void SAFEAudioProcessor::saveDetailsToXml()
+{
+    XmlElement parentElement ("Plugin");
+    parentElement.setAttribute ("Name", JucePlugin_Name);
+    parentElement.setAttribute ("Code", getPluginCode());
+
+    String parameterString;
+
+    for (int i = 0; i < parameters.size() - 1; ++i)
+    {
+        parameterString += parameters [i]->getName() + ", ";
+    }
+
+    if (parameters.size() > 0)
+    {
+        parameterString += parameters.getLast()->getName();
+    }
+
+    parentElement.setAttribute ("Parameters", parameterString);
+
+    File documentsDirectory (File::getSpecialLocation (File::userDocumentsDirectory));
+    File dataDirectory (documentsDirectory.getChildFile ("SAFEPluginData"));
+
+    File tempDataFile = dataDirectory.getChildFile (JucePlugin_Name + String ("Details.xml"));
+
+    parentElement.writeToFile (tempDataFile, "");
+}
+
+//==========================================================================
 //      Process Block
 //==========================================================================
 void SAFEAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
