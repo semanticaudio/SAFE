@@ -58,6 +58,8 @@ public:
         PARAMgain4,
         PARAMfreq4  
 	};
+	
+	virtual String getPluginCode() override;
     
 private:
     int numFilters;

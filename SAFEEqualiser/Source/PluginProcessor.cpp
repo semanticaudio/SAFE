@@ -15,6 +15,8 @@
 //==============================================================================
 SafeequaliserAudioProcessor::SafeequaliserAudioProcessor()
 {
+    addLibXtractFeature (LibXtract::AllFeatures);
+    
     numFilters = 5;
     gains.allocate (numFilters, true);
     freqs.allocate (numFilters, true);
@@ -46,6 +48,10 @@ SafeequaliserAudioProcessor::SafeequaliserAudioProcessor()
     fs = 44100;
     
     numChannels = 0;
+    
+    #ifdef JUCE_DEBUG
+    saveDetailsToXml();
+    #endif
 }
 
 SafeequaliserAudioProcessor::~SafeequaliserAudioProcessor()
@@ -150,6 +156,11 @@ void SafeequaliserAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer, M
 bool SafeequaliserAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
+}
+
+String SafeequaliserAudioProcessor::getPluginCode()
+{
+    return "SFEQ";
 }
 
 AudioProcessorEditor* SafeequaliserAudioProcessor::createEditor()

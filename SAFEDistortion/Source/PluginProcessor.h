@@ -44,6 +44,8 @@ public:
         PARAMtone,
         PARAMoutputGain
 	};    
+	
+	virtual String getPluginCode() override;
     
 private:
     OwnedArray <IIRFilter> toneFilters;

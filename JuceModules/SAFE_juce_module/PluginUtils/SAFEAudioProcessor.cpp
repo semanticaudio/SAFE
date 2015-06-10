@@ -324,7 +324,7 @@ WarningID SAFEAudioProcessor::populateXmlElementWithSemanticData (XmlElement* el
     for (int parameterNum = 0; parameterNum < parameters.size() - 1; ++parameterNum)
     {
         float currentParameterValue = parametersToSave [parameterNum];
-        parameterString += String (currentParameterValue);
+        parameterString += String (currentParameterValue) + ", ";
     }
 
     if (parameters.size() > 0)

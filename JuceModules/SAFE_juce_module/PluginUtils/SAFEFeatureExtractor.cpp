@@ -30,6 +30,9 @@ SAFEFeatureExtractor::SAFEFeatureExtractor()
 
     // get the vamp loader instance
     vampPluginLoader = VampPluginLoader::getInstance();
+
+	double jam = 0.0;
+    Logger::outputDebugString ("Test: " + doubleToString (jam / jam));
 }
 
 SAFEFeatureExtractor::~SAFEFeatureExtractor()
@@ -75,12 +78,17 @@ void SAFEFeatureExtractor::initialise (int numChannelsInit, int defaultFrameSize
 
 void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
 {
-    LibXtractFeature *newFeature = libXtractFeatureValues.add (new LibXtractFeature);
-    newFeature->featureNumber = feature;
-
     if (feature < LibXtract::NumScalarFeatures)
     {
+        if (calculateLibXtractScalarFeature [feature])
+        {
+            return;
+        }
+
         calculateLibXtractScalarFeature [feature] = true;
+
+        LibXtractFeature *newFeature = libXtractFeatureValues.add (new LibXtractFeature);
+        newFeature->featureNumber = feature;
 
         if (feature >= LibXtract::SpectralCentroid)
         {
@@ -157,25 +165,41 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
                 break;
         }
     }
+    else if (feature == LibXtract::BarkCoefficients)
+    {
+        if (calculateLibXtractBarkCoefficients)
+        {
+            return;
+        }
+
+        LibXtractFeature *newFeature = libXtractFeatureValues.add (new LibXtractFeature);
+        newFeature->featureNumber = feature;
+
+        libXtractSpectrumNeeded = true;
+        calculateLibXtractBarkCoefficients = true;
+    }
+    else if (feature == LibXtract::MFCCs)
+    {
+        if (calculateLibXtractMFCCs)
+        {
+            return;
+        }
+
+        LibXtractFeature *newFeature = libXtractFeatureValues.add (new LibXtractFeature);
+        newFeature->featureNumber = feature;
+
+        libXtractSpectrumNeeded = true;
+        calculateLibXtractMFCCs = true;
+    }
     else
     {
         switch (feature)
         {
-            case LibXtract::BarkCoefficients:
-                libXtractSpectrumNeeded = true;
-                calculateLibXtractBarkCoefficients = true;
-                break;
-
-            case LibXtract::MFCCs:
-                libXtractSpectrumNeeded = true;
-                calculateLibXtractMFCCs = true;
-                break;
-
             case LibXtract::TemporalFeatures:
 
                 for (int i = LibXtract::TemporalMean; i <= LibXtract::ZeroCrossingRate; ++i)
                 {
-                    calculateLibXtractScalarFeature [i] = true;
+                    addLibXtractFeature (static_cast <LibXtract::Feature> (i));
                 }
 
                 break;
@@ -184,49 +208,39 @@ void SAFEFeatureExtractor::addLibXtractFeature (LibXtract::Feature feature)
 
                 for (int i = LibXtract::FundamentalFrequency; i <= LibXtract::SpectralSlope; ++i)
                 {
-                    calculateLibXtractScalarFeature [i] = true;
+                    addLibXtractFeature (static_cast <LibXtract::Feature> (i));
                 }
 
-                libXtractSpectrumNeeded = true;
                 break;
 
             case LibXtract::PeakSpectralFeatures:
 
                 for (int i = LibXtract::PeakSpectralCentroid; i <= LibXtract::PeakTristimulus3; ++i)
                 {
-                    calculateLibXtractScalarFeature [i] = true;
+                    addLibXtractFeature (static_cast <LibXtract::Feature> (i));
                 }
 
-                calculateLibXtractScalarFeature [LibXtract::FundamentalFrequency] = true;
-                libXtractSpectrumNeeded = true;
-                libXtractPeakSpectrumNeeded = true;
                 break;
 
             case LibXtract::HarmonicSpectralFeatures:
 
                 for (int i = LibXtract::Inharmonicity; i <= LibXtract::HarmonicParityRatio; ++i)
                 {
-                    calculateLibXtractScalarFeature [i] = true;
+                    addLibXtractFeature (static_cast <LibXtract::Feature> (i));
                 }
 
-                calculateLibXtractScalarFeature [LibXtract::FundamentalFrequency] = true;
-                libXtractSpectrumNeeded = true;
-                libXtractPeakSpectrumNeeded = true;
-                libXtractHarmonicSpectrumNeeded = true;
                 break;
 
 			case LibXtract::AllFeatures:
                 
                 for (int i = 0; i < LibXtract::NumScalarFeatures; ++i)
                 {
-                    calculateLibXtractScalarFeature [i] = true;
+                    addLibXtractFeature (static_cast <LibXtract::Feature> (i));
                 }
 
-                calculateLibXtractBarkCoefficients = true;
-                calculateLibXtractMFCCs = true;
-                libXtractSpectrumNeeded = true;
-                libXtractPeakSpectrumNeeded = true;
-                libXtractHarmonicSpectrumNeeded = true;
+                addLibXtractFeature (LibXtract::BarkCoefficients);
+                addLibXtractFeature (LibXtract::MFCCs);
+
                 break;
 
             default:
@@ -460,17 +474,37 @@ void SAFEFeatureExtractor::addAudioFeatureToXmlElement (XmlElement *element, con
 
     for (int i = 0; i < numValues - 1; ++i)
     {
-        valueString += String (feature.values [i]) + ", ";
+        valueString += doubleToString (feature.values [i]) + ", ";
     }
 
     if (numValues > 0)
     {
-        valueString += String (feature.values.getLast());
+        valueString += doubleToString (feature.values.getLast());
     }
 
     featureElement->setAttribute ("Values", valueString);
 
     element->prependChildElement (featureElement);
+}
+
+String SAFEFeatureExtractor::doubleToString (double value)
+{
+    if (std::isnan (value))
+    {
+        return "NaN";
+    }
+    else if (value == std::numeric_limits <double>::infinity())
+    {
+        return "Infinity";
+    }
+    else if (value == -std::numeric_limits <double>::infinity())
+    {
+        return "-Infinity";
+    }
+    else
+    {
+        return String (value);
+    }
 }
 
 void SAFEFeatureExtractor::deleteLibXtractMelFilters()

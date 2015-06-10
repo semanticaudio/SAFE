@@ -91,6 +91,7 @@ private:
     const AnalysisConfiguration* getVampPluginAnalysisConfiguration (int pluginIndex);
 
     void addAudioFeatureToXmlElement (XmlElement *element, const AudioFeature &feature);
+    String doubleToString (double value);
     
     //==========================================================================
     //      libxtract stuff

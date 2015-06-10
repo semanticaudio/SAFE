@@ -101,6 +101,31 @@
         <MODULEPATH id="juce_audio_basics" path="../JuceModules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
+    <VS2013 targetFolder="Builds/VisualStudio2013" vstFolder="c:\VST3 SDK"
+            extraDefs="IMAGE_DIRECTORY=&quot;C:/Users/id115387/Documents/ResearchWork/smmp/Juce_Module_Stuff/SAFE_juce_module/LookAndFeel&quot;"
+            externalLibraries="LibXtract.lib&#10;VampHostSDK.lib" toolset="v120_xp">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="SAFECompressor" headerPath="$(SolutionDir)../../../LibXtract&#10;C:/Users/id115387/GitClones/vamp-plugin-sdk/"
+                       libraryPath="$(SolutionDir)../../../LibXtract/vc2012/LibXtract_static_llib/lib/Debug&#10;C:/Users/id115387/GitClones/vamp-plugin-sdk/build/Debug"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="SAFECompressor"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="SAFE_juce_module" path="../JuceModules"/>
+        <MODULEPATH id="juce_opengl" path="../JuceModules"/>
+        <MODULEPATH id="juce_gui_extra" path="../JuceModules"/>
+        <MODULEPATH id="juce_gui_basics" path="../JuceModules"/>
+        <MODULEPATH id="juce_graphics" path="../JuceModules"/>
+        <MODULEPATH id="juce_events" path="../JuceModules"/>
+        <MODULEPATH id="juce_data_structures" path="../JuceModules"/>
+        <MODULEPATH id="juce_cryptography" path="../JuceModules"/>
+        <MODULEPATH id="juce_core" path="../JuceModules"/>
+        <MODULEPATH id="juce_audio_processors" path="../JuceModules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../JuceModules"/>
+        <MODULEPATH id="juce_audio_basics" path="../JuceModules"/>
+      </MODULEPATHS>
+    </VS2013>
   </EXPORTFORMATS>
   <MODULES>
     <MODULES id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>

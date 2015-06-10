@@ -49,6 +49,8 @@ public:
     AudioProcessorEditor* createEditor();
     bool hasEditor() const;
 
+    virtual String getPluginCode() override;
+
 private:
     MVerb <float> reverb;
     AudioSampleBuffer tempInput, tempOutput;

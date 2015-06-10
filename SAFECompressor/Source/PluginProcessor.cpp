@@ -18,6 +18,8 @@ SafecompressorAudioProcessor::SafecompressorAudioProcessor()
       rmsDetector (1, 4096),
       rmsCounter (0)
 {
+    addLibXtractFeature (LibXtract::AllFeatures);
+    
     numChannels = 0;
     numSamples = 0;
     
@@ -36,6 +38,10 @@ SafecompressorAudioProcessor::SafecompressorAudioProcessor()
     addParameter ("Make Up Gain", makeUpGain, 0.0f, 0.0f, 20.0f, "dB"); 
     
     rmsDetector.clear();
+    
+    #ifdef JUCE_DEBUG
+    saveDetailsToXml();
+    #endif
 }
 
 SafecompressorAudioProcessor::~SafecompressorAudioProcessor()
@@ -148,6 +154,12 @@ float SafecompressorAudioProcessor::getOutputLevel()
 bool SafecompressorAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
+}
+
+
+String SafecompressorAudioProcessor::getPluginCode()
+{
+    return "SFCP";
 }
 
 AudioProcessorEditor* SafecompressorAudioProcessor::createEditor()

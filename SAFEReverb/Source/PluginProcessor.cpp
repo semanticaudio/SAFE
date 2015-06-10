@@ -17,6 +17,8 @@ SafereverbAudioProcessor::SafereverbAudioProcessor()
     : tempInput (2, 44100),
       tempOutput (2, 44100)
 {
+    addLibXtractFeature (LibXtract::AllFeatures);
+    
     tempInput.clear();
     tempOutput.clear();
     
@@ -33,7 +35,11 @@ SafereverbAudioProcessor::SafereverbAudioProcessor()
     for (int i = 0; i < 9; ++i)
     {
         parameterUpdateCalculations (i);
-    }
+    }   
+        
+    #ifdef JUCE_DEBUG
+    saveDetailsToXml();
+    #endif
 }
 
 SafereverbAudioProcessor::~SafereverbAudioProcessor()
@@ -122,6 +128,11 @@ void SafereverbAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer, Midi
 bool SafereverbAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
+}
+
+String SafereverbAudioProcessor::getPluginCode()
+{
+    return "SFRV";
 }
 
 AudioProcessorEditor* SafereverbAudioProcessor::createEditor()

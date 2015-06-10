@@ -48,6 +48,8 @@ public:
 	
 	float getInputLevel();
 	float getOutputLevel();
+	
+	virtual String getPluginCode() override;
     
 private:
     int numChannels;

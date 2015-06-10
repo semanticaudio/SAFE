@@ -19,6 +19,8 @@ SafedistortionAudioProcessor::SafedistortionAudioProcessor()
       antiAliasingCutoff (0.99f),
       antiAliasingOrder (8)
 {
+    addLibXtractFeature (LibXtract::AllFeatures);
+    
     fs = 44100;
     
     addDBParameter ("Input Gain", inputGain, 0.0f, -50.0f, 50.0f, "dB");
@@ -28,6 +30,10 @@ SafedistortionAudioProcessor::SafedistortionAudioProcessor()
     addDBParameter ("Output Gain", outputGain, 0.0f, -60.0f, 6.0f, "dB");
     
     numChannels = 0;
+    
+    #ifdef JUCE_DEBUG
+    saveDetailsToXml();
+    #endif
 }
 
 SafedistortionAudioProcessor::~SafedistortionAudioProcessor()
@@ -161,6 +167,11 @@ void SafedistortionAudioProcessor::pluginProcessing (AudioSampleBuffer& buffer, 
 bool SafedistortionAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
+}
+
+String SafedistortionAudioProcessor::getPluginCode()
+{
+    return "SFDT";
 }
 
 AudioProcessorEditor* SafedistortionAudioProcessor::createEditor()
