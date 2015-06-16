@@ -8,6 +8,7 @@ SAFEAudioProcessorEditor::SAFEAudioProcessorEditor (SAFEAudioProcessor* ownerFil
       metaDataButton ("Meta Data"),
       fileAccessButton ("File Access"),
       infoButton ("i"),
+      descriptorLoadScreen (ownerFilter->getPluginCode()),
       parameters (ownerFilter->getParameterArray())
 {
     // set it to use our look and feel

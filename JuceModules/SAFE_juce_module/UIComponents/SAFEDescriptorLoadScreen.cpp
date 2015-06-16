@@ -1,10 +1,11 @@
 //==========================================================================
 //      Constructor and Destructor
 //==========================================================================
-SAFEDescriptorLoadScreen::SAFEDescriptorLoadScreen()
+SAFEDescriptorLoadScreen::SAFEDescriptorLoadScreen (const String &pluginCodeInit)
     : refreshButton (""),
       closeButton (""),
-      loadButton ("")
+      loadButton (""),
+      pluginCode (pluginCodeInit)
 {
     // add the main title
     addAndMakeVisible (&titleLabel);
@@ -84,8 +85,8 @@ void SAFEDescriptorLoadScreen::updateDescriptors (bool fromServer, const XmlElem
 
     if (fromServer)
     {
-        URL descriptorURL ("http://193.60.133.151/SAFE/getDescriptors.php");
-        descriptorURL = descriptorURL.withParameter ("PluginName", JucePlugin_Name);
+        URL descriptorURL ("http://193.60.133.151/newsafe/listdescriptors.php");
+        descriptorURL = descriptorURL.withParameter ("Plugin", pluginCode);
 
         String loadableDescriptors = descriptorURL.readEntireTextStream();
         loadableDescriptors = loadableDescriptors.removeCharacters ("()[]{}<>");

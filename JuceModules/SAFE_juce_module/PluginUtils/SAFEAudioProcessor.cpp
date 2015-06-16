@@ -389,47 +389,43 @@ WarningID SAFEAudioProcessor::saveSemanticData (const String& newDescriptors, co
 
 WarningID SAFEAudioProcessor::loadSemanticData (const String& descriptor)
 {
-    //StringArray descriptorArray;
-    //descriptorArray.addTokens (descriptor, " ,;", String::empty);
+    StringArray descriptorArray;
+    descriptorArray.addTokens (descriptor, " ,;", String::empty);
 
-    //updateSemanticDataElement();
+    updateSemanticDataElement();
 
-    //if (descriptorArray.size() > 0)
-    //{
-    //    String firstDescriptor = descriptorArray [0];
+    if (descriptorArray.size() == 0)
+    {
+        return DescriptorNotInFile;
+    }
 
-    //    if (firstDescriptor.containsNonWhitespaceChars())
-    //    {
-    //        // go through XML elements and look for the first one with the descriptor we want
-    //        forEachXmlChildElement (*semanticDataElement, descriptorElement)
-    //        {
-    //            int numAttributes = descriptorElement->getNumAttributes();
+    String firstDescriptor = descriptorArray [0];
 
-    //            for (int attribute = 0; attribute < numAttributes; ++ attribute)
-    //            {
-    //                String attributeValue = descriptorElement->getAttributeValue (attribute);
+    // go through XML elements and look for the first one with the descriptor we want
+    forEachXmlChildElement (*semanticDataElement, descriptorElement)
+    {
+        int numAttributes = descriptorElement->getNumAttributes();
 
-    //                if (attributeValue == firstDescriptor)
-    //                {
-    //                    XmlElement* parametersElement = descriptorElement->getChildByName ("ParameterSettings");
+        for (int attribute = 0; attribute < numAttributes; ++ attribute)
+        {
+            String attributeValue = descriptorElement->getAttributeValue (attribute);
 
-    //                    for (int parameterNum = 0; parameterNum < parameters.size(); ++parameterNum)
-    //                    {
-    //                        SAFEParameter* currentParameter = parameters [parameterNum];
-    //                        String xmlParameterName = makeXmlString (currentParameter->getName());
-    //                        float newParameterValue = (float) parametersElement->getDoubleAttribute (xmlParameterName);
-    //                        
-    //                        setScaledParameterNotifyingHost (parameterNum, newParameterValue);
-    //                    }
+            if (attributeValue == firstDescriptor)
+            {
+                XmlElement *parameterElement = descriptorElement->getChildByName ("ParameterSettings");
+                String parameterValueString = parameterElement->getStringAttribute ("Values");
 
-    //                    return NoWarning;
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
+                StringArray parameterValues;
+                parameterValues.addTokens (parameterValueString, ",", "");
+                parameterValues.removeEmptyStrings();
 
-    //return DescriptorNotInFile;
+                for (int i = 0; i < parameterValues.size(); ++i)
+                {
+                    setScaledParameterNotifyingHost (i, parameterValues [i].getDoubleValue());
+                }
+            }
+        }
+    }
 
     return NoWarning;
 }
@@ -510,59 +506,45 @@ WarningID SAFEAudioProcessor::sendDataToServer (const String& newDescriptors, co
 
 WarningID SAFEAudioProcessor::getServerData (const String& descriptor)
 {
-    //// get descriptors
-    //StringArray descriptorArray;
-    //descriptorArray.addTokens (descriptor, " ,;", String::empty);
-    //descriptorArray.removeEmptyStrings();
+    // get descriptors
+    StringArray descriptorArray;
+    descriptorArray.addTokens (descriptor, " ,;", String::empty);
+    descriptorArray.removeEmptyStrings();
 
-    //if (descriptorArray.size() > 0)
-    //{
-    //    // we just take the first descriptor in the box
-    //    // This will be changed to a more comprehensive model soon...
-    //    String firstDescriptor = descriptorArray [0];
-    //    
-    //    // send call to script with user descriptor...
-    //    String userDataTableName = JucePlugin_Name + String ("UserData");
-    //    URL downloadParamData ("http://193.60.133.151/SAFE/download.php");
-    //    downloadParamData = downloadParamData.withParameter(String("TableName"),   userDataTableName);
-    //    downloadParamData = downloadParamData.withParameter(String("Descriptors"), firstDescriptor);
-    //    
-    //    // just returns an ordered list of strings for the params...
-    //    String dbOutput = downloadParamData.readEntireTextStream();
-    //    
-    //    //return the param values from the download.php script.
-    //    StringArray outputStringArray, fieldNames, paramValues;
-    //    outputStringArray.addTokens(dbOutput, ",");
-    //    outputStringArray.removeEmptyStrings();
-    //    
-    //    if (outputStringArray.size()>0) // if the term exists
-    //    {
-    //        // seperate the strings into fields and paramValues.
-    //        for (int i=0; i<outputStringArray.size()-1; i+=2)
-    //        {
-    //            fieldNames.add(outputStringArray[i].removeCharacters(", "));
-    //            paramValues.add(outputStringArray[i+1].removeCharacters(", "));
-    //        }
-    //        
-    //        for (int parameterNum = 0; parameterNum < parameters.size(); ++parameterNum)
-    //        {
-    //            String tempFieldName = String ("Param_") + makeXmlString (parameters [parameterNum]->getName());
-    //            int index = fieldNames.indexOf (tempFieldName);
+    if (descriptorArray.size() > 0)
+    {
+        // we just take the first descriptor in the box
+        // This will be changed to a more comprehensive model soon...
+        String firstDescriptor = descriptorArray [0];
+        
+        // send call to script with user descriptor...
+        URL downloadParamData ("http://193.60.133.151/newsafe/getaverageparameters.php");
+        downloadParamData = downloadParamData.withParameter("Plugin", getPluginCode());
+        downloadParamData = downloadParamData.withParameter("Descriptor", firstDescriptor);
+        
+        // just returns an ordered list of strings for the params...
+        String dbOutput = downloadParamData.readEntireTextStream();
 
-    //            float newParameterValue = String (paramValues[index]).getFloatValue();
-    //            setScaledParameterNotifyingHost (parameterNum, newParameterValue);
-    //        }
-    //        return NoWarning;
-    //    }
-    //    else
-    //    {
-    //        return DescriptorNotOnServer;
-    //    }
-    //}
-    //else
-    //{
-    //    return DescriptorNotOnServer;
-    //}
+        if (dbOutput == "Descriptor not found.")
+        {
+            return DescriptorNotOnServer;
+        }
+
+        StringArray parameterSettings;
+        parameterSettings.addTokens (dbOutput, "\n", "");
+        parameterSettings.removeEmptyStrings();
+
+        for (int i = 0; i < parameterSettings.size(); ++i)
+        {
+            double parameterValue = parameterSettings [i].fromFirstOccurrenceOf (", ", false, false).getDoubleValue();
+
+            setScaledParameterNotifyingHost (i, parameterValue);                        
+        }
+    }
+    else
+    {
+        return DescriptorNotOnServer;
+    }
 
 	return NoWarning;
 }

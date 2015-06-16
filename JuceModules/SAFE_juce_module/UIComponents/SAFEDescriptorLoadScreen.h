@@ -14,8 +14,12 @@ public:
     //==========================================================================
     //      Constructor and Destructor
     //==========================================================================
-    /** Create a new descriptor load screen. */
-    SAFEDescriptorLoadScreen();
+    /** Create a new descriptor load screen. 
+     *
+     *  @param pluginCodeInit  the unique code of the plug-in this component
+     *                         is being used in
+     */
+    SAFEDescriptorLoadScreen (const String &pluginCodeInit);
 
     /** Destructor */
     ~SAFEDescriptorLoadScreen();
@@ -83,6 +87,8 @@ private:
 
     SAFEButton refreshButton;
     String previousSearchTerm;
+
+    String pluginCode;
 
     bool getDataFromServer;
     const XmlElement *localSemanticData;
