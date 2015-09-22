@@ -31,11 +31,11 @@ function getHeight()
 function releaseTheMoose()
 {
 	var title = document.getElementById("title");
-	title.src = "titleAlone.png";
+	title.src = "html/titleAlone.png";
 	title.onclick = "";
 
 	var moose = document.createElement("img");
-	moose.src = "mooseAlone.png";
+	moose.src = "html/mooseAlone.png";
 	moose.style.position = "absolute";
 	moose.style.left = title.offsetLeft + "px";
 	moose.style.top = title.offsetTop + "px";
@@ -60,7 +60,7 @@ function releaseTheMoose()
 </script>
 
 <div style="text-align: center">
-	<img id="title" src="moose.png" onclick="releaseTheMoose()"/>
+	<img id="title" src="html/moose.png" onclick="releaseTheMoose()"/>
 </div>
 @endhtmlonly
 
@@ -81,7 +81,7 @@ protected members on the SAFEAudioProcessorEditor page for more information.
 ### Sean (Baked Goods Supervisor)
 
 @htmlonly
-<img style="width: 400px; height: auto" src="sean.jpg"/>
+<img style="width: 400px; height: auto" src="html/sean.jpg"/>
 @endhtmlonly
 
 ### Ryan (Chief Moose Herder)
@@ -97,24 +97,24 @@ function toggleRyan()
 
 	if (toggleRyan.current)
 	{
-		document.getElementById("ryan").src="ryan.jpg";
+		document.getElementById("ryan").src="html/ryan.jpg";
 		toggleRyan.current = 0;
 	}
 	else
 	{
-		document.getElementById("ryan").src="alpaca.jpg";
+		document.getElementById("ryan").src="html/alpaca.jpg";
 		toggleRyan.current = 1;
 	}
 }
 </script>
 
-<img id="ryan" style="width: 400px; height: auto" src="ryan.jpg" onclick="toggleRyan()"/>
+<img id="ryan" style="width: 400px; height: auto" src="html/ryan.jpg" onclick="toggleRyan()"/>
 @endhtmlonly
 
 ### Brecht (Keeper of the Phat Beats)
 
 @htmlonly
-<img style="width: 400px; height: auto" src="brecht.jpg"/>
+<img style="width: 400px; height: auto" src="html/brecht.jpg"/>
 @endhtmlonly
 
 ## Acknowledgments 
